@@ -3,6 +3,9 @@ import Navbar from "../../components/Navbar/Navbar";
 import { BarChart } from "react-bootstrap-icons";
 import NavbarLeft from "../../components/NavbarLeft/NavbarLeft";
 import Speedometter from "./Speedometter";
+import Chartmetter from "./Chartmetter";
+import { GraphUp, Speedometer2 } from "react-bootstrap-icons";
+import "./home.css";
 function Home() {
   return (
     <div>
@@ -11,9 +14,9 @@ function Home() {
         <div className="container-fluid p-0">
           <div className="d-flex mx-0">
             <NavbarLeft />
-            <div style={{ height: "2000px", marginTop: "60px", width: "100%" }}>
+            <div style={{ marginTop: "75px", width: "100%" }}>
               <main>
-                <div class="container-fluid px-2">
+                <div class="container-fluid">
                   <div class="row">
                     <div class="col-xl-3 col-md-6">
                       <div class="card bg-primary text-white mb-4">
@@ -61,11 +64,55 @@ function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="row">
+                <div class="row mx-1">
                   <div className="col-xl-3">
-                    <Speedometter />
+                    <div class="card">
+                      <div className="card-header align-items-center d-flex">
+                        <Speedometer2 />
+                        &nbsp; Công tơ điện
+                      </div>
+                      <div class="card-body">
+                        <Speedometter />
+                        <div>
+                          <table className="table detail-speedmetter">
+                            <tbody>
+                              <tr>
+                                <td>Công suất hiện tại:</td>
+                                <td>50 W</td>
+                              </tr>
+                              <tr>
+                                <td>Công suất cao nhất:</td>
+                                <td>4000 W</td>
+                              </tr>
+                              <tr>
+                                <td>Công suất thấp nhất:</td>
+                                <td>10 W</td>
+                              </tr>
+                              <tr>
+                                <td>Tiêu thụ ở chế độ chờ:</td>
+                                <td>100 kWh</td>
+                              </tr>
+                              <tr>
+                                <td>Số thiết bị đang hoạt động:</td>
+                                <td>10 / 22</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="cols-xl-9"></div>
+                  <div class="col-xl-9">
+                    <div class="card mb-4">
+                      <div className="card-header align-items-center d-flex">
+                        <GraphUp />
+                        &nbsp; Biểu đồ theo dõi tiêu thụ trực tiếp
+                      </div>
+                      <div class="card-body">
+                        <Chartmetter />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </main>
             </div>

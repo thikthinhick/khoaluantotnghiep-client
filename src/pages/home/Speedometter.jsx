@@ -4,7 +4,7 @@ import ReactSpeedometer from "react-d3-speedometer";
 const styles = {
   dial: {
     display: "inline-block",
-    width: `300px`,
+    width: `250px`,
     height: `auto`,
     color: "#000",
     border: "0.5px solid #fff",
@@ -22,8 +22,8 @@ const Speedometer = ({ id, value, title }) => {
       <ReactSpeedometer
         maxValue={120}
         minValue={-100}
-        height={190}
-        width={290}
+        height={150}
+        width={255}
         value={value}
         needleTransition="easeQuadIn"
         needleTransitionDuration={1000}
