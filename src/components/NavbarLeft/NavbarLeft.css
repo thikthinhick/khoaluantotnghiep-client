@@ -1,0 +1,7 @@
+.active {
+    background-color: red;
+    width: 100%;
+}
+.navbarleft-container li {
+    padding-left: 15px;
+}
