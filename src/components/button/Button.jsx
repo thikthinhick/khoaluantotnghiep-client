@@ -22,4 +22,12 @@ const ButtonError = ({ title, style }) => {
     </div>
   );
 };
-export { ButtonPrimary, ButtonError, ButtonSuccess };
+const ToggleSwitch = () => {
+  return (
+    <label class="switch">
+      <input type="checkbox" />
+      <span class="slider round"></span>
+    </label>
+  );
+};
+export { ButtonPrimary, ButtonError, ButtonSuccess, ToggleSwitch };

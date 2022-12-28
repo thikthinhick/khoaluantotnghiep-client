@@ -1,0 +1,23 @@
+.container-status{
+    padding: 2px 10px;
+    width: fit-content;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.status-running{
+    color: #62d493;
+    border: 2px solid #62d493;
+}
+.status-off{
+    color: #ff4961;
+    border: 2px solid #ff4961;
+}
+.status-standby{
+    color:#ffa41c;
+    border: 2px solid #ffa41c;
+}
+.status-unplugged {
+    color: gray;
+    border: 2px solid gray;
+}
