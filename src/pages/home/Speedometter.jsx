@@ -22,7 +22,7 @@ const Speedometer = ({ id, value, title }) => {
       <ReactSpeedometer
         maxValue={120}
         minValue={-100}
-        height={150}
+        height={160}
         width={255}
         value={value}
         needleTransition="easeQuadIn"

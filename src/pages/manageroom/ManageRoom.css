@@ -1,0 +1,8 @@
+.container-manager-room table, th, td {
+    border: 1px solid #e1e1e1;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+.container-manager-room table tbody tr {
+    align-items: center;
+}
