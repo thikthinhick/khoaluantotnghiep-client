@@ -8,7 +8,7 @@ import { GraphUp, Speedometer2 } from "react-bootstrap-icons";
 import "./home.css";
 function Home() {
   return (
-    <div>
+    <React.Fragment>
       <Navbar />
       <div id="layoutSidenav">
         <div className="container-fluid p-0">
@@ -119,7 +119,7 @@ function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 

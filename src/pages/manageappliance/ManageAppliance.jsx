@@ -49,7 +49,6 @@ function ManageAppliance() {
             <div style={{ marginTop: "75px", width: "100%" }}>
               <main>
                 <div className="container-fluid px-4">
-                  <h3>Quản lý phòng</h3>
                   <ol className="breadcrumb mb-4">
                     <li class="breadcrumb-item">
                       <House />
