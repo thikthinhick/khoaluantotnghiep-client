@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/NavbarTop/NavbarTop";
 import { BarChart } from "react-bootstrap-icons";
 import NavbarLeft from "../../components/NavbarLeft/NavbarLeft";
 import {

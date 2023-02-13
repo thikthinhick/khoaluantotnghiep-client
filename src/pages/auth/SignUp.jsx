@@ -1,10 +1,11 @@
 import React from "react";
 import "./styles.css";
+import { Link } from "react-router-dom";
 function SignUp() {
   return (
     <div className="container-login">
       <div class="signup-form">
-        <form action="/examples/actions/confirmation.php" method="post">
+        <div className="form">
           <h2>Tạo tài khoản</h2>
           <div class="form-group">
             <input
@@ -47,12 +48,12 @@ function SignUp() {
               TẠO TÀI KHOẢN
             </button>
           </div>
-        </form>
+        </div>
         <div class="text-center" style={{ color: "white" }}>
           Bạn đã có tài khoản?{" "}
-          <a href="login.html" className="text-login">
+          <Link className="text-login" to={"/login"}>
             Đăng nhập
-          </a>
+          </Link>
         </div>
       </div>
     </div>

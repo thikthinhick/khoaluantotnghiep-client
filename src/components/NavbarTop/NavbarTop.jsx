@@ -1,6 +1,6 @@
 import React from "react";
 import { Search, Gear, BoxArrowLeft, Person } from "react-bootstrap-icons";
-import "./Navbar.css";
+import "./NavbarTop.css";
 import NavDropdown from "react-bootstrap/NavDropdown";
 function Navbar() {
   return (

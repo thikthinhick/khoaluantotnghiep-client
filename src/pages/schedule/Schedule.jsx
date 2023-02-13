@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/NavbarTop/NavbarTop";
 import NavbarLeft from "../../components/NavbarLeft/NavbarLeft";
 import { House, Calendar2 } from "react-bootstrap-icons";
 import "./Schedule.css";

@@ -2,10 +2,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-repeat: none;
-    background-size: contain;
+    background-size: cover;
     background-image: url('../../assets/images/hinhanh.jpg');
     height: 100vh;
+  
 }
 
  .container-login .signup-form h2 {
@@ -14,16 +14,33 @@
     position: relative;
     text-align: center;
   }
-  .container-login .signup-form form {
+  .container-login .signup-form .form {
     color: #999;
     border-radius: 3px;
     margin-bottom: 15px;
-    background: #f2f3f7;
+    background: white;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     padding: 20px;
   }
-  .container-login .signup-form .form-group {
-    margin-bottom: 10px;
+  .container-login .signup-form .form-item__error{
+    height: 18px;
+    display: flex;
+  }
+  .container-login .signup-form .form-item__error p{
+    height: 100%;
+    font-size: 12px;
+    color: #f56c6c;
+    margin: 0px;
+    transition: height 2s;
+  
+  }
+  .container-login .signup-form .message-error{
+    font-size: 13px;
+    color: #f56c6c;
+    padding: 12px;
+    border-radius: 5px;
+    background-color: #FEF0F0;
+    margin-bottom: 15px;
   }
   .container-login .signup-form input[type="checkbox"] {
     margin-top: 3px;
@@ -35,6 +52,8 @@
   .container-login .text-login{
     color: 
     #ff4a00;
+    font-weight: 500;
+    font-size: 15px;
   }
   .container-login .signup-form .btn {
     font-size: 15px;

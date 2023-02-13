@@ -7,7 +7,7 @@
   font-family: "Roboto";
   font-size: 14px;
  }
- html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p{
+ html, body, div, span, applet, object, iframe,h1, h2,ul h3, h4, h5, h6, p{
   margin: 0;
   padding: 0;
   border: 0;
@@ -17,4 +17,40 @@
 ol, ul {
   list-style: none;
 }
+textarea:focus, input:focus{
+  outline: none;
+}
+.container{
+  position: relative;
+}
+.loader-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  position: absolute;
+}
 
+.loader {
+  border: 10px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 10px solid #ff4a00;
+  border-bottom: 10px solid #ff4a00;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

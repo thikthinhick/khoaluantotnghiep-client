@@ -4,4 +4,15 @@
 }
 .navbarleft-container li {
     padding-left: 15px;
+    width: 100%;
+    cursor: pointer;
+}
+.navbarleft-container li:hover{
+    background-color: #cdcdcd;
+    color: black;
+}
+.navbarleft-container li a {
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
 }

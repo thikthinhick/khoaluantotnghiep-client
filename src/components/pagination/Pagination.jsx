@@ -15,7 +15,9 @@ function Pagination() {
       {data.map((element) => (
         <ItemPagination
           title={element}
-          style={element == active ? { background: "#ff4a00" } : {}}
+          style={
+            active === element ? { color: "white", background: "#ff4961" } : {}
+          }
         />
       ))}
     </div>
