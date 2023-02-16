@@ -16,14 +16,15 @@
   }
   .container-login .signup-form .form {
     color: #999;
+    max-width: 600px;
     border-radius: 3px;
     margin-bottom: 15px;
     background: white;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    padding: 20px;
+    padding: 25px;
   }
   .container-login .signup-form .form-item__error{
-    height: 18px;
+    height: 20px;
     display: flex;
   }
   .container-login .signup-form .form-item__error p{
@@ -31,27 +32,37 @@
     font-size: 12px;
     color: #f56c6c;
     margin: 0px;
-    transition: height 2s;
-  
   }
   .container-login .signup-form .message-error{
     font-size: 13px;
     color: #f56c6c;
-    padding: 12px;
+    padding: 10px;
     border-radius: 5px;
     background-color: #FEF0F0;
+    margin-bottom: 15px;
+  }
+  .container-login .signup-form .message-success{
+    font-size: 13px;
+    background-color: #f0f9eb;
+    color: #67c23a;
+    padding: 10px;
+    border-radius: 5px;
     margin-bottom: 15px;
   }
   .container-login .signup-form input[type="checkbox"] {
     margin-top: 3px;
   }
   .container-login .signup-form input{
-    outline: none !important;
-
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    /* font-size: 15px; */
   }
+  .container-login .signup-form input:focus {
+    outline: none !important;
+}
+
   .container-login .text-login{
-    color: 
-    #ff4a00;
+    color:#ff4a00;
     font-weight: 500;
     font-size: 15px;
   }

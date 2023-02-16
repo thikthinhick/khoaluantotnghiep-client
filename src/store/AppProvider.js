@@ -22,24 +22,37 @@ export const AuthProvider = ({ children }) => {
       const ttl = remember ? 1000 * 60 * 60 * 24 * 7 : 1000 * 10;
       setUser(response.data, ttl);
       setLoading(false);
+      navigate("/", { replace: true });
+    }
+    setLoading(false);
+  };
+  const signup = async (form) => {
+    const { email, password, username } = form;
+    setLoading(true);
+    const response = await axios.post(API_URL + "signup", {
+      username,
+      password,
+      email,
+    });
+    if (response.status === 200) {
       navigate("/");
     }
     setLoading(false);
-    return response.status;
   };
+
   const value = useMemo(
     () => ({
       user,
       loading,
       login,
+      signup,
       setUser,
       setLoading,
     }),
-    [user]
+    [user, loading]
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
 export const useStore = () => {
   return useContext(AuthContext);
 };

@@ -1,16 +1,18 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { SortUpAlt } from "react-bootstrap-icons";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../../store/AppProvider";
 import "./styles.css";
 function Login() {
+  const { login, user, setLoading } = useStore();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user) navigate("/");
+  });
   const [form, setForm] = useState({
     username: "",
     password: "",
     remember: false,
   });
-  const { login } = useStore();
   const [error, setError] = useState("");
   const [usernameError, setUsernameError] = useState(false);
   const [passwrodError, setPasswordError] = useState(false);
@@ -29,7 +31,7 @@ function Login() {
       try {
         await login(form);
       } catch (error) {
-        console.log(error);
+        setLoading(false);
         if (error.code === "ERR_NETWORK")
           setError("Không thể kết nối với máy chủ");
         else if (error.code === "ERR_BAD_REQUEST")
@@ -39,23 +41,13 @@ function Login() {
     if (form.username === "") setUsernameError(true);
     if (form.password === "") setPasswordError(true);
   };
-  // const login = async () => {
-  //   await axios
-  //     .post("http://localhost:8081/api/auth/signin", form)
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     });
-  //   console.log("hello");
-  // };
   return (
     <div className="container-login">
       <div class="signup-form">
         <div className="form">
           <h2>Đăng nhập</h2>
           {error ? (
-            <div className="form-group message-error">
-              Tài khoản hoặc mật khẩu nhập vào không chính xác
-            </div>
+            <div className="form-group message-error">{error}</div>
           ) : (
             <></>
           )}
@@ -99,7 +91,7 @@ function Login() {
               />{" "}
               Lưu đăng nhập
             </label>
-            <Link className="text-login" to={"/login"}>
+            <Link className="text-login" to={"/forgot-password"}>
               Quên mật khẩu?
             </Link>
           </div>
