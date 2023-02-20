@@ -28,6 +28,9 @@
   src: url("./assets/font/font-family/Montserrat-SemiBold.ttf");
   font-weight: 600;
 }
+:root{
+  --primary-color: #ff4a00;
+}
 
 *{ 
   margin: 0;

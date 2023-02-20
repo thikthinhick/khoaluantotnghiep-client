@@ -5,7 +5,6 @@ import axios from "axios";
 import { useEffect } from "react";
 import { URL } from "../../contants/Contants";
 import { useStore } from "../../store/AppProvider";
-import { SortUpAlt } from "react-bootstrap-icons";
 function ResetPassword() {
   const navigate = useNavigate();
   const params = useParams();
@@ -15,6 +14,7 @@ function ResetPassword() {
     confirm_password: "",
     email: "",
   });
+  const [error, setError] = useState("");
   const [message, setMessage] = useState({
     password: "",
     confirm_password: "",
@@ -27,21 +27,21 @@ function ResetPassword() {
     };
     setForm(nextFormState);
   };
-  // useEffect(() => {
-  //   const fetchDate = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const response = await axios.get(
-  //         `${URL}api/auth/confirm_reset_password/${params.token}`
-  //       );
-  //       setData({ show: true, token: response.data.info });
-  //     } catch (error) {
-  //       navigate("/errorpage");
-  //     }
-  //     setLoading(false);
-  //   };
-  //   fetchDate();
-  // }, []);
+  useEffect(() => {
+    const fetchDate = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${URL}api/auth/confirm_reset_password/${params.token}`
+        );
+        setData({ show: true, token: response.data.info });
+      } catch (error) {
+        navigate("/errorpage");
+      }
+      setLoading(false);
+    };
+    fetchDate();
+  }, []);
   const updatePassword = async () => {
     if (form.password.length === 0)
       setMessage({
@@ -64,7 +64,7 @@ function ResetPassword() {
           password: form.password,
         });
       } catch (error) {
-        alert("Cập nhật mật khẩu không thành công!");
+        setError("Cập nhật mật khẩu thất bại, vui lòng cập nhật lại !");
       }
       navigate("/login");
     }
@@ -80,6 +80,15 @@ function ResetPassword() {
               2 phút!
             </p>
           </div>
+
+          {error ? (
+            <div className="form-group message-error">
+              Cập nhật mật khẩu thất bại, vui lòng cập nhật lại !
+            </div>
+          ) : (
+            <></>
+          )}
+
           <div class="form-group">
             <input
               style={{

@@ -1,0 +1,21 @@
+.container-error{
+    background-color: #222;
+    height: 100vh   ;
+}
+.container-error center > h1 {
+    text-transform: uppercase;
+    color: var(--primary-color);
+    font-size: 48px;
+  }
+  
+.container-error center h3 > a {
+    text-transform: uppercase;
+    font-size: 18px;
+    color: #000;
+    background-color:var(--primary-color);
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    color: white
+  }

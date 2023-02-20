@@ -13,7 +13,7 @@ import { Routes, Route } from "react-router-dom";
 import { RequireAuth } from "./pages/auth/RequireAuth";
 import Navbar from "./components/Navbar";
 import "./App.css";
-import NotFound from "./test/NotFound";
+import NotFound from "./pages/error/NotFound";
 import ResetPassword from "./pages/auth/ResetPassword";
 import { useStore } from "./store/AppProvider";
 import { Navigate } from "react-router-dom";
