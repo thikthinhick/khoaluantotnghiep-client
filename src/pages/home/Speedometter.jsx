@@ -17,21 +17,14 @@ const styles = {
 };
 
 const Speedometer = ({ id, value, title }) => {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCount((prev) => prev + 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  });
   return (
     <div style={styles.dial}>
       <ReactSpeedometer
-        maxValue={120}
+        maxValue={1000}
         minValue={0}
         height={160}
         width={255}
-        value={count}
+        value={value}
         needleTransition="easeQuadIn"
         needleTransitionDuration={1000}
         needleColor="red"

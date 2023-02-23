@@ -2,7 +2,10 @@ import React from "react";
 import { Search, Gear, BoxArrowLeft, Person } from "react-bootstrap-icons";
 import "./NavbarTop.css";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { useStore } from "../../store/AppProvider";
+import profile from "../../assets/images/user.webp";
 function Navbar() {
+  const { user } = useStore();
   return (
     <nav
       id="navbar-container"
@@ -32,30 +35,24 @@ function Navbar() {
       <div className="d-flex align-items-center">
         <img
           className="image-profile"
-          src="https://upload.wikimedia.org/wikipedia/commons/8/85/Elon_Musk_Royal_Society_%28crop1%29.jpg"
+          src={user.value.thumbnail ? user.value.thumbnail : profile}
         />
-        <span className="mx-2" style={{ color: "white" }}>
-          Elon Musk
+        <span
+          className="mx-2"
+          style={{ color: "white", textTransform: "capitalize" }}
+        >
+          {user.value.username}
         </span>
       </div>
       <NavDropdown id="collasible-nav-dropdown" style={{ color: "white" }}>
-        <NavDropdown.Item
-          href="#action/3.1"
-          className="d-flex align-items-center"
-        >
+        <NavDropdown.Item className="d-flex align-items-center">
           <Person /> &ensp;Profile
         </NavDropdown.Item>
-        <NavDropdown.Item
-          href="#action/3.3"
-          className="d-flex align-items-center"
-        >
+        <NavDropdown.Item className="d-flex align-items-center">
           <Gear /> &ensp;Cài đặt
         </NavDropdown.Item>
         <NavDropdown.Divider />
-        <NavDropdown.Item
-          href="#action/3.4"
-          className="d-flex align-items-center"
-        >
+        <NavDropdown.Item className="d-flex align-items-center">
           <BoxArrowLeft />
           &ensp;Đăng xuất
         </NavDropdown.Item>

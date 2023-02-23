@@ -1,17 +1,10 @@
 import React from "react";
-import Navbar from "../../components/NavbarTop/NavbarTop";
-import NavbarLeft from "../../components/NavbarLeft/NavbarLeft";
-import { Table, House } from "react-bootstrap-icons";
+import { Table } from "react-bootstrap-icons";
+import { ButtonSuccess, ToggleSwitch } from "../../components/button/Button";
 import "./ManageAppliance.css";
-import {
-  ButtonPrimary,
-  ButtonError,
-  ButtonSuccess,
-  ToggleSwitch,
-} from "../../components/button/Button";
 
-import Status from "../../components/status/Status";
 import Pagination from "../../components/pagination/Pagination";
+import Status from "../../components/status/Status";
 const data = [
   {
     name: "Máy giặt",
@@ -42,16 +35,6 @@ function ManageAppliance() {
   return (
     <main>
       <div className="container-fluid px-4">
-        <ol className="breadcrumb mb-4">
-          <li class="breadcrumb-item">
-            <House />
-          </li>
-          <li className="breadcrumb-item">
-            <a href="index.html">Quản lý phòng</a>
-          </li>
-          <li className="breadcrumb-item">Quản lý thiết bị</li>
-        </ol>
-        <h2>Phòng khách</h2>
         <div className="card mb-4">
           <div className="card-header align-items-center d-flex">
             <Table />
@@ -83,15 +66,15 @@ function ManageAppliance() {
                       <td>Loại 1</td>
                       <td>
                         <div className="d-flex">
-                          <ButtonPrimary title={"XEM CHI TIẾT"} />
-                          <ButtonSuccess
-                            title={"LẬP LỊCH"}
-                            style={{ marginLeft: "10px" }}
-                          />
-                          <ButtonError
-                            title={"XÓA THIẾT BỊ"}
-                            style={{ marginLeft: "10px" }}
-                          />
+                          <a class="btn btn-outline-dark mt-auto" href="#">
+                            Chi tiết
+                          </a>
+                          <a class="btn btn-outline-dark mt-auto mx-2" href="#">
+                            Lập lịch
+                          </a>
+                          <a class="btn btn-outline-dark mt-auto" href="#">
+                            Xóa thiết bị
+                          </a>
                         </div>
                       </td>
                       <td>
@@ -101,8 +84,10 @@ function ManageAppliance() {
                   ))}
                 </tbody>
               </table>
-              <div className="d-flex justify-content-between">
-                <ButtonSuccess title={"THÊM THIẾT BỊ"}></ButtonSuccess>
+              <div className="p-0 d-flex justify-content-between">
+                <a class="btn btn-outline-dark mt-auto" href="#">
+                  Thêm thiết bị
+                </a>
                 <Pagination />
               </div>
             </div>

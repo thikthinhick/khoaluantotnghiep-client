@@ -1,8 +1,47 @@
 .container-manager-room table, th, td {
     border: 1px solid #e1e1e1;
     border-collapse: collapse;
-    font-size: 15px;
+    font-size: 14px;
 }
-.container-manager-room table tbody tr {
-    align-items: center;
+
+
+
+.container-room {
+
+    margin-bottom: 20px;
+}
+.container-room__body{
+    padding: 5px 10px;
+}
+.container-room__body .top {
+    display: flex;
+    text-align: center;
+    align-items: end;
+    justify-content: space-between;
+
+}
+.container-room__body .top h5 {
+    font-weight: 600;
+}
+.container-room__body .users {
+    
+}
+.container-room__body .users li{
+    width: 20px;
+}
+.container-room__body .users li img {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    border: 1px solid white;
+}
+.container-room__body .top p {
+    font-size: 12px;
+    vertical-align: bottom;
+    line-height: 16px;
+    color: gray;
+}
+.card-img{
+    height: 150px;
+    object-fit: cover;
 }

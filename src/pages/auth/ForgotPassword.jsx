@@ -19,7 +19,7 @@ function ForgotPassword() {
       );
       if (response.status === 200) {
         setMessage(
-          "Chúng tôi đã gửi một email có lên kết để đặt lại mật khẩu của bạn. Có thể mất từ 1 đến 2 phút để hoàn thành. Hãy kiểm tra hộp thư đến của bạn"
+          "Chúng tôi đã gửi một email có lên kết để đặt lại mật khẩu của bạn. Có thể mất từ 1 đến 2 phút để hoàn thành. Hãy kiểm tra hộp thư "
         );
       }
     } catch (error) {

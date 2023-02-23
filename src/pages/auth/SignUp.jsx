@@ -201,13 +201,7 @@ function SignUp() {
                 vui lòng kiểm tra hộp thư để kích hoạt tài khoản.
               </p>
               <br></br>
-              <p style={{ fontSize: "13px" }}>
-                Nếu không nhận được email kích hoạt từ chúng tôi, vui lòng{" "}
-                <b>
-                  <Link to="/">Gửi lại</Link>
-                </b>{" "}
-                email kích hoạt.
-              </p>
+              
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@ function ResetPassword() {
     confirm_password: "",
     email: "",
   });
-  const [error, setError] = useState("");
+  const [notifi, setNotifi] = useState({ success: "", error: "" });
   const [message, setMessage] = useState({
     password: "",
     confirm_password: "",
@@ -63,10 +63,18 @@ function ResetPassword() {
         await axios.put(`${URL}api/auth/reset_password/${data.token}`, {
           password: form.password,
         });
+        setNotifi({
+          success:
+            "Cập nhật mật khẩu thành công, đang chuyển sang trang đăng nhập !",
+          error: "",
+        });
+        return setTimeout(() => navigate("/login"), 2000);
       } catch (error) {
-        setError("Cập nhật mật khẩu thất bại, vui lòng cập nhật lại !");
+        setNotifi({
+          success: "",
+          error: "Cập nhật mật khẩu thất bại, vui lòng cập nhật lại !",
+        });
       }
-      navigate("/login");
     }
   };
   return true ? (
@@ -81,14 +89,16 @@ function ResetPassword() {
             </p>
           </div>
 
-          {error ? (
-            <div className="form-group message-error">
-              Cập nhật mật khẩu thất bại, vui lòng cập nhật lại !
-            </div>
+          {notifi.error ? (
+            <div className="form-group message-error">{notifi.error}</div>
           ) : (
             <></>
           )}
-
+          {notifi.success ? (
+            <div className="form-group message-success">{notifi.success}</div>
+          ) : (
+            <></>
+          )}
           <div class="form-group">
             <input
               style={{

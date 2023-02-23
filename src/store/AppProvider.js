@@ -24,7 +24,6 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
       navigate("/", { replace: true });
     }
-    setLoading(false);
   };
   const signup = async (form) => {
     const { email, password, username } = form;
