@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Button.css";
+import { Power } from "react-bootstrap-icons";
 const ButtonPrimary = ({ title, style }) => {
   return (
     <div class="custom-button custom-button-primary" style={style}>
@@ -22,6 +23,23 @@ const ButtonError = ({ title, style }) => {
     </div>
   );
 };
+//https://api.weatherapi.com/v1/current.json?key=f0d4d9631e9b4fb89e4175156232502&q=Hanoi&aqi=no
+const ButtonPower = ({ title }) => {
+  const [state, setState] = useState(false);
+  return (
+    <div className="d-flex flex-column align-items-center">
+      <div
+        onClick={() => setState(!state)}
+        className={state ? "custom-button-power" : "custom-button-power off"}
+      >
+        <Power size={40} color={"white"} />
+      </div>
+      <span style={{ fontSize: "12px", marginTop: "2px" }}>
+        {state ? "Đang bật" : "Đang tắt"}
+      </span>
+    </div>
+  );
+};
 const ToggleSwitch = () => {
   return (
     <label class="switch">
@@ -30,4 +48,4 @@ const ToggleSwitch = () => {
     </label>
   );
 };
-export { ButtonPrimary, ButtonError, ButtonSuccess, ToggleSwitch };
+export { ButtonPrimary, ButtonPower, ButtonError, ButtonSuccess, ToggleSwitch };

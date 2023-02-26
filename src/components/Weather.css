@@ -1,0 +1,11 @@
+.container-weather {
+    display: flex;
+    justify-content: space-between;
+}
+.container-weather div h2{
+    position: 'relative'
+}
+.container-weather div h2 b{
+    position: absolute;
+    font-size: 14px;
+}

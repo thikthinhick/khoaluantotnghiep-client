@@ -11,7 +11,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "./NavbarLeft.css";
 function NavbarLeft() {
   return (
-    <div className="col-auto col-xl-2 px-0 bg-dark navbarleft-container navbar-left">
+    <div className="px-0 col-xl-2 bg-dark navbarleft-container">
       <div className="d-flex flex-column align-items-center align-items-sm-start pt-2 text-white min-vh-100">
         <a
           href="/"
@@ -22,46 +22,53 @@ function NavbarLeft() {
         <ul
           className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
           id="menu"
-          style={{ width: "100%" }}
+          style={{
+            marginTop: "18px",
+            width: "100%",
+            display: "flex",
+
+            flex: 1,
+          }}
         >
-          <li className="py-3 item active">
-            <NavDropdown.Item href="#">
+          <li className="py-3 active">
+            <NavDropdown.Item className="navbar-left-item" href="#">
               <HouseDoor size={20} color={"white"} />
-              <span className="ms-2 d-none d-sm-inline">TRANG CHỦ</span>
+              <h5 className="ms-2 d-none d-sm-inline">TRANG CHỦ</h5>
             </NavDropdown.Item>
           </li>
           <li className="py-3">
-            <NavDropdown.Item href="#">
+            <NavDropdown.Item className="navbar-left-item" href="#">
               <LayoutSidebar size={20} color={"white"} />
-              <span className="ms-2 d-none d-sm-inline">QUẢN LÝ PHÒNG</span>
+              <h5 className="ms-2 d-none d-sm-inline">QUẢN LÝ PHÒNG</h5>
             </NavDropdown.Item>
           </li>
           <li className="py-3">
-            <NavDropdown.Item href="#">
+            <NavDropdown.Item className="navbar-left-item" href="#">
               <BarChart size={20} color={"white"} />
-              <span className="ms-2 d-none d-sm-inline">THỐNG KÊ</span>
+              <h5 className="ms-2 d-none d-sm-inline">THỐNG KÊ</h5>
             </NavDropdown.Item>
           </li>
           <li className="py-3">
-            <NavDropdown.Item href="#">
+            <NavDropdown.Item className="navbar-left-item" href="#">
               <Lightbulb size={20} color={"white"} />
-              <span className="ms-2 d-none d-sm-inline">GIẢI PHÁP</span>
+              <h5 className="ms-2 d-none d-sm-inline">GIẢI PHÁP</h5>
             </NavDropdown.Item>
           </li>
           <li className="py-3">
-            <NavDropdown.Item href="#">
+            <NavDropdown.Item className="navbar-left-item" href="#">
               <Gear size={20} color={"white"} />
-              <span className="ms-2 d-none d-sm-inline">CÀI ĐẶT</span>
+              <h5 className="ms-2 d-none d-sm-inline">CÀI ĐẶT</h5>
             </NavDropdown.Item>
           </li>
+          <li style={{ flex: 1 }}></li>
           <li className="py-3">
-            <NavDropdown.Item href="#">
+            <NavDropdown.Item className="navbar-left-item" href="#">
               <QuestionCircle size={20} color={"white"} />
-              <span className="ms-2 d-none d-sm-inline">GIỚI THIỆU</span>
+              <h5 className="ms-2 d-none d-sm-inline">GIỚI THIỆU</h5>
             </NavDropdown.Item>
           </li>
+          <br></br>
         </ul>
-        <hr />
       </div>
     </div>
   );

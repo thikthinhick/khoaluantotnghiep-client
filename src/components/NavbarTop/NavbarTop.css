@@ -1,11 +1,29 @@
 #navbar-container .image-profile{
-    height: 36px;
-    width:36px;
-    border-radius: 18px;
+    height: 40px;
+    width:40px;
+    border-radius: 20px;
     object-fit: cover;
 }
 #navbar-container{
     position: fixed;
+    padding: 10px 0;
     width: 100%;
     z-index: 100;
+}
+.notification {
+    margin: 0px 20px 0px 0px;
+    position: relative;
+}
+.notification::after{
+    content: "9+";
+    position: absolute;
+    background-color: red;
+    height: 16px;
+    width: 16px;
+    top: -5px;
+    left: 10px;
+    font-size: 10px;
+    border-radius: 8px;
+    color: white;
+    text-align: center;
 }

@@ -1,5 +1,12 @@
 import React from "react";
-import { Search, Gear, BoxArrowLeft, Person } from "react-bootstrap-icons";
+import {
+  Search,
+  Gear,
+  BoxArrowLeft,
+  Person,
+  BellFill,
+} from "react-bootstrap-icons";
+import House from "../../assets/images/house.png";
 import "./NavbarTop.css";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useStore } from "../../store/AppProvider";
@@ -11,9 +18,19 @@ function Navbar() {
       id="navbar-container"
       className="sb-topnav navbar navbar-expand navbar-dark bg-dark px-3"
     >
-      <span style={{ color: "white", fontSize: "20px" }}>
-        QUẢN LÝ ĐIỆN NĂNG
-      </span>
+      <div className="d-flex align-items-end mx-5">
+        <img style={{ height: "30px", width: "30px" }} src={House} />
+        <span
+          style={{
+            color: "white",
+            fontSize: "18px",
+            marginLeft: "4px",
+            lineHeight: "18px",
+          }}
+        >
+          HOUSE<p style={{ fontSize: "14px", lineHeight: "14px" }}>POWER</p>
+        </span>
+      </div>
       <form className="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
         <div className="input-group">
           <input
@@ -32,6 +49,9 @@ function Navbar() {
           </button>
         </div>
       </form>
+      <div className="notification">
+        <BellFill color="white" size={20} />
+      </div>
       <div className="d-flex align-items-center">
         <img
           className="image-profile"
@@ -44,6 +64,7 @@ function Navbar() {
           {user.value.username}
         </span>
       </div>
+
       <NavDropdown id="collasible-nav-dropdown" style={{ color: "white" }}>
         <NavDropdown.Item className="d-flex align-items-center">
           <Person /> &ensp;Profile

@@ -1,3 +1,41 @@
-.table tr {
+.containerManageAppliance__header {
+ height: 200px;
+}
+.containerManageAppliance__header .background-image {
+   
+    background-repeat:no-repeat;
+    background-position: center center;
+    background-image:url(https://bedesign.vn/wp-content/uploads/2022/03/ifYeUmdP3QBcScG-lGBjF_prtajlv6f_1bS0VMzYqlMGBsdQpownlxCDkwJ6LcdUVEI0D_ukv4_PNRrKqyO-xjKttQDGVQ8lWpCVUpJSp5sTKYOGejPgvDqa9f76DsOsMEdqmII.jpg);
+    color:#FFF;
+    flex: 1;
+    background-size: cover;
+    margin-right: 10px;
+    margin-bottom: 4px;
+}
+.containerManageAppliance__header .content {
+    background-color: rgba(0, 0, 0 , 0.4);
+    color: white;
+    left: 10px;
+    border-radius: 3px;
+    margin-bottom: 4px;
+    padding: 7px 10px;
+    width: fit-content;
+    width: 300px;
+}
+.containerManageAppliance__header .content div .icon {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    background-color: var(--green-color);
+}
+.containerManageAppliance__header .content .users li {
+    width: 20px;
+}
+.containerManageAppliance__header .content .users li  img {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
 }

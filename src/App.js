@@ -12,7 +12,10 @@ import Home from "./pages/home/Home";
 import ManageAppliance from "./pages/manageappliance/ManageAppliance";
 import ManagerClient from "./pages/managerclient/ManagerClient";
 import ManageRoom from "./pages/manageroom/ManageRoom";
+import Optimize from "./pages/optimize/Optimize";
+import ApplianceDetail from "./pages/appliancedetail/ApplianceDetail";
 import { useStore } from "./store/AppProvider";
+import Schedule from "./pages/schedule/Schedule";
 function App() {
   const { loading, user } = useStore();
   return (
@@ -36,13 +39,17 @@ function App() {
         >
           <Route path="home" element={<Home />} />
           <Route path="room" element={<ManageRoom />} />
+          <Route path="optimize" element={<Optimize />} />
           <Route path="appliance" element={<ManageAppliance />} />
+          <Route path="appliancedetail" element={<ApplianceDetail />} />
+          <Route path="/schedule" element={<Schedule />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/manager-client" element={<ManagerClient />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

@@ -1,23 +1,52 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
-// import Chart from "chart.js/auto";
-import { CategoryScale } from "chart.js";
-// Chart.register(CategoryScale);
-// const data = {
-//   labels: [
-//     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-//     21, 22, 23,
-//   ],
-//   datasets: [
-//     {
-//       label: "First dataset",
-//       data: [33, 53, 85, 41, 44, 65],
-//       fill: true,
-//       backgroundColor: "#55a3f4",
-//     },
-//   ],
-// };
 
-export default function VerticalBarChart() {
-  return <div>Hello</div>;
+const state = {
+  labels: [
+    "7 ngày",
+    "6 ngày",
+    "5 ngày",
+    "4 ngày",
+    "3 ngày",
+    "2 ngày",
+    "1 ngày",
+    "Hiện tại",
+  ],
+  datasets: [
+    {
+      label: "Thấp nhất",
+      data: [23, 36, 37, 39, 10, 11, 60, 80],
+      backgroundColor: "rgba(53, 162, 235, 0.5)",
+    },
+    {
+      label: "Cao nhất",
+      data: [20, 30, 10, 200, 10, 33, 10, 90],
+      backgroundColor: "rgba(255, 99, 132, 0.5)",
+    },
+  ],
+};
+
+export default class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <Bar
+          data={state}
+          options={
+            {
+              // title: {
+              //   display: true,
+              //   text: "Average Rainfall per month",
+              //   fontSize: 20,
+              // },
+              // legend: {
+              //   display: true,
+              //   position: "right",
+              // },
+            }
+          }
+        />
+      </div>
+    );
+  }
 }

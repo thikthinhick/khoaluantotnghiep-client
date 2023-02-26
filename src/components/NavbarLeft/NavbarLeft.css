@@ -3,13 +3,16 @@
     width: 100%;
 }
 .navbarleft-container li {
-    padding-left: 15px;
+    padding: 20px;
     width: 100%;
     cursor: pointer;
 }
+.navbarleft-container {
+    position: fixed;
+}
+
 .navbarleft-container li:hover{
-    background-color: #cdcdcd;
-    color: black;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 .navbarleft-container li a {
     align-items: center;

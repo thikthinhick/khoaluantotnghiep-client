@@ -26,7 +26,7 @@ function App({ speed }) {
     datasets: [
       {
         label: "Số liệu",
-        borderColor: "rgb(54, 162, 235)",
+        borderColor: "",
         cubicInterpolationMode: "monotone",
         fill: true,
         pointStyle: "none",
@@ -111,7 +111,7 @@ function App({ speed }) {
     },
   };
   return (
-    <div className="App">
+    <div style={{ height: "100%" }}>
       <Line data={data} options={options} />
     </div>
   );

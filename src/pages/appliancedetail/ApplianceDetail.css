@@ -1,0 +1,7 @@
+
+.container__appliance-detail .header .description {
+    padding: 0 10px;
+}
+.container__appliance-detail .header .description ul li {
+    height: 25px;
+}

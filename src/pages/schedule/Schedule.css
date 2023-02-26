@@ -1,5 +1,7 @@
 .modal-popup {
     font-size: 13px;
+    
+        
   }
   .modal-popup > .header-popup {
     width: 100%;
@@ -41,3 +43,4 @@
   input{
     font-size: 14px;
   }
+ 

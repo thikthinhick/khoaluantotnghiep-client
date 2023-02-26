@@ -11,8 +11,12 @@ const styles = {
     padding: "2px",
   },
   title: {
-    fontSize: "1em",
     color: "#000",
+    textAlign: "center",
+    position: "absolute",
+    top: "-24px",
+    background: "white",
+    width: "100%",
   },
 };
 
@@ -20,19 +24,24 @@ const Speedometer = ({ id, value, title }) => {
   return (
     <div style={styles.dial}>
       <ReactSpeedometer
-        maxValue={1000}
+        maxValue={300}
         minValue={0}
         height={160}
         width={255}
         value={value}
         needleTransition="easeQuadIn"
         needleTransitionDuration={1000}
-        needleColor="red"
+        needleColor="gray"
         startColor="green"
         segments={10}
-        endColor="blue"
+        endColor="red"
       />
-      <div style={styles.title}>{title}</div>
+
+      <div style={{ position: "relative" }}>
+        <h3 style={styles.title}>
+          {value} <span style={{ color: "gray" }}>kWh</span>
+        </h3>
+      </div>
     </div>
   );
 };

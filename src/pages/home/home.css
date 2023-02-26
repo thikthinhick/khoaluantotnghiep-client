@@ -1,8 +1,19 @@
 .detail-speedmetter tbody tr, th, td {
-    font-size: 13px !important;
+    font-size: 14px !important;
 }
-.live-chart{
-    
+.table-home tr td{
+    border: none
+}
+.table-home{
+   width: 100%;
+}
+
+.table-home tr:not(:last-child){
+    border-bottom: 1px solid #e1e1e1;
+}
+.table-home td:last-child{
+    padding: 8px 0;
+    text-align: end;
 }
 .live-chart::after{
     content: "LIVE";

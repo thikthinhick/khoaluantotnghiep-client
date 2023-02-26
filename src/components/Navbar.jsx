@@ -10,8 +10,17 @@ function Navbar() {
         <div className="container-fluid p-0">
           <div className="d-flex mx-0">
             <NavbarLeft />
-            <div style={{ marginTop: "75px", width: "100%" }}>
-              <Outlet />
+            <div
+              style={{
+                marginTop: "75px",
+                display: "flex",
+                width: "100%",
+              }}
+            >
+              <div className="col-xl-2"></div>
+              <div className="col-xl-10">
+                <Outlet />
+              </div>
             </div>
           </div>
         </div>

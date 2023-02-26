@@ -71,7 +71,19 @@
   .slider.round {
     border-radius: 13px;
   }
-  
+  .custom-button-power{
+    height: 60px;
+    width: 60px;
+    background: var(--green-color);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .custom-button-power.off{
+    background: var(--red-color)
+  }
   .slider.round:before {
     border-radius: 11px
   }
