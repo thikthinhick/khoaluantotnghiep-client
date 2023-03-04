@@ -1,101 +1,69 @@
-import React, { useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import "chartjs-plugin-streaming";
 import "chartjs-plugin-zoom";
-import moment from "moment";
+import axios from "axios";
+import { GraphUp } from "react-bootstrap-icons";
+import { URL } from "../../contants/Contants";
+const typeTimes = [
+  {
+    duration: 1000 * 60 * 15,
+    delay: 15000,
+    refresh: 15000,
+  },
+  {
+    duration: 1000 * 60 * 60 * 3,
+    delay: 15000 * 12,
+    refresh: 15000 * 12,
+  },
+  {
+    duration: 1000 * 60 * 60 * 24,
+    delay: 15000 * 12 * 8,
+    refresh: 15000 * 60 * 8,
+  },
+];
+function Chartmetter({ dataChart }) {
+  const [typeTime, setTypeTime] = useState(typeTimes[0]);
 
-function App({ speed }) {
-  const [x, setX] = useState([
-    { y: 0.1, x: moment().subtract(450, "second") },
-    { y: 0.2, x: moment().subtract(420, "second") },
-    { y: 0.2, x: moment().subtract(390, "second") },
-    { y: 0.4, x: moment().subtract(360, "second") },
-    { y: 0.3, x: moment().subtract(330, "second") },
-    { y: 0.4, x: moment().subtract(300, "second") },
-    { y: 0.5, x: moment().subtract(270, "second") },
-    { y: 0.1, x: moment().subtract(240, "second") },
-    { y: 0.5, x: moment().subtract(210, "second") },
-    { y: 0.1, x: moment().subtract(180, "second") },
-    { y: 0.5, x: moment().subtract(150, "second") },
-    { y: 0.9, x: moment().subtract(120, "second") },
-    { y: 0.2, x: moment().subtract(90, "second") },
-    { y: 0.7, x: moment().subtract(60, "second") },
-    { y: 0.8, x: moment().subtract(30, "second") },
-  ]);
+  const changeTypeTime = (e) => {
+    setTypeTime(typeTimes[e.target.value]);
+  };
   const data = {
     datasets: [
       {
-        label: "Số liệu",
-        borderColor: "",
-        cubicInterpolationMode: "monotone",
+        label: "Công suất tiêu thụ",
+        borderColor: "rgb(255, 99, 132)",
         fill: true,
         pointStyle: "none",
-        pointRadius: 0,
-        data: x,
+        pointRadius: 2,
+        data: dataChart,
       },
     ],
   };
   const options = {
-    plugins: {
-      zoom: {
-        pan: {
-          enabled: true,
-          mode: "x",
-        },
-        zoom: {
-          enabled: true,
-          mode: "x",
-        },
-        limits: {
-          x: {
-            minDelay: null, // Min value of the delay option
-            maxDelay: null, // Max value of the delay option
-            minDuration: null, // Min value of the duration option
-            maxDuration: null, // Max value of the duration option
-          },
-        },
-      },
-    },
     elements: {
       line: {
-        tension: 0.5,
-        borderWidth: 2,
+        tension: 0.2,
+        borderWidth: 1.5,
         color: "#666",
         lineTension: 0,
       },
+    },
+    animation: {
+      duration: 0,
     },
     scales: {
       xAxes: [
         {
           type: "realtime",
-
           realtime: {
-            duration: 500000,
+            duration: typeTime.duration,
             frameRate: 30,
-            delay: 20000,
-            refresh: 10000,
+            delay: typeTime.delay,
+            refresh: typeTime.refresh,
             pause: false,
-            onRefresh: function (chart) {
-              chart.config.data.datasets.forEach(function (dataset) {
-                const item = { x: moment(), y: Math.random() };
-                dataset.data.push(item);
-              });
-            },
             time: {
-              displayFormat: "h:mm",
-            },
-          },
-          ticks: {
-            displayFormats: 1,
-            maxRotation: 0,
-            minRotation: 0,
-            stepSize: 1,
-            maxTicksLimit: 30,
-            source: "auto",
-            autoSkip: true,
-            callback: function (value) {
-              let x = moment(value, "HH:mm:ss").format("HH:mm");
-              return x;
+              displayFormat: "h",
             },
           },
         },
@@ -103,18 +71,32 @@ function App({ speed }) {
       yAxes: [
         {
           ticks: {
-            max: 1,
-            min: 0,
+            max: 5000,
+            min: -1000,
           },
         },
       ],
     },
   };
+
   return (
-    <div style={{ height: "100%" }}>
-      <Line data={data} options={options} />
+    <div class="card mb-4" style={{ height: "100%" }}>
+      <div className="card-header align-items-center d-flex live-chart justify-content-between">
+        <div>
+          <GraphUp />
+          &nbsp; Biểu đồ theo dõi tiêu thụ trực tiếp
+        </div>
+        <select name="time" id="time" onChange={changeTypeTime}>
+          <option value="0">Theo dõi trong 30 phút</option>
+          <option value="1">Theo dõi trong 3 giờ</option>
+          <option value="2">Theo dõi trong 1 ngày</option>
+        </select>
+      </div>
+      <div style={{ height: "100%" }}>
+        <Line data={data} options={options} />
+      </div>
     </div>
   );
 }
 
-export default App;
+export default memo(Chartmetter);

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import axios from "axios";
 import "./Weather.css";
-export default function () {
+function Weather() {
   const [state, setState] = useState({
     location: {},
     current: { condition: {} },
@@ -18,7 +18,6 @@ export default function () {
         console.error(err);
       });
   }, []);
-  console.log(state);
   return (
     <div>
       <div className="container-weather">
@@ -39,9 +38,7 @@ export default function () {
           <img src={state.current.condition.icon} />
         </div>
       </div>
-      {/* <div style={{ fontWeight: "bold", fontSize: "16px" }}>
-        {state.location.localtime}
-      </div> */}
     </div>
   );
 }
+export default memo(Weather);

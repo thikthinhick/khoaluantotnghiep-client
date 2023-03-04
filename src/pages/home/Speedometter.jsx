@@ -29,8 +29,8 @@ const Speedometer = ({ id, value, title }) => {
         height={160}
         width={255}
         value={value}
-        needleTransition="easeQuadIn"
-        needleTransitionDuration={1000}
+        needleTransition="easeLinear"
+        needleTransitionDuration={500}
         needleColor="gray"
         startColor="green"
         segments={10}
