@@ -18,6 +18,7 @@ import { useStore } from "./store/AppProvider";
 import Schedule from "./pages/schedule/Schedule";
 function App() {
   const { loading, user } = useStore();
+
   return (
     <div className="App">
       {loading ? (
@@ -39,10 +40,10 @@ function App() {
         >
           <Route path="home" element={<Home />} />
           <Route path="room" element={<ManageRoom />} />
+          <Route path="/room/:id" element={<ManageAppliance />} />
           <Route path="optimize" element={<Optimize />} />
-          <Route path="appliance" element={<ManageAppliance />} />
           <Route path="appliancedetail" element={<ApplianceDetail />} />
-          <Route path="/schedule" element={<Schedule />} />
+          <Route path="schedule" element={<Schedule />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/manager-client" element={<ManagerClient />} />

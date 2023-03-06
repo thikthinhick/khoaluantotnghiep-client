@@ -1,17 +1,10 @@
 import React from "react";
-import Navbar from "../../components/NavbarTop/NavbarTop";
-import NavbarLeft from "../../components/NavbarLeft/NavbarLeft";
-import { House, Calendar2 } from "react-bootstrap-icons";
+import { Calendar2 } from "react-bootstrap-icons";
+import Popup from "../../components/popup/Popup";
+import { ToggleSwitch } from "../../components/button/Button";
 import "./Schedule.css";
-import {
-  ButtonPrimary,
-  ButtonError,
-  ToggleSwitch,
-} from "../../components/button/Button";
 import EditSchedule from "./EditSchedule";
-import Popup from "reactjs-popup";
-import "reactjs-popup/dist/index.css";
-import Pagination from "../../components/pagination/Pagination";
+const data = ["T2", "T3", "T4", "T5", "T6", "T7", "CN", "None"];
 function Schedule() {
   return (
     <main>
@@ -58,24 +51,14 @@ function Schedule() {
                   ))}
                 </tbody>
               </table>
-
-              <div className="d-flex justify-content-between p-0">
-                <Popup
-                  style={{ backgroundColor: "red" }}
-                  trigger={
-                    <a class="btn btn-outline-dark mt-auto" href="#">
-                      Tạo lịch mới
-                    </a>
-                  }
-                  modal
-                  nested
-                  contentStyle={{}}
-                >
-                  {(close) => <EditSchedule close={close} />}
-                </Popup>
-
-                <Pagination />
-              </div>
+              <Popup
+                title={"Tạo lịch trình mới"}
+                trigger={
+                  <a class="btn btn-outline-dark mt-auto">Tạo lịch trình</a>
+                }
+              >
+                <EditSchedule />
+              </Popup>
             </div>
           </div>
         </div>

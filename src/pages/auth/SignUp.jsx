@@ -201,7 +201,6 @@ function SignUp() {
                 vui lòng kiểm tra hộp thư để kích hoạt tài khoản.
               </p>
               <br></br>
-              
             </div>
           </div>
         </div>

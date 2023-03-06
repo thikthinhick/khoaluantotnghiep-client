@@ -1,5 +1,5 @@
 .active {
-    background-color: #dc3545;
+    background-color: var(--primary-color);
     width: 100%;
 }
 .navbarleft-container li {

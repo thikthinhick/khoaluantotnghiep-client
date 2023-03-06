@@ -3,11 +3,7 @@
     border-collapse: collapse;
     font-size: 14px;
 }
-
-
-
 .container-room {
-
     margin-bottom: 20px;
 }
 .container-room__body{
@@ -24,16 +20,18 @@
     font-weight: 600;
 }
 .container-room__body .users {
-    
+    height: 40px;
+    justify-content: center
 }
 .container-room__body .users li{
-    width: 20px;
+    width: 25px;
 }
 .container-room__body .users li img {
-    height: 30px;
-    width: 30px;
-    border-radius: 15px;
+    height: 36px;
+    width: 36px;
+    border-radius: 18px;
     border: 1px solid white;
+
 }
 .container-room__body .top p {
     font-size: 12px;
@@ -44,4 +42,7 @@
 .card-img{
     height: 150px;
     object-fit: cover;
+}
+.container__editroom{
+    width: 400px;
 }

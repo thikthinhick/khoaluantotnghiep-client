@@ -1,10 +1,7 @@
-import React, { memo, useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
 import "chartjs-plugin-streaming";
-import "chartjs-plugin-zoom";
-import axios from "axios";
+import React, { memo, useState } from "react";
 import { GraphUp } from "react-bootstrap-icons";
-import { URL } from "../../contants/Contants";
+import { Line } from "react-chartjs-2";
 const typeTimes = [
   {
     duration: 1000 * 60 * 15,

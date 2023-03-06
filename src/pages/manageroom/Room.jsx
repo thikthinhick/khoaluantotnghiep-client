@@ -1,44 +1,59 @@
 import React from "react";
 import Profile from "../../assets/images/user.webp";
-function Room() {
+import axios from "axios";
+import NotImage from "../../assets/images/notImage.png";
+import { URL } from "../../contants/Contants";
+import { useNavigate } from "react-router-dom";
+function Room({ info, deleteRoom }) {
+  const nav = useNavigate();
   return (
     <div class="col container-room">
       <div class="card">
         <img
           class="card-img"
-          src="https://bedesign.vn/wp-content/uploads/2022/03/ifYeUmdP3QBcScG-lGBjF_prtajlv6f_1bS0VMzYqlMGBsdQpownlxCDkwJ6LcdUVEI0D_ukv4_PNRrKqyO-xjKttQDGVQ8lWpCVUpJSp5sTKYOGejPgvDqa9f76DsOsMEdqmII.jpg"
+          src={info.thumbnail ? info.thumbnail : NotImage}
           alt="..."
         />
         <div className="container-room__body">
           <div className="top">
-            <h5>Nhà bếp</h5>
-            <p>10 thiết bị</p>
+            <h5>{info.nameRoom}</h5>
+            <p>{info.totalAppliances} thiết bị</p>
           </div>
+
           <div>
-            Công suất hiện tại: <b style={{ color: "#009933" }}>100W</b>
+            <b
+              style={{
+                color: "var(--primary-color)",
+                fontSize: "20px",
+                fontWeight: "bold",
+              }}
+            >
+              {Math.ceil(Math.random() * 5000)} W
+            </b>
           </div>
+
           <ul className="d-flex users">
-            <li>
-              <img src={Profile} />
-            </li>
-            <li>
-              <img src={Profile} />
-            </li>
-            <li>
-              <img src={Profile} />
-            </li>
+            {info.listThumbnail.map((element, index) => (
+              <li key={index}>
+                <img src={element ? element : Profile} />
+              </li>
+            ))}
           </ul>
         </div>
 
         <div class="card-footer pt-0 border-top-0 bg-transparent">
           <div class="text-center d-flex justify-content-between">
-            <a class="btn btn-outline-dark mt-auto" href="#">
-              Chi tiết
+            <a
+              class="btn btn-outline-dark mt-auto"
+              onClick={() => nav(`/room/${info.roomId}`)}
+            >
+              Vào phòng
             </a>
-            <a class="btn btn-outline-dark mt-auto" href="#">
-              Chỉnh sửa
-            </a>
-            <a class="btn btn-outline-dark mt-auto" href="#">
+            <a class="btn btn-outline-dark mt-auto">Thay đổi</a>
+            <a
+              class="btn btn-outline-dark mt-auto"
+              onClick={() => deleteRoom(info.roomId)}
+            >
               Xóa
             </a>
           </div>

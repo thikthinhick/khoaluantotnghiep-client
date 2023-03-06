@@ -1,59 +1,111 @@
-import React, { useState } from "react";
-import { ButtonPrimary } from "../../components/button/Button";
-import MultiSelect from "../../components/multiselectcheckbox/MultiSelectCheckboxs";
-const options = [
-  { name: "Facilities", value: "facilities" },
-  { name: "Finance", value: "finance" },
-  { name: "Front Office", value: "front_office" },
-  { name: "Human Resources", value: "human_resources" },
-  { name: "IT", value: "it" },
-  { name: "Management Team", value: "management_team" },
-  { name: "Planning", value: "planning" },
-  { name: "Sales", value: "sales" },
-];
-const defaultValues = [
-  { name: "Management Team", value: "management_team" },
-  { name: "Sales", value: "sales" },
-];
-function EditRoom({ close }) {
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const handleMultiChange = (options) => {
-    setSelectedOptions(options);
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+function EditRoom({ addRoom }) {
+  const [selectedFile, setSelectedFile] = useState();
+  const [preview, setPreview] = useState();
+  const [form, setForm] = useState({ roomName: "", descriptionRoom: "" });
+  useEffect(() => {
+    if (!selectedFile) {
+      setPreview(undefined);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreview(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
+  const onUpdateField = (e) => {
+    const nextFormState = {
+      ...form,
+      [e.target.name]: e.target.value,
+    };
+    setForm(nextFormState);
+  };
+  const onSelectFile = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(null);
+      return;
+    }
+    setSelectedFile(e.target.files[0]);
+  };
+  const createRoom = () => {
+    var formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("data", JSON.stringify(form));
+    if (window.confirm("bạn có chắc muốn tạo phòng không?") === true) {
+      axios
+        .post("http://localhost:8081/api/room", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          alert("Tạo phòng thành công!");
+          addRoom(res.data.info);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Tạo phòng thất bại!");
+        });
+    }
   };
   return (
-    <div className="modal-popup">
-      {/* <button className="close-popup" onClick={close}>
-        &times;
-      </button> */}
-      <div className="header-popup">Tạo phòng mới</div>
-      <div className="content-popup">
-        {" "}
-        <label style={{ fontWeight: "bold" }}>Tên phòng mới:</label>
-        <div class="input-group mb-3">
+    <>
+      <div className="modal-body container__editroom">
+        <div class="form-group mb-2">
+          <label>Tên Phòng</label>
           <input
-            style={{ fontSize: "13px", borderRadius: "0px", outline: "none" }}
             type="text"
-            outline={"none"}
             class="form-control"
-            placeholder="Nhập tên phòng"
+            value={form.roomName}
+            name="roomName"
+            onChange={onUpdateField}
           />
         </div>
-        <label style={{ fontWeight: "bold" }}>
-          Chọn danh sách người điều khiển:
-        </label>
-        <div class="input-group mb-3">
-          <MultiSelect
-            options={options}
-            defaultValues={defaultValues}
-            name="department"
-            onChange={handleMultiChange}
+        <div class="form-group mb-2">
+          <label>Mô tả</label>
+          <input
+            type="text"
+            class="form-control"
+            value={form.descriptionRoom}
+            name="descriptionRoom"
+            onChange={onUpdateField}
           />
         </div>
-        <div className="d-flex mt-2" style={{ justifyContent: "center" }}>
-          <ButtonPrimary title={"TẠO PHÒNG"} />
+        <div className="form-group mb-2">
+          <label>Chọn ảnh phòng</label>
+          <input type="file" onChange={onSelectFile} className="form-control" />
+          {selectedFile && (
+            <img
+              src={preview}
+              style={{
+                width: "100%",
+                height: "100%",
+                marginTop: "8px",
+                height: "150px",
+                objectFit: "cover",
+                borderRadius: "3px",
+              }}
+            />
+          )}
         </div>
       </div>
-    </div>
+      <div className="modal-content__footer">
+        <div className="body">
+          <input
+            type="button"
+            class="btn btn-default"
+            data-dismiss="modal"
+            value="Hủy"
+          />
+          <input
+            type="submit"
+            class="btn btn-success"
+            value="Ghi nhận"
+            onClick={createRoom}
+          />
+        </div>
+      </div>
+    </>
   );
 }
 

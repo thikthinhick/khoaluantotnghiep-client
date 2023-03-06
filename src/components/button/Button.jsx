@@ -23,7 +23,6 @@ const ButtonError = ({ title, style }) => {
     </div>
   );
 };
-//https://api.weatherapi.com/v1/current.json?key=f0d4d9631e9b4fb89e4175156232502&q=Hanoi&aqi=no
 const ButtonPower = ({ title }) => {
   const [state, setState] = useState(false);
   return (

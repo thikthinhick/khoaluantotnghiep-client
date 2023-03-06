@@ -1,0 +1,71 @@
+
+.container-mutipleOption{
+   
+}
+.select-btn{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+}
+.select-btn .arrow-dwn{
+    transform: rotate(-180deg);
+}
+.list-items{
+    position: relative;
+    margin-top: 4px;
+    border-radius: 4px;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    max-height: 150px;
+    overflow-y: scroll;
+}
+
+.list-items .item{
+    display: flex;
+    align-items: center;
+    list-style: none;
+    height: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    padding: 0 15px;
+}
+.list-items .item:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.list-items .item-info {
+    display: flex;
+    align-items: center;
+}
+.list-items .item-info img {
+    height: 30px;
+    width: 30px;
+    object-fit: cover;
+    border-radius: 15px;
+    margin-right: 5px;
+}
+.item .item-text{
+    font-weight: 400;
+    color: #333;
+}
+.item .checkbox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 16px;
+    width: 16px;
+    border-radius: 4px;
+    margin-right: 12px;
+    border: 1.5px solid #c0c0c0;
+    transition: all 0.3s ease-in-out;
+}
+.checkbox .check-icon{
+    font-size: 14px;    
+}
+.item.checked .check-icon{
+    transform: scale(1);
+}

@@ -1,46 +1,29 @@
 import React from "react";
 import "./Schedule.css";
-import { ButtonPrimary } from "../../components/button/Button";
 const data = ["T2", "T3", "T4", "T5", "T6", "T7", "CN", "None"];
-function EditSchedule({ close }) {
+function EditSchedule() {
   return (
-    <div className="modal-popup">
-      <button className="close-popup" onClick={close}>
-        &times;
-      </button>
-      <div className="header-popup">Tạo lịch trình mới</div>
-      <div className="content-popup">
-        {" "}
-        <label style={{ fontWeight: "bold" }}>Tên lịch trình:</label>
-        <div class="input-group mb-3">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Nhập tên lịch trình"
-          />
-        </div>
-        <label style={{ fontWeight: "bold" }}>
-          Thời gian bắt đầu / kết thúc:
-        </label>
+    <div class="modal-body">
+      <div class="form-group mb-2">
+        <label>Tên lịch trình</label>
+        <input type="text" class="form-control" required />
+      </div>
+
+      <div className="form-group mb-2">
+        <label>Thời gian bắt đầu / kết thúc:</label>
         <div class="d-flex">
-          <div class="input-group mb-3">
-            <input
-              type="time"
-              class="form-control"
-              placeholder="Thời gian bắt đầu"
-            />
+          <div class="input-group">
+            <input type="time" class="form-control" placeholder="Bắt đầu" />
           </div>
           &nbsp;&nbsp;
-          <div class="input-group mb-3">
-            <input
-              type="time"
-              class="form-control"
-              placeholder="Thời gian kết thúc"
-            />
+          <div class="input-group">
+            <input type="time" class="form-control" placeholder="Kết thúc" />
           </div>
         </div>
-        <label style={{ fontWeight: "bold" }}>Chọn thời gian lặp:</label>
-        <div class="input-group mb-3">
+      </div>
+      <div class="form-group">
+        <label>Lặp lại:</label>
+        <div class="input-group">
           {data.map((element, index) => (
             <div class="form-check form-check-inline" key={index}>
               <input
@@ -49,17 +32,15 @@ function EditSchedule({ close }) {
                 id="inlineCheckbox1"
                 value="option1"
               />
-              <label class="form-check-label" for="inlineCheckbox1">
+              <label
+                class="form-check-label"
+                for="inlineCheckbox1"
+                style={{ fontWeight: "400" }}
+              >
                 {element}
               </label>
             </div>
           ))}
-        </div>
-        <div>
-          <b>Tổng thời gian hoạt động:</b> 2 giờ 30 phút
-        </div>
-        <div className="d-flex mt-2" style={{ justifyContent: "center" }}>
-          <ButtonPrimary title={"TẠO LỊCH"} />
         </div>
       </div>
     </div>
