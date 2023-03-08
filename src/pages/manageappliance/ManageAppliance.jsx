@@ -1,103 +1,124 @@
-import React from "react";
-import {
-  Table,
-  Speedometer,
-  PeopleFill,
-  DatabaseFill,
-} from "react-bootstrap-icons";
-import { ButtonSuccess, ToggleSwitch } from "../../components/button/Button";
-import "./ManageAppliance.css";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { ChevronCompactRight, Table } from "react-bootstrap-icons";
+import { useParams } from "react-router-dom";
+import LoadingIcon from "../../components/loading/LoadingIcon";
+import MultipleOption from "../../components/multipleOption/MultipleOption";
 import Pagination from "../../components/pagination/Pagination";
-import Profile from "../../assets/images/user.webp";
-import Status from "../../components/status/Status";
-const data = [
-  {
-    name: "Máy giặt",
-    status: 1,
-    consume: 100,
-    on: false,
-  },
-  {
-    name: "Máy rửa bát",
-    status: 2,
-    consume: 100,
-    on: false,
-  },
-  {
-    name: "Bóng đèn",
-    status: 3,
-    consume: 100,
-    on: false,
-  },
-  {
-    name: "Bình nóng lạnh",
-    status: 4,
-    consume: 100,
-    on: true,
-  },
-  {
-    name: "Bình nóng lạnh",
-    status: 4,
-    consume: 100,
-    on: true,
-  },
-  {
-    name: "Bình nóng lạnh",
-    status: 4,
-    consume: 100,
-    on: true,
-  },
-];
+import Popup from "../../components/popup/Popup";
+import { URL as url } from "../../contants/Contants";
+import { useStore } from "../../store/AppProvider";
+import EditAppliance from "./EditAppliance";
+import "./ManageAppliance.css";
 function ManageAppliance() {
+  let { id } = useParams();
+  const { user } = useStore();
+  const { setLoading } = useStore();
+  const [visiableUser, setVisiableUser] = useState(false);
+  const [visiableAppliance, setVisiableAppliance] = useState(false);
+  const [state, setState] = useState({ appliances: [], users: [] });
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${url}api/room?id=${id}`)
+      .then((res) => {
+        setState(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  const updateUser = (users) => {
+    setState({ ...state, users: users });
+  };
+  const updateAppliance = (appliance) => {
+    setState({ ...state, appliances: [...state.appliances, appliance] });
+  };
+  const deleteAppliance = async (id) => {
+    if (window.confirm("bạn có chắc chắn muốn xóa không?") === true) {
+      axios
+        .delete(`${url}api/appliance`, {
+          data: {
+            userId: user.value.userId,
+            applianceId: id,
+          },
+        })
+        .then(() => {
+          alert("Xóa thành công!");
+          const appliances = state.appliances.filter((element) => {
+            return element.id !== id;
+          });
+          setState({
+            ...state,
+            appliances: appliances,
+          });
+        })
+        .catch((err) => {
+          alert("Xóa không thành công!");
+        });
+    }
+  };
   return (
     <main>
+      l
       <div className="container-fluid px-4 containerManageAppliance">
         <div className="containerManageAppliance__header">
-          <div className="d-flex">
-            <div className="background-image"></div>
-            <div>
-              <div className="content">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
+          <div className="d-flex" style={{ height: "100%" }}>
+            <div
+              className="col-6 background-image"
+              style={{ backgroundImage: `url(${state.thumbnail})` }}
+            ></div>
+            <div className="col-6" style={{ height: "100%" }}>
+              <h2>{state.roomName}</h2>
+              <p style={{ color: "gray", height: "40px" }}>
+                {state.descriptionRoom}
+              </p>
+              <a class="btn btn-outline-dark mt-2">Tắt tất cả</a>{" "}
+              <div className="d-flex mt-3">
+                <div className="item col-4">
+                  <div className="content">
                     <span>Công suất hiện tại</span>
-                    <h2>453 W</h2>
-                  </div>
-                  <div className="icon">
-                    <Speedometer size={20} />
-                  </div>
-                </div>
-              </div>
-              <div className="content">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <span>Tổng lượng điện tiêu thụ</span>
                     <h2>
-                      1000 kWh <i class="fas fa-kiss-wink-heart    "></i>
+                      <LoadingIcon />
                     </h2>
                   </div>
-                  <div className="icon">
-                    <DatabaseFill size={20} />
+                </div>
+                <div className="item col-4">
+                  <div className="content">
+                    <span>Tiêu thụ trong tháng</span>
+                    <h2>{state.totalConsumption} kWh</h2>
                   </div>
                 </div>
-              </div>
-              <div className="content">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <span>Người quản lý</span>
-                    <ul className="d-flex users">
-                      <li>
-                        <img src={Profile} />
-                      </li>
-                      <li>
-                        <img src={Profile} />
-                      </li>
-                      <li>
-                        <img src={Profile} />
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="icon">
-                    <PeopleFill size={20} />
+                <div className="item col-4">
+                  <div className="content">
+                    <span>Người điều khiển</span>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <ul className="d-flex users">
+                        {state.users.map((element, index) => (
+                          <li key={element.id}>
+                            <img src={element.thumbnail} />
+                          </li>
+                        ))}
+                      </ul>
+                      <Popup
+                        title={"Chọn người điều khiển"}
+                        show={visiableUser}
+                        trigger={
+                          <ChevronCompactRight
+                            size={20}
+                            style={{ cursor: "pointer" }}
+                            onClick={() => setVisiableUser(true)}
+                          />
+                        }
+                      >
+                        <MultipleOption
+                          roomId={state.roomId}
+                          close={setVisiableUser}
+                          updateUser={updateUser}
+                        />
+                      </Popup>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -115,7 +136,7 @@ function ManageAppliance() {
               <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">ID thiết bị</th>
+                    <th scope="col">ID</th>
                     <th scope="col">Tên thiết bị</th>
                     <th scope="col">Tình trạng thiết bị</th>
                     <th scope="col">Tiêu thụ hiện tại</th>
@@ -125,45 +146,58 @@ function ManageAppliance() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((element, index) => (
+                  {state.appliances.map((element, index) => (
                     <tr key={index}>
                       <th scope="row">{index + 1}</th>
                       <td>{element.name}</td>
                       <td>
-                        <Status index={element.status} />
+                        {/* <Status index={1} /> */}
+                        <LoadingIcon />
                       </td>
-                      <td>110 W</td>
+                      <td>
+                        <LoadingIcon />
+                      </td>
                       <td>Loại 1</td>
                       <td>
                         <div className="d-flex">
-                          <a class="btn btn-outline-dark mt-auto" href="#">
-                            Chi tiết
-                          </a>
-                          <a class="btn btn-outline-dark mt-auto mx-2" href="#">
+                          <a class="btn btn-outline-dark mt-auto">Chi tiết</a>
+                          <a class="btn btn-outline-dark mt-auto mx-2">
                             Lập lịch
                           </a>
-                          <a class="btn btn-outline-dark mt-auto" href="#">
+                          <a
+                            class="btn btn-outline-dark mt-auto"
+                            onClick={() => deleteAppliance(element.id)}
+                          >
                             Xóa thiết bị
                           </a>
                         </div>
                       </td>
                       <td>
-                        <ToggleSwitch />
+                        <a class="btn btn-outline-dark mt-auto">Bật thiết bị</a>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               <div className="p-0 d-flex justify-content-between">
-                <div>
-                  <a class="btn btn-outline-dark mt-auto" href="#">
-                    Thêm thiết bị
-                  </a>
-                  <a class="btn btn-outline-dark mt-auto mx-2" href="#">
-                    Tắt tất cả
-                  </a>
-                </div>
-
+                <Popup
+                  title={"Tạo thiết bị mới"}
+                  show={visiableAppliance}
+                  trigger={
+                    <a
+                      class="btn btn-outline-dark mt-auto"
+                      onClick={() => setVisiableAppliance(true)}
+                    >
+                      Thêm thiết bị
+                    </a>
+                  }
+                >
+                  <EditAppliance
+                    close={setVisiableAppliance}
+                    roomId={state.roomId}
+                    updateAppliance={updateAppliance}
+                  />
+                </Popup>
                 <Pagination />
               </div>
             </div>

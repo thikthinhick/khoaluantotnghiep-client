@@ -29,8 +29,9 @@
 
 }
 .modal .modal-content__header h4 {
-    font-weight: bold;
+  
     text-align: center;
+    font-size: 20px;
 }
 .modal .modal-content__header span {
     position: absolute;

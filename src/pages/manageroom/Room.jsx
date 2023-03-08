@@ -5,6 +5,7 @@ import NotImage from "../../assets/images/notImage.png";
 import { URL } from "../../contants/Contants";
 import { useNavigate } from "react-router-dom";
 function Room({ info, deleteRoom }) {
+  console.log(info);
   const nav = useNavigate();
   return (
     <div class="col container-room">
@@ -16,7 +17,7 @@ function Room({ info, deleteRoom }) {
         />
         <div className="container-room__body">
           <div className="top">
-            <h5>{info.nameRoom}</h5>
+            <h5>{info.roomName}</h5>
             <p>{info.totalAppliances} thiết bị</p>
           </div>
 
@@ -33,7 +34,7 @@ function Room({ info, deleteRoom }) {
           </div>
 
           <ul className="d-flex users">
-            {info.listThumbnail.map((element, index) => (
+            {info.listThumbnailUser.map((element, index) => (
               <li key={index}>
                 <img src={element ? element : Profile} />
               </li>

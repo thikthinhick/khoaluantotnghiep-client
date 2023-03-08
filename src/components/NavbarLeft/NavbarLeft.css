@@ -12,7 +12,7 @@
 }
 
 .navbarleft-container li:hover{
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--primary-light-color)
 }
 .navbarleft-container li a {
     align-items: center;

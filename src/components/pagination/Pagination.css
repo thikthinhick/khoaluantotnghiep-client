@@ -2,12 +2,12 @@
     display: flex;
 }
 .container-pagination .item-pagination {
-    height: 36px;
-    width: 36px;
+    height: 30px;
+    width: 30px;
     cursor: pointer;
     border: 1px solid #e5e5e5;
     margin: 0px 4px;
-    border-radius: 5px;
+    border-radius: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
