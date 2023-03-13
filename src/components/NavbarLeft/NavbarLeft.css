@@ -2,20 +2,30 @@
     background-color: var(--primary-color);
     width: 100%;
 }
-.navbarleft-container li {
-    padding: 20px;
+.navbarleft-container {
+    padding-top: 60px;
+}
+.navbarleft-container .link-item {
+    display: flex;
+    color: white;
     width: 100%;
-    cursor: pointer;
+    padding: 10px;
+    align-items: center;
+    text-decoration: none;
+    transition: all ease 0.3s;
+}
+.navbarleft-container .link-item:hover {
+    transition: all ease 0.3s;
+    background: var(--yellow-color);
+    color: black;
+}
+
+.navbar-left-name {
+    font-size: 16px;
+    text-transform: uppercase;
+    margin-left: 10px;
 }
 .navbarleft-container {
     position: fixed;
 }
 
-.navbarleft-container li:hover{
-    background-color: var(--primary-light-color)
-}
-.navbarleft-container li a {
-    align-items: center;
-    font-size: 16px;
-    font-weight: 500;
-}

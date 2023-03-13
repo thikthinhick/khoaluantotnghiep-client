@@ -10,15 +10,13 @@
     margin-right: 10px;
     margin-bottom: 4px;
 }
-.containerManageAppliance__header .item {
-    
-}
 .containerManageAppliance__header .item .content {
     border : 1px solid;
     border-radius: 5px;
     padding: 4px 10px;
     height: 100%;
     margin-right: 10px;
+    background-color: var(--yellow-color);
 }
 
 .containerManageAppliance__header .content .users li {

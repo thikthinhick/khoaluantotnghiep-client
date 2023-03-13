@@ -1,15 +1,13 @@
 import React from "react";
-import Profile from "../../assets/images/user.webp";
-import axios from "axios";
-import NotImage from "../../assets/images/notImage.png";
-import { URL } from "../../contants/Contants";
 import { useNavigate } from "react-router-dom";
-function Room({ info, deleteRoom }) {
-  console.log(info);
+import NotImage from "../../assets/images/notImage.png";
+import Profile from "../../assets/images/user.webp";
+function Room({ info, deleteRoom, watt }) {
   const nav = useNavigate();
   return (
     <div class="col container-room">
       <div class="card">
+        <div className="card-wattage"> {watt ? watt + " W" : "Loading..."}</div>
         <img
           class="card-img"
           src={info.thumbnail ? info.thumbnail : NotImage}
@@ -21,24 +19,16 @@ function Room({ info, deleteRoom }) {
             <p>{info.totalAppliances} thiết bị</p>
           </div>
 
-          <div>
-            <b
-              style={{
-                color: "var(--primary-color)",
-                fontSize: "20px",
-                fontWeight: "bold",
-              }}
-            >
-              {Math.ceil(Math.random() * 5000)} W
-            </b>
-          </div>
-
           <ul className="d-flex users">
-            {info.listThumbnailUser.map((element, index) => (
-              <li key={index}>
-                <img src={element ? element : Profile} />
-              </li>
-            ))}
+            {info.users.length !== 0 ? (
+              info.users.map((element, index) => (
+                <li key={index}>
+                  <img src={element.thumbnail ? element.thumbnail : Profile} />
+                </li>
+              ))
+            ) : (
+              <p>Phòng chưa có người nào</p>
+            )}
           </ul>
         </div>
 

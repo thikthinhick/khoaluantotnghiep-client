@@ -65,14 +65,14 @@ function Chartmetter({ dataChart }) {
           },
         },
       ],
-      yAxes: [
-        {
-          ticks: {
-            max: 5000,
-            min: -1000,
-          },
-        },
-      ],
+      // yAxes: [
+      //   {
+      //     ticks: {
+      //       max: 10000,
+      //       min: 0,
+      //     },
+      //   },
+      // ],
     },
   };
 

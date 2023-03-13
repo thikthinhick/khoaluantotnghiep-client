@@ -3,5 +3,15 @@
     padding: 0 10px;
 }
 .container__appliance-detail .header .description ul li {
-    height: 25px;
+  min-height: 30px; 
+}
+.description-appliance {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    color: gray;
+    line-height: 1.5rem;
+    height: 4.5rem;
+
 }

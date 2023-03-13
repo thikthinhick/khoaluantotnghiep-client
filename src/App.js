@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
+import ApplianceDetail from "./pages/appliancedetail/ApplianceDetail";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import Login from "./pages/auth/Login";
 import { RequireAuth } from "./pages/auth/RequireAuth";
@@ -13,9 +14,7 @@ import ManageAppliance from "./pages/manageappliance/ManageAppliance";
 import ManagerClient from "./pages/managerclient/ManagerClient";
 import ManageRoom from "./pages/manageroom/ManageRoom";
 import Optimize from "./pages/optimize/Optimize";
-import ApplianceDetail from "./pages/appliancedetail/ApplianceDetail";
 import { useStore } from "./store/AppProvider";
-import Schedule from "./pages/schedule/Schedule";
 function App() {
   const { loading, user } = useStore();
 
@@ -38,12 +37,14 @@ function App() {
             </RequireAuth>
           }
         >
-          <Route path="home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="room" element={<ManageRoom />} />
           <Route path="/room/:id" element={<ManageAppliance />} />
+          <Route
+            path="/room/:roomId/appliance/:applianceId"
+            element={<ApplianceDetail />}
+          />
           <Route path="optimize" element={<Optimize />} />
-          <Route path="appliancedetail" element={<ApplianceDetail />} />
-          <Route path="schedule" element={<Schedule />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/manager-client" element={<ManagerClient />} />

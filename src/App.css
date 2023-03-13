@@ -29,15 +29,23 @@
   font-weight: 600;
 }
 :root{
-  /* --primary-color: #ff4a00; */
+
   --primary-color: #04AA6D;
   --green-color: #62d493;
+  --yellow-color: #FFF4A3;
   --red-color: #ff4961;
   --primary-light-color: rgba(255, 74, 0, 0.5);
+}
+.bg-primary-custom {
+  background: var(--primary-color)
 }
 .btn-outline-dark:hover {
   background-color: var(--primary-color);
   border: 1px solid var(--primary-color);
+}
+.card-header{
+  background-color: var(--primary-color);
+  color: white
 }
 *{ 
   margin: 0;

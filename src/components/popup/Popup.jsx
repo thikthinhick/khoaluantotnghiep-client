@@ -7,7 +7,7 @@ function Popup(props) {
         <div className="modal">
           <div className="modal-content">
             <div className="modal-content__header">
-              <span>&times;</span>
+              <span onClick={() => props.close(false)}>&times;</span>
               <h4>{props.title}</h4>
             </div>
             <div className="modal-content__body">{props.children}</div>

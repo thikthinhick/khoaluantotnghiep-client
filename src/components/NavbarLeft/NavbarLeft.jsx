@@ -8,66 +8,65 @@ import {
   QuestionCircle,
 } from "react-bootstrap-icons";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { NavLink } from "react-router-dom";
 import "./NavbarLeft.css";
 function NavbarLeft() {
+  const menuItem = [
+    {
+      path: "/",
+      name: "Trang chủ",
+      icon: <HouseDoor />,
+    },
+    {
+      path: "/room",
+      name: "Quản lý phòng",
+      icon: <LayoutSidebar />,
+    },
+    {
+      path: "/statistic",
+      name: "Thống kê",
+      icon: <BarChart />,
+    },
+    {
+      path: "/setting",
+      name: "Cài đặt",
+      icon: <Gear />,
+    },
+    {
+      path: "/optimize",
+      name: "Tỗi ưu",
+      icon: <Lightbulb />,
+    },
+    ,
+    {
+      path: "/about",
+      name: "Thông tin thêm",
+      icon: <QuestionCircle />,
+    },
+  ];
   return (
-    <div className="px-0 col-xl-2 bg-dark navbarleft-container">
-      <div className="d-flex flex-column align-items-center align-items-sm-start pt-2 text-white min-vh-100">
-        <a
-          href="/"
-          className="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
-        >
-          <span className="d-none d-sm-inline">QUẢN LÝ ĐIỆN NĂNG</span>
-        </a>
+    <div className="col-xl-2 bg-dark navbarleft-container">
+      <div className="d-flex flex-column align-items-center align-items-sm-start text-white min-vh-100">
         <ul
-          className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+          className="flex-column align-items-center align-items-sm-start"
           id="menu"
           style={{
-            marginTop: "18px",
             width: "100%",
             display: "flex",
-
             flex: 1,
           }}
         >
-          <li className="py-3 active">
-            <NavDropdown.Item className="navbar-left-item" href="#">
-              <HouseDoor size={20} color={"white"} />
-              <h5 className="ms-2 d-none d-sm-inline">TRANG CHỦ</h5>
-            </NavDropdown.Item>
-          </li>
-          <li className="py-3">
-            <NavDropdown.Item className="navbar-left-item" href="#">
-              <LayoutSidebar size={20} color={"white"} />
-              <h5 className="ms-2 d-none d-sm-inline">QUẢN LÝ PHÒNG</h5>
-            </NavDropdown.Item>
-          </li>
-          <li className="py-3">
-            <NavDropdown.Item className="navbar-left-item" href="#">
-              <BarChart size={20} color={"white"} />
-              <h5 className="ms-2 d-none d-sm-inline">THỐNG KÊ</h5>
-            </NavDropdown.Item>
-          </li>
-          <li className="py-3">
-            <NavDropdown.Item className="navbar-left-item" href="#">
-              <Lightbulb size={20} color={"white"} />
-              <h5 className="ms-2 d-none d-sm-inline">GIẢI PHÁP</h5>
-            </NavDropdown.Item>
-          </li>
-          <li className="py-3">
-            <NavDropdown.Item className="navbar-left-item" href="#">
-              <Gear size={20} color={"white"} />
-              <h5 className="ms-2 d-none d-sm-inline">CÀI ĐẶT</h5>
-            </NavDropdown.Item>
-          </li>
-          <li style={{ flex: 1 }}></li>
-          <li className="py-3">
-            <NavDropdown.Item className="navbar-left-item" href="#">
-              <QuestionCircle size={20} color={"white"} />
-              <h5 className="ms-2 d-none d-sm-inline">GIỚI THIỆU</h5>
-            </NavDropdown.Item>
-          </li>
-          <br></br>
+          {menuItem.map((element, index) => (
+            <NavLink
+              className="link-item"
+              to={element.path}
+              key={index}
+              activeClassName="active"
+            >
+              <div className="navbar-left-icon">{element.icon}</div>
+              <div className="navbar-left-name">{element.name}</div>
+            </NavLink>
+          ))}
         </ul>
       </div>
     </div>

@@ -1,11 +1,29 @@
-import React from "react";
-import { BarChart, GraphUp } from "react-bootstrap-icons";
+import React, { useState, useEffect } from "react";
+import { Calendar2, Table } from "react-bootstrap-icons";
 import hinhanh from "../../assets/images/maygiat.jpg";
-import Status from "../../components/status/Status";
-import Chartmetter from "../home/Chartmetter";
+import { ToggleSwitch } from "../../components/button/Button";
+import LoadingIcon from "../../components/loading/LoadingIcon";
+import Pagination from "../../components/pagination/Pagination";
+import Popup from "../../components/popup/Popup";
+import EditSchedule from "./EditSchedule";
+import { URL } from "../../contants/Contants";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 import "./ApplianceDetail.css";
-import VerticalBarChart from "./VerticalBarChart";
 function ApplianceDetail() {
+  const { applianceId } = useParams();
+  const [showCreateAppliance, setShowCreateAppliance] = useState(false);
+  const [state, setState] = useState({ dbSchedules: [] });
+  useEffect(() => {
+    axios
+      .get(`${URL}api/appliance?id=${applianceId}`)
+      .then((res) => {
+        setState(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <main>
       <div className="container-fluid px-4 pt-4 container__appliance-detail">
@@ -13,7 +31,7 @@ function ApplianceDetail() {
           <div class="col-xl-8 d-flex">
             <div class="col-xl-6">
               <img
-                src={hinhanh}
+                src={state.thumbnail}
                 style={{
                   height: "100%",
                   width: "100%",
@@ -21,19 +39,23 @@ function ApplianceDetail() {
                 }}
               />
             </div>
-            <div className="col-xl-6 description">
-              <h3>Máy giặt</h3>
+            <div className="col-xl-6 description px-4">
+              <h2>{state.name}</h2>
               <ul>
-                <li>
-                  <b>Mô tả: </b>Là thiết bị dùng để giặt đồ trong gia đình
-                </li>
+                <li className="description-appliance">{state.description}</li>
                 <li>
                   <b>Công suất hiện tại: </b>
-                  123 W
+                  <h2 style={{ color: "var(--primary-color)" }}>
+                    <LoadingIcon />
+                  </h2>
+                </li>
+                <li>
+                  <b>Tổng năng lượng đã tiêu thụ: </b>400 kWh
                 </li>
                 <li className="d-flex align-items-center">
                   <b>Trạng thái :</b>&ensp;
-                  <Status index={1} />
+                  {/* <Status index={1} /> */}
+                  <LoadingIcon />
                 </li>
                 <li className="mt-2">
                   <a class="btn btn-outline-dark mt-auto" href="#">
@@ -42,83 +64,125 @@ function ApplianceDetail() {
                   <a class="btn btn-outline-dark mx-2" href="#">
                     Theo dõi
                   </a>
-                  <a class="btn btn-outline-dark mx-2" href="#">
-                    Lập lịch
-                  </a>
+
                   <a class="btn btn-outline-dark mt-auto" href="#">
-                    Xóa
+                    Xóa Thiết bị
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-
           <div class="col-xl-4">
-            <table class="table">
-              <tbody>
-                <tr>
-                  <td colspan="2" style={{ textAlign: "center" }}>
-                    <b>Thống kê liên quan</b>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Loại thiết bị:</td>
-                  <td>Flex</td>
-                </tr>
-                <tr>
-                  <td>Tổng tiêu thụ tháng này</td>
-                  <td>50 kWh</td>
-                </tr>
-                <tr>
-                  <td>Tổng tiêu thụ tháng trước</td>
-                  <td>50 kWh</td>
-                </tr>
-                <tr>
-                  <td>Chi phí hiện phải trả:</td>
-                  <td>40.000 VNĐ</td>
-                </tr>
-                <tr>
-                  <td>Chi phí tháng trước:</td>
-                  <td>80.000 VNĐ</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="row mt-4">
-          <div class="col-xl-6">
-            <div class="card mb-4">
-              <div
-                class="card-header"
-                style={{
-                  display: "flex",
-                  fontSize: "14px",
-                  alignItems: "center",
-                }}
-              >
-                <GraphUp />
-                &nbsp; Theo dõi trực tiếp tiêu thụ
+            <div class="card">
+              <div className="card-header align-items-center d-flex">
+                <Table />
+                &nbsp; Các chỉ số liên quan
               </div>
               <div className="card-body">
-                <Chartmetter />
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>Loại thiết bị:</td>
+                      <td>Loại 1</td>
+                    </tr>
+                    <tr>
+                      <td>Tổng tiêu thụ tháng này</td>
+                      <td>50 kWh</td>
+                    </tr>
+                    <tr>
+                      <td>Tổng tiêu thụ tháng trước</td>
+                      <td>50 kWh</td>
+                    </tr>
+                    <tr>
+                      <td>Chi phí hiện phải trả:</td>
+                      <td>40.000 VNĐ</td>
+                    </tr>
+                    <tr>
+                      <td>Chi phí tháng trước:</td>
+                      <td>80.000 VNĐ</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-          <div class="col-xl-6">
-            <div class="card mb-4">
-              <div
-                class="card-header"
-                style={{
-                  display: "flex",
-                  fontSize: "14px",
-                  alignItems: "center",
-                }}
-              >
-                <BarChart />
-                &nbsp; Thống kê tiêu thụ thiết bị
-              </div>
-              <div class="card-body">
-                <VerticalBarChart />
+        </div>
+        <div className="card mt-4">
+          <div className="card-header align-items-center d-flex">
+            <Calendar2 />
+            &nbsp; Danh sách lịch trình
+          </div>
+          <div className="card-body">
+            <div className="row px-3 container-manager-room">
+              {state.dbSchedules.length === 0 ? (
+                <h2 className="text-aligns-center p-4 text-center">
+                  Danh sách trống
+                </h2>
+              ) : (
+                <table className="table border">
+                  <thead className="thead-dark">
+                    <tr>
+                      <th scope="col">Số thứ tự</th>
+                      <th scope="col">Tên lịch trình</th>
+                      <th scope="col">Lặp lại</th>
+                      <th scope="col">Bắt đầu</th>
+                      <th scope="col">Kết thúc</th>
+                      <th scope="col">Tùy chọn</th>
+                      <th scope="col">Bật / tắt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {state.dbSchedules.map((element, index) => (
+                      <tr>
+                        <th scope="row">{index + 1}</th>
+                        <td>{element.name}</td>
+                        <td>
+                          {element.repeatDate ? element.repeatDate : "1 lần"}
+                        </td>
+                        <td>{element.startDate}</td>
+                        <td>{element.endDate}</td>
+                        <td>
+                          <div className="d-flex">
+                            <a class="btn btn-outline-dark mt-auto" href="#">
+                              Chỉnh sửa
+                            </a>
+                            <a
+                              class="btn btn-outline-dark mt-auto mx-2"
+                              href="#"
+                            >
+                              Xóa
+                            </a>
+                          </div>
+                        </td>
+                        <td>
+                          <ToggleSwitch value={element.status} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+
+              <div className="p-0 d-flex justify-content-between">
+                <Popup
+                  title={"Tạo lịch trình mới"}
+                  show={showCreateAppliance}
+                  close={setShowCreateAppliance}
+                  trigger={
+                    <a
+                      class="btn btn-outline-dark mt-auto"
+                      onClick={() => setShowCreateAppliance(true)}
+                    >
+                      Tạo lịch trình mới
+                    </a>
+                  }
+                >
+                  <EditSchedule
+                    close={setShowCreateAppliance}
+                    applianceId={applianceId}
+                  />
+                </Popup>
+                {state.dbSchedules.length === 0 ? <></> : <Pagination />}
               </div>
             </div>
           </div>

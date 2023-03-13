@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { BarChart, SortUpAlt } from "react-bootstrap-icons";
-import Speedometter from "./Speedometter";
-import Chartmetter from "./Chartmetter";
-import Weather from "../../components/Weather";
-import { Speedometer2, ListUl } from "react-bootstrap-icons";
-import "./Home.css";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { BarChart, CashCoin, Speedometer2 } from "react-bootstrap-icons";
 import { ButtonPower } from "../../components/button/Button";
+import Weather from "../../components/Weather";
 import { URL } from "../../contants/Contants";
+import Chartmetter from "./Chartmetter";
+import "./Home.css";
+import Speedometter from "./Speedometter";
 const URL_WEB_SOCKET = "ws://localhost:8081/websocket";
 const request = {
-  typeMessage: "SUBSCRIBE",
+  typeMessage: "SUBSCRIBE_HOME",
 };
 function Home() {
   const [ws, setWs] = useState(null);
@@ -67,7 +66,6 @@ function Home() {
           },
         ]);
       } else if (message.typeMessage === "SPEED_METTER") {
-        console.log(message.data);
         setSpeed(message.data);
       }
     };
@@ -81,7 +79,7 @@ function Home() {
       <div class="container-fluid">
         <div class="row">
           <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary text-white mb-4">
+            <div class="card bg-primary-custom text-white mb-4">
               <div class="card-body">Tổng tiêu thụ trong ngày</div>
               <div class="card-footer d-flex align-items-center justify-content-between">
                 <div class="small text-white">{state.consumptionInDay} kWh</div>
@@ -92,7 +90,7 @@ function Home() {
             </div>
           </div>
           <div class="col-xl-3 col-md-6">
-            <div class="card bg-danger text-white mb-4">
+            <div class="card bg-primary-custom text-white mb-4">
               <div class="card-body">Tổng tiêu thụ trong tháng</div>
               <div class="card-footer d-flex align-items-center justify-content-between">
                 <div class="small text-white">
@@ -105,7 +103,7 @@ function Home() {
             </div>
           </div>
           <div class="col-xl-3 col-md-6">
-            <div class="card bg-success text-white mb-4">
+            <div class="card bg-primary-custom text-white mb-4">
               <div class="card-body">Tổng tiêu thụ</div>
               <div class="card-footer d-flex align-items-center justify-content-between">
                 <div class="small text-white">{state.consumptionTotal} kWh</div>
@@ -124,6 +122,10 @@ function Home() {
       </div>
       <div class="row mx-1">
         <div className="col-xl-3 d-flex flex-column">
+          <div className="d-flex mb-4">
+            <ButtonPower />
+          </div>
+
           <div class="card">
             <div className="card-header align-items-center d-flex">
               <Speedometer2 />
@@ -134,43 +136,29 @@ function Home() {
             </div>
           </div>
           <br></br>
-          <div className="card" style={{ flex: 1 }}>
+          <div className="card">
             <div className="card-header align-items-center d-flex">
-              <ListUl />
-              &nbsp; Tổng quát
+              <CashCoin />
+              &nbsp; Chi phí
             </div>
             <div className="card-body">
               <table className="table-home">
                 <tr>
-                  <td colspan="2">
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                      <ButtonPower />
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
+                  <td>Chi phí tháng này:</td>
                   <td>
-                    <b>Chi phí tháng này:</b>
-                  </td>
-                  <td>
-                    {state.costCurrentMonth} <b>VNĐ</b>
+                    <b>{state.costCurrentMonth}</b>
                   </td>
                 </tr>
                 <tr>
+                  <td>Chi phí tháng trước:</td>
                   <td>
-                    <b>Chi phí tháng trước:</b>{" "}
-                  </td>
-                  <td>
-                    {state.costLastMonth} <b>VNĐ</b>
+                    <b>{state.costLastMonth}</b>
                   </td>
                 </tr>
                 <tr>
+                  <td>Tổng tất cả chi phí:</td>
                   <td>
-                    <b>Tổng tất cả chi phí:</b>
-                  </td>
-                  <td>
-                    {state.costTotal} <b>VNĐ</b>
+                    <b>{state.costTotal}</b>
                   </td>
                 </tr>
               </table>

@@ -24,8 +24,9 @@ const Speedometer = ({ id, value, title }) => {
   return (
     <div style={styles.dial}>
       <ReactSpeedometer
-        maxValue={300}
+        maxValue={16000}
         minValue={0}
+        labelFontSize={10}
         height={160}
         width={255}
         value={value}
@@ -33,13 +34,13 @@ const Speedometer = ({ id, value, title }) => {
         needleTransitionDuration={500}
         needleColor="gray"
         startColor="green"
-        segments={10}
+        segments={8}
         endColor="red"
       />
 
       <div style={{ position: "relative" }}>
         <h3 style={styles.title}>
-          {value} <span style={{ color: "gray" }}>kWh</span>
+          {value} <span style={{ color: "gray" }}>W</span>
         </h3>
       </div>
     </div>

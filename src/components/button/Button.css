@@ -16,7 +16,7 @@
     background-color: #ff4961;
 }
 .custom-button-success {
-    background-color: #62d493;
+    background-color: var(--primary-color)
 }
 .switch {
     position: relative;
@@ -56,7 +56,7 @@
   }
   
   input:checked + .slider {
-    background-color: #62d493;
+    background-color: var(--primary-color)
   }
   
   input:focus + .slider {
@@ -74,7 +74,7 @@
   .custom-button-power{
     height: 60px;
     width: 60px;
-    background: var(--green-color);
+    background: var(--primary-color);
     border-radius: 10px;
     display: flex;
     align-items: center;

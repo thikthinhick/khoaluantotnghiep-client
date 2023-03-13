@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { URL } from "../../contants/Contants";
 import axios from "axios";
-function EditRoom({ addRoom }) {
+function EditRoom({ addRoom, close }) {
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
   const [form, setForm] = useState({ roomName: "", descriptionRoom: "" });
@@ -33,7 +34,7 @@ function EditRoom({ addRoom }) {
     formData.append("data", JSON.stringify(form));
     if (window.confirm("bạn có chắc muốn tạo phòng không?") === true) {
       axios
-        .post("http://localhost:8081/api/room", formData, {
+        .post(`${URL}/api/room`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -41,6 +42,7 @@ function EditRoom({ addRoom }) {
         .then((res) => {
           alert("Tạo phòng thành công!");
           addRoom(res.data.info);
+          close();
         })
         .catch((err) => {
           console.log(err);
@@ -96,6 +98,7 @@ function EditRoom({ addRoom }) {
             class="btn btn-default"
             data-dismiss="modal"
             value="Hủy"
+            onClick={() => close()}
           />
           <input
             type="submit"

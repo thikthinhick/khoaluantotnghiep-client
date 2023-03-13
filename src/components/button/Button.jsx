@@ -26,7 +26,7 @@ const ButtonError = ({ title, style }) => {
 const ButtonPower = ({ title }) => {
   const [state, setState] = useState(false);
   return (
-    <div className="d-flex flex-column align-items-center">
+    <div className="">
       <div
         onClick={() => setState(!state)}
         className={state ? "custom-button-power" : "custom-button-power off"}
@@ -39,10 +39,10 @@ const ButtonPower = ({ title }) => {
     </div>
   );
 };
-const ToggleSwitch = () => {
+const ToggleSwitch = ({ value }) => {
   return (
     <label class="switch">
-      <input type="checkbox" />
+      <input type="checkbox" checked={value} />
       <span class="slider round"></span>
     </label>
   );

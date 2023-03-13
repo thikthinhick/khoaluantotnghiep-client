@@ -11,6 +11,7 @@ import "./NavbarTop.css";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useStore } from "../../store/AppProvider";
 import profile from "../../assets/images/user.webp";
+import { Link } from "react-router-dom";
 function Navbar() {
   const { user } = useStore();
   return (
@@ -18,7 +19,11 @@ function Navbar() {
       id="navbar-container"
       className="sb-topnav navbar navbar-expand navbar-dark bg-dark px-3"
     >
-      <div className="d-flex align-items-end mx-5">
+      <Link
+        to="/"
+        className="d-flex align-items-end mx-5"
+        style={{ textDecoration: "none" }}
+      >
         <img style={{ height: "30px", width: "30px" }} src={House} />
         <span
           style={{
@@ -28,20 +33,29 @@ function Navbar() {
             lineHeight: "18px",
           }}
         >
-          HOUSE<p style={{ fontSize: "14px", lineHeight: "14px" }}>POWER</p>
+          HOUSE
+          <p
+            style={{
+              fontSize: "14px",
+              lineHeight: "14px",
+              color: "var(--yellow-color)",
+            }}
+          >
+            POWER
+          </p>
         </span>
-      </div>
+      </Link>
       <form className="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
         <div className="input-group">
           <input
             className="form-control"
             type="text"
-            placeholder="Tìm kiếm..."
-            aria-label="Search for..."
+            placeholder="Tìm kiếm thiết bị, phòng,..."
             aria-describedby="btnNavbarSearch"
           />
           <button
-            className="btn btn-primary"
+            className="btn"
+            style={{ background: "var(--primary-color)" }}
             id="btnNavbarSearch"
             type="button"
           >

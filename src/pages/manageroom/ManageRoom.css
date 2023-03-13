@@ -5,6 +5,18 @@
 }
 .container-room {
     margin-bottom: 20px;
+    
+}
+.container-room .card {
+    position: relative;
+}
+.container-room .card .card-wattage{
+    position: absolute;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px 0px 0px 0px;
+    min-width: 50px;
 }
 .container-room__body{
     padding: 5px 10px;
@@ -21,7 +33,7 @@
 }
 .container-room__body .users {
     height: 40px;
-    justify-content: center
+    margin-top: 10px;
 }
 .container-room__body .users li{
     width: 25px;

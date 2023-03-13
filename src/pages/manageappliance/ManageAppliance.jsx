@@ -10,10 +10,19 @@ import { URL as url } from "../../contants/Contants";
 import { useStore } from "../../store/AppProvider";
 import EditAppliance from "./EditAppliance";
 import "./ManageAppliance.css";
+import Status from "../../components/status/Status";
+const URL_WEB_SOCKET = "ws://localhost:8081/websocket";
+
 function ManageAppliance() {
   let { id } = useParams();
+  const request = {
+    typeMessage: "SUBSCRIBE_ROOM",
+    roomId: id,
+  };
+  const [watts, setWatts] = useState({});
   const { user } = useStore();
   const { setLoading } = useStore();
+  const [ws, setWs] = useState(null);
   const [visiableUser, setVisiableUser] = useState(false);
   const [visiableAppliance, setVisiableAppliance] = useState(false);
   const [state, setState] = useState({ appliances: [], users: [] });
@@ -28,6 +37,22 @@ function ManageAppliance() {
       .catch((err) => {
         console.log(err);
       });
+    const wsClient = new WebSocket(URL_WEB_SOCKET);
+    wsClient.onopen = () => {
+      setWs(wsClient);
+      wsClient.send(JSON.stringify(request));
+      console.log("connected to server!");
+    };
+    wsClient.onmessage = (response) => {
+      let message = JSON.parse(response.data);
+      if (message.typeMessage === "SPEED_METTER_ROOM") {
+        setWatts(message.data);
+      }
+    };
+    wsClient.onclose = () => console.log("closed!");
+    return () => {
+      wsClient.close();
+    };
   }, []);
   const updateUser = (users) => {
     setState({ ...state, users: users });
@@ -59,9 +84,34 @@ function ManageAppliance() {
         });
     }
   };
+  const updateStatusAppliance = (applianceId, status) => {
+    const message = status ? "tắt" : "bật";
+    if (window.confirm(`Bạn có muốn ${message} thiết bị không?`) === true) {
+      axios
+        .put(`${url}api/appliance/change_status?id=${applianceId}`, {
+          status: !status,
+        })
+        .then((res) => {
+          let listAppliances = state.appliances.map((element) => {
+            if (element.id === applianceId) element.status = res.data.info;
+            return element;
+          });
+          setState({ ...state, appliances: listAppliances });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+  const totalWatt = () => {
+    let sum = 0;
+    for (let key in watts) {
+      sum += watts[key];
+    }
+    return sum;
+  };
   return (
     <main>
-      l
       <div className="container-fluid px-4 containerManageAppliance">
         <div className="containerManageAppliance__header">
           <div className="d-flex" style={{ height: "100%" }}>
@@ -79,15 +129,14 @@ function ManageAppliance() {
                 <div className="item col-4">
                   <div className="content">
                     <span>Công suất hiện tại</span>
-                    <h2>
-                      <LoadingIcon />
-                    </h2>
+
+                    <h2>{watts ? totalWatt() + " W" : <LoadingIcon />}</h2>
                   </div>
                 </div>
                 <div className="item col-4">
                   <div className="content">
                     <span>Tiêu thụ trong tháng</span>
-                    <h2>{state.totalConsumption} kWh</h2>
+                    <h2>{state.totalConsumptionMonth} kWh</h2>
                   </div>
                 </div>
                 <div className="item col-4">
@@ -151,12 +200,13 @@ function ManageAppliance() {
                       <th scope="row">{index + 1}</th>
                       <td>{element.name}</td>
                       <td>
-                        {/* <Status index={1} /> */}
-                        <LoadingIcon />
+                        {watts[element.id] ? (
+                          <Status index={1} />
+                        ) : (
+                          <Status index={2} />
+                        )}
                       </td>
-                      <td>
-                        <LoadingIcon />
-                      </td>
+                      <td>{watts[element.id] ? watts[element.id] : 0} W</td>
                       <td>Loại 1</td>
                       <td>
                         <div className="d-flex">
@@ -173,7 +223,14 @@ function ManageAppliance() {
                         </div>
                       </td>
                       <td>
-                        <a class="btn btn-outline-dark mt-auto">Bật thiết bị</a>
+                        <a
+                          class="btn btn-outline-dark mt-auto"
+                          onClick={() =>
+                            updateStatusAppliance(element.id, element.status)
+                          }
+                        >
+                          {element.status ? "Tắt thiết bị" : "Bật thiết bị"}
+                        </a>
                       </td>
                     </tr>
                   ))}
