@@ -2,8 +2,8 @@ import React from "react";
 import "./ManagerClient.css";
 function ManagerClient() {
   return (
-    <div class="grid-container">
-      <div class="item">
+    <div className="grid-container">
+      <div className="item">
         <select name="cars" id="cars">
           <option value="1">Chạy</option>
           <option value="2">Tắt</option>

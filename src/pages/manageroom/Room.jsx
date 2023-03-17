@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NotImage from "../../assets/images/notImage.png";
 import Profile from "../../assets/images/user.webp";
-function Room({ info, deleteRoom, watt }) {
+import Popup from "../../components/popup/Popup";
+import EditRoom from "./EditRoom";
+function Room({ info, deleteRoom, watt, updateRoom }) {
+  const [visiable, setVisiable] = useState(false);
+  const close = () => {
+    setVisiable(false);
+  };
+  const getDataParent = () => info;
   const nav = useNavigate();
   return (
-    <div class="col container-room">
-      <div class="card">
+    <div className="col container-room">
+      <div className="card">
         <div className="card-wattage"> {watt ? watt + " W" : "Loading..."}</div>
         <img
-          class="card-img"
+          className="card-img"
           src={info.thumbnail ? info.thumbnail : NotImage}
           alt="..."
         />
@@ -32,21 +39,45 @@ function Room({ info, deleteRoom, watt }) {
           </ul>
         </div>
 
-        <div class="card-footer pt-0 border-top-0 bg-transparent">
-          <div class="text-center d-flex justify-content-between">
+        <div className="card-footer pt-0 border-top-0 bg-transparent">
+          <div className="d-flex justify-content-between">
             <a
-              class="btn btn-outline-dark mt-auto"
+              className="btn btn-outline-dark mt-auto"
               onClick={() => nav(`/room/${info.roomId}`)}
             >
               Vào phòng
             </a>
-            <a class="btn btn-outline-dark mt-auto">Thay đổi</a>
+            <Popup
+              title={"Chỉnh sửa phòng"}
+              trigger={
+                <a
+                  className="btn btn-outline-dark mt-auto"
+                  onClick={() => setVisiable(true)}
+                >
+                  Chỉnh sửa
+                </a>
+              }
+              show={visiable}
+              close={close}
+            >
+              <EditRoom
+                getDataParent={getDataParent}
+                updateRoom={updateRoom}
+                close={close}
+              />
+            </Popup>
             <a
-              class="btn btn-outline-dark mt-auto"
+              className="btn btn-outline-dark mt-auto"
+              onClick={() => deleteRoom(info.roomId)}
+            >
+              Xóa phòng
+            </a>
+            {/* <a
+              className="btn btn-outline-dark mt-auto"
               onClick={() => deleteRoom(info.roomId)}
             >
               Xóa
-            </a>
+            </a> */}
           </div>
         </div>
       </div>

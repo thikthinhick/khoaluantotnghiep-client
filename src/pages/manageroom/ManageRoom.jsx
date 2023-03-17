@@ -4,7 +4,7 @@ import "./ManageRoom.css";
 import Room from "./Room";
 import axios from "axios";
 import Popup from "../../components/popup/Popup";
-import EditRoom from "./EditRoom";
+import CreateRoom from "./CreateRoom";
 const URL_WEB_SOCKET = "ws://localhost:8081/websocket";
 const request = {
   typeMessage: "SUBSCRIBE_ROOMS",
@@ -55,7 +55,14 @@ function ManageRoom() {
     }
   };
   const addRoom = (room) => {
-    setRooms([...rooms, room]);
+    setRooms([...rooms, { ...room, users: [], totalAppliances: 0 }]);
+  };
+  const updateRoom = (room) => {
+    let x = rooms.map((element) =>
+      element.id === room.id ? { ...element, ...room } : element
+    );
+
+    setRooms(x);
   };
   const closeCreateRoom = () => {
     setVisible({ ...visible, createRoom: false });
@@ -63,13 +70,14 @@ function ManageRoom() {
   return (
     <main>
       <div className="container-fluid px-4">
-        <div class="container">
-          <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
+        <div className="container">
+          <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3">
             {rooms.map((element) => (
               <Room
                 info={element}
                 watt={watts[element.roomId]}
                 deleteRoom={deleteRoom}
+                updateRoom={updateRoom}
                 key={element.roomId}
               />
             ))}
@@ -78,7 +86,7 @@ function ManageRoom() {
             title={"Tạo phòng mới"}
             trigger={
               <a
-                class="btn btn-outline-dark mt-auto"
+                className="btn btn-outline-dark mt-auto"
                 onClick={() => setVisible({ ...visible, createRoom: true })}
               >
                 Tạo phòng mới
@@ -87,7 +95,7 @@ function ManageRoom() {
             close={closeCreateRoom}
             show={visible.createRoom}
           >
-            <EditRoom addRoom={addRoom} close={closeCreateRoom} />
+            <CreateRoom addRoom={addRoom} close={closeCreateRoom} />
           </Popup>
         </div>
       </div>

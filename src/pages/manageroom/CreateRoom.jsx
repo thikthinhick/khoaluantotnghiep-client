@@ -1,32 +1,19 @@
-import axios from "axios";
-import React, { memo, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { URL as url } from "../../contants/Contants";
-function EditRoom({ getDataParent, updateRoom, close }) {
+import axios from "axios";
+function CreateRoom({ addRoom, close }) {
   const [selectedFile, setSelectedFile] = useState();
-
-  const [form, setForm] = useState({
-    roomName: "",
-    descriptionRoom: "",
-    thumbnail: null,
-  });
+  const [preview, setPreview] = useState();
+  const [form, setForm] = useState({ roomName: "", descriptionRoom: "" });
   useEffect(() => {
     if (!selectedFile) {
-      setForm({ ...form, thumbnail: null });
+      setPreview(undefined);
       return;
     }
     const objectUrl = URL.createObjectURL(selectedFile);
-    setForm({ ...form, thumbnail: objectUrl });
+    setPreview(objectUrl);
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
-  useEffect(() => {
-    const { roomName, descriptionRoom, thumbnail, roomId } = getDataParent();
-    setForm({
-      roomName: roomName,
-      descriptionRoom: descriptionRoom,
-      thumbnail: thumbnail,
-      roomId: roomId,
-    });
-  }, []);
   const onUpdateField = (e) => {
     const nextFormState = {
       ...form,
@@ -41,26 +28,25 @@ function EditRoom({ getDataParent, updateRoom, close }) {
     }
     setSelectedFile(e.target.files[0]);
   };
-  const submit = () => {
+  const createRoom = () => {
     var formData = new FormData();
     formData.append("file", selectedFile);
     formData.append("data", JSON.stringify(form));
-    if (window.confirm("bạn có chắc muốn cập nhật phòng không?") === true) {
+    if (window.confirm("bạn có chắc muốn tạo phòng không?") === true) {
       axios
-        .put(`${url}api/room?id=${form.roomId}`, formData, {
+        .post(`${url}api/room`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         })
         .then((res) => {
-          alert("Update phòng thành công!");
-          // console.log(res.data.info);
-          updateRoom(res.data.info);
+          alert("Tạo phòng thành công!");
+          addRoom(res.data.info);
           close();
         })
         .catch((err) => {
           console.log(err);
-          alert("Update phòng thất bại!");
+          alert("Tạo phòng thất bại!");
         });
     }
   };
@@ -90,9 +76,9 @@ function EditRoom({ getDataParent, updateRoom, close }) {
         <div className="form-group mb-2">
           <label>Chọn ảnh phòng</label>
           <input type="file" onChange={onSelectFile} className="form-control" />
-          {form.thumbnail && (
+          {selectedFile && (
             <img
-              src={form.thumbnail}
+              src={preview}
               style={{
                 width: "100%",
                 height: "100%",
@@ -112,13 +98,13 @@ function EditRoom({ getDataParent, updateRoom, close }) {
             className="btn btn-default"
             data-dismiss="modal"
             value="Hủy"
-            onClick={close}
+            onClick={() => close()}
           />
           <input
             type="submit"
             className="btn btn-success"
             value="Ghi nhận"
-            onClick={submit}
+            onClick={createRoom}
           />
         </div>
       </div>
@@ -126,4 +112,4 @@ function EditRoom({ getDataParent, updateRoom, close }) {
   );
 }
 
-export default memo(EditRoom);
+export default CreateRoom;

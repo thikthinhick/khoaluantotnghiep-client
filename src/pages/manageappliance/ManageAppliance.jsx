@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ChevronCompactRight, Table } from "react-bootstrap-icons";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import LoadingIcon from "../../components/loading/LoadingIcon";
 import MultipleOption from "../../components/multipleOption/MultipleOption";
 import Pagination from "../../components/pagination/Pagination";
@@ -99,7 +99,7 @@ function ManageAppliance() {
           setState({ ...state, appliances: listAppliances });
         })
         .catch((err) => {
-          console.log(err);
+          alert(`Không thể ${message} thiết bị! hãy kiểm tra lại`);
         });
     }
   };
@@ -124,19 +124,26 @@ function ManageAppliance() {
               <p style={{ color: "gray", height: "40px" }}>
                 {state.descriptionRoom}
               </p>
-              <a class="btn btn-outline-dark mt-2">Tắt tất cả</a>{" "}
+              <a className="btn btn-outline-dark mt-2">Tắt tất cả</a>{" "}
               <div className="d-flex mt-3">
                 <div className="item col-4">
                   <div className="content">
                     <span>Công suất hiện tại</span>
-
-                    <h2>{watts ? totalWatt() + " W" : <LoadingIcon />}</h2>
+                    {watts ? (
+                      <h2>
+                        {totalWatt()} <span>w</span>
+                      </h2>
+                    ) : (
+                      <LoadingIcon />
+                    )}
                   </div>
                 </div>
                 <div className="item col-4">
                   <div className="content">
                     <span>Tiêu thụ trong tháng</span>
-                    <h2>{state.totalConsumptionMonth} kWh</h2>
+                    <h2>
+                      {state.totalConsumptionMonth} <span>Số điện</span>
+                    </h2>
                   </div>
                 </div>
                 <div className="item col-4">
@@ -182,7 +189,7 @@ function ManageAppliance() {
           </div>
           <div className="card-body">
             <div className="row px-3 container-manager-room">
-              <table class="table">
+              <table className="table">
                 <thead>
                   <tr>
                     <th scope="col">ID</th>
@@ -210,12 +217,18 @@ function ManageAppliance() {
                       <td>Loại 1</td>
                       <td>
                         <div className="d-flex">
-                          <a class="btn btn-outline-dark mt-auto">Chi tiết</a>
-                          <a class="btn btn-outline-dark mt-auto mx-2">
+                          <Link
+                            className="btn btn-outline-dark mt-auto"
+                            to={`appliance/${element.id}`}
+                          >
+                            Chi tiết
+                          </Link>
+
+                          <a className="btn btn-outline-dark mt-auto mx-2">
                             Lập lịch
                           </a>
                           <a
-                            class="btn btn-outline-dark mt-auto"
+                            className="btn btn-outline-dark mt-auto"
                             onClick={() => deleteAppliance(element.id)}
                           >
                             Xóa thiết bị
@@ -224,7 +237,7 @@ function ManageAppliance() {
                       </td>
                       <td>
                         <a
-                          class="btn btn-outline-dark mt-auto"
+                          className="btn btn-outline-dark mt-auto"
                           onClick={() =>
                             updateStatusAppliance(element.id, element.status)
                           }
@@ -242,7 +255,7 @@ function ManageAppliance() {
                   show={visiableAppliance}
                   trigger={
                     <a
-                      class="btn btn-outline-dark mt-auto"
+                      className="btn btn-outline-dark mt-auto"
                       onClick={() => setVisiableAppliance(true)}
                     >
                       Thêm thiết bị

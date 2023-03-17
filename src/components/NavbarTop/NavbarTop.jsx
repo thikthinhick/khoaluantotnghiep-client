@@ -1,16 +1,12 @@
 import React from "react";
-import {
-  Search,
-  Gear,
-  BoxArrowLeft,
-  Person,
-  BellFill,
-} from "react-bootstrap-icons";
+import { Gear, BoxArrowLeft, Person, BellFill } from "react-bootstrap-icons";
+import Notification from "./Notification";
 import House from "../../assets/images/house.png";
 import "./NavbarTop.css";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { useStore } from "../../store/AppProvider";
 import profile from "../../assets/images/user.webp";
+import Searchbar from "./Searchbar";
 import { Link } from "react-router-dom";
 function Navbar() {
   const { user } = useStore();
@@ -45,27 +41,8 @@ function Navbar() {
           </p>
         </span>
       </Link>
-      <form className="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-        <div className="input-group">
-          <input
-            className="form-control"
-            type="text"
-            placeholder="Tìm kiếm thiết bị, phòng,..."
-            aria-describedby="btnNavbarSearch"
-          />
-          <button
-            className="btn"
-            style={{ background: "var(--primary-color)" }}
-            id="btnNavbarSearch"
-            type="button"
-          >
-            <Search size={20} color={"white"} />
-          </button>
-        </div>
-      </form>
-      <div className="notification">
-        <BellFill color="white" size={20} />
-      </div>
+      <Searchbar />
+      <Notification />
       <div className="d-flex align-items-center">
         <img
           className="image-profile"
@@ -81,11 +58,9 @@ function Navbar() {
 
       <NavDropdown id="collasible-nav-dropdown" style={{ color: "white" }}>
         <NavDropdown.Item className="d-flex align-items-center">
-          <Person /> &ensp;Profile
+          <Person /> &ensp;Trang cá nhân
         </NavDropdown.Item>
-        <NavDropdown.Item className="d-flex align-items-center">
-          <Gear /> &ensp;Cài đặt
-        </NavDropdown.Item>
+
         <NavDropdown.Divider />
         <NavDropdown.Item className="d-flex align-items-center">
           <BoxArrowLeft />

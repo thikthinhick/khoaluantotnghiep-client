@@ -30,7 +30,7 @@ function ForgotPassword() {
   };
   return (
     <div className="container-login">
-      <div class="signup-form">
+      <div className="signup-form">
         <div className="form">
           <h2>Quên mật khẩu</h2>
           {message ? (
@@ -48,7 +48,7 @@ function ForgotPassword() {
           </p>
           <div>
             <br></br>
-            <div class="form-group">
+            <div className="form-group">
               <label for="fname">Nhập email:</label>
               <input
                 style={{
@@ -63,10 +63,10 @@ function ForgotPassword() {
                 placeholder="Nhập email"
               />
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <button
                 type="submit"
-                class="btn btn-success btn-lg btn-block"
+                className="btn btn-success btn-lg btn-block"
                 style={{ minWidth: "200px", marginTop: "10px" }}
                 onClick={() => forgotPassword()}
               >

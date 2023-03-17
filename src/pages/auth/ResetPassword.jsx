@@ -79,7 +79,7 @@ function ResetPassword() {
   };
   return true ? (
     <div className="container-login">
-      <div class="signup-form">
+      <div className="signup-form">
         <div className="form" style={{ width: "500px" }}>
           <h2>Cập nhật lại mật khẩu</h2>
           <div>
@@ -99,7 +99,7 @@ function ResetPassword() {
           ) : (
             <></>
           )}
-          <div class="form-group">
+          <div className="form-group">
             <input
               style={{
                 width: "100%",
@@ -107,7 +107,7 @@ function ResetPassword() {
                 marginTop: "3px",
               }}
               type="password"
-              class="form-control"
+              className="form-control"
               name="password"
               value={form.username}
               onChange={onUpdateField}
@@ -117,7 +117,7 @@ function ResetPassword() {
           <div className="form-item__error">
             <p>{message.password}</p>
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <input
               style={{
                 width: "100%",
@@ -125,7 +125,7 @@ function ResetPassword() {
                 marginTop: "3px",
               }}
               type="password"
-              class="form-control"
+              className="form-control"
               name="confirm_password"
               onChange={onUpdateField}
               value={form.confirm_password}
@@ -135,10 +135,10 @@ function ResetPassword() {
           <div className="form-item__error">
             <p>{message.confirm_password}</p>
           </div>
-          <div class="form-group d-flex pt-2">
+          <div className="form-group d-flex pt-2">
             <button
               style={{ minWidth: "auto" }}
-              class="btn btn-primary btn-lg btn-block"
+              className="btn btn-primary btn-lg btn-block"
               onClick={updatePassword}
             >
               CẬP NHẬT

@@ -1,35 +1,94 @@
-import React, { useState, useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Calendar2, Table } from "react-bootstrap-icons";
-import hinhanh from "../../assets/images/maygiat.jpg";
+import { useParams } from "react-router-dom";
 import { ToggleSwitch } from "../../components/button/Button";
 import LoadingIcon from "../../components/loading/LoadingIcon";
 import Pagination from "../../components/pagination/Pagination";
 import Popup from "../../components/popup/Popup";
-import EditSchedule from "./EditSchedule";
 import { URL } from "../../contants/Contants";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useStore } from "../../store/AppProvider";
 import "./ApplianceDetail.css";
+import CreateSchedule from "./CreateSchedule";
+import EditSchedule from "./EditSchedule";
 function ApplianceDetail() {
   const { applianceId } = useParams();
   const [showCreateAppliance, setShowCreateAppliance] = useState(false);
   const [state, setState] = useState({ dbSchedules: [] });
+  const { user } = useStore();
   useEffect(() => {
     axios
       .get(`${URL}api/appliance?id=${applianceId}`)
       .then((res) => {
-        setState(res.data);
+        let data = res.data;
+        data = {
+          ...data,
+
+          dbSchedules: data.dbSchedules.map((element) => {
+            element.showEditSchedule = false;
+            return element;
+          }),
+        };
+        setState(data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+  const deleteSchedule = (id) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa lịch trình không?")) {
+      axios
+        .delete(`${URL}api/schedule`, {
+          data: { userId: user.value.userId, scheduleId: id },
+        })
+        .then((res) => {
+          setState({
+            ...state,
+            dbSchedules: state.dbSchedules.filter(
+              (element) => element.id !== id
+            ),
+          });
+          alert("Xóa lịch trình thành công");
+        })
+        .catch((err) => {
+          alert("Xóa lịch trình thất bại");
+        });
+    }
+  };
+  const updateSchedule = (schedule) => {
+    let dbSchedules = state.dbSchedules.map((element) => {
+      if (element.id === schedule.id)
+        return { ...element, ...schedule, showEditSchedule: false };
+      return element;
+    });
+    setState({
+      ...state,
+      dbSchedules: dbSchedules,
+    });
+  };
+  const addSchedule = (schedule) => {
+    setState({ ...state, dbSchedules: [...state.dbSchedules, schedule] });
+  };
+  const changeShowEditSchedule = (scheduleId) => {
+    const schedules = state.dbSchedules.map((element) => {
+      if (element.id === scheduleId)
+        return { ...element, showEditSchedule: !element.showEditAppliance };
+      return element;
+    });
+    setState({ ...state, dbSchedules: schedules });
+  };
+  const closeShowEditSchedule = () => {
+    const schedules = state.dbSchedules.map((element) => {
+      return { ...element, showEditSchedule: false };
+    });
+    setState({ ...state, dbSchedules: schedules });
+  };
   return (
     <main>
       <div className="container-fluid px-4 pt-4 container__appliance-detail">
-        <div class="row header">
-          <div class="col-xl-8 d-flex">
-            <div class="col-xl-6">
+        <div className="row header">
+          <div className="col-xl-8 d-flex">
+            <div className="col-xl-6">
               <img
                 src={state.thumbnail}
                 style={{
@@ -58,28 +117,28 @@ function ApplianceDetail() {
                   <LoadingIcon />
                 </li>
                 <li className="mt-2">
-                  <a class="btn btn-outline-dark mt-auto" href="#">
+                  <a className="btn btn-outline-dark mt-auto" href="#">
                     Tắt thiết bị
                   </a>
-                  <a class="btn btn-outline-dark mx-2" href="#">
+                  <a className="btn btn-outline-dark mx-2" href="#">
                     Theo dõi
                   </a>
 
-                  <a class="btn btn-outline-dark mt-auto" href="#">
+                  <a className="btn btn-outline-dark mt-auto" href="#">
                     Xóa Thiết bị
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-          <div class="col-xl-4">
-            <div class="card">
+          <div className="col-xl-4">
+            <div className="card">
               <div className="card-header align-items-center d-flex">
                 <Table />
                 &nbsp; Các chỉ số liên quan
               </div>
               <div className="card-body">
-                <table class="table">
+                <table className="table">
                   <tbody>
                     <tr>
                       <td>Loại thiết bị:</td>
@@ -133,22 +192,40 @@ function ApplianceDetail() {
                   </thead>
                   <tbody>
                     {state.dbSchedules.map((element, index) => (
-                      <tr>
+                      <tr key={index}>
                         <th scope="row">{index + 1}</th>
                         <td>{element.name}</td>
                         <td>
-                          {element.repeatDate ? element.repeatDate : "1 lần"}
+                          {element.repeatDay ? element.repeatDay : "1 lần"}
                         </td>
                         <td>{element.startDate}</td>
                         <td>{element.endDate}</td>
                         <td>
                           <div className="d-flex">
-                            <a class="btn btn-outline-dark mt-auto" href="#">
-                              Chỉnh sửa
-                            </a>
+                            <Popup
+                              title={"Chỉnh sửa lịch trình"}
+                              show={element.showEditSchedule}
+                              close={closeShowEditSchedule}
+                              trigger={
+                                <a
+                                  className="btn btn-outline-dark mt-auto"
+                                  onClick={() =>
+                                    changeShowEditSchedule(element.id)
+                                  }
+                                >
+                                  Chỉnh sửa lịch trình
+                                </a>
+                              }
+                            >
+                              <EditSchedule
+                                info={element}
+                                close={closeShowEditSchedule}
+                                updateSchedule={updateSchedule}
+                              />
+                            </Popup>
                             <a
-                              class="btn btn-outline-dark mt-auto mx-2"
-                              href="#"
+                              className="btn btn-outline-dark mt-auto mx-2"
+                              onClick={() => deleteSchedule(element.id)}
                             >
                               Xóa
                             </a>
@@ -170,16 +247,17 @@ function ApplianceDetail() {
                   close={setShowCreateAppliance}
                   trigger={
                     <a
-                      class="btn btn-outline-dark mt-auto"
+                      className="btn btn-outline-dark mt-auto"
                       onClick={() => setShowCreateAppliance(true)}
                     >
                       Tạo lịch trình mới
                     </a>
                   }
                 >
-                  <EditSchedule
+                  <CreateSchedule
                     close={setShowCreateAppliance}
                     applianceId={applianceId}
+                    addSchedule={addSchedule}
                   />
                 </Popup>
                 {state.dbSchedules.length === 0 ? <></> : <Pagination />}

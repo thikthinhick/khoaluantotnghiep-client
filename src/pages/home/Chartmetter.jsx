@@ -77,7 +77,7 @@ function Chartmetter({ dataChart }) {
   };
 
   return (
-    <div class="card mb-4" style={{ height: "100%" }}>
+    <div className="card mb-4" style={{ height: "100%" }}>
       <div className="card-header align-items-center d-flex live-chart justify-content-between">
         <div>
           <GraphUp />

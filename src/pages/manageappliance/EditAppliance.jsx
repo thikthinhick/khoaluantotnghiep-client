@@ -55,27 +55,27 @@ function EditAppliance({ close, roomId, updateAppliance }) {
   return (
     <>
       <div className="modal-body container__editroom">
-        <div class="form-group mb-2">
+        <div className="form-group mb-2">
           <label>*Tên thiết bị</label>
           <input
             type="text"
-            class="form-control"
+            className="form-control"
             name="applianceName"
             value={form.applianceName}
             onChange={handleChange}
           />
         </div>
-        <div class="form-group mb-2">
+        <div className="form-group mb-2">
           <label>Mô tả</label>
           <input
             type="text"
-            class="form-control"
+            className="form-control"
             onChange={handleChange}
             value={form.applianceDescription}
             name="applianceDescription"
           />
         </div>
-        <div class="form-group mb-2">
+        <div className="form-group mb-2">
           <label>*Loại thiết bị</label>
           <div className="d-flex">
             <div className="d-flex">
@@ -87,7 +87,7 @@ function EditAppliance({ close, roomId, updateAppliance }) {
                 onChange={handleChange}
               />
               <label
-                class="check-label mx-2"
+                className="check-label mx-2"
                 style={{ fontWeight: "400" }}
                 for="flexRadioDefault1"
               >
@@ -103,7 +103,7 @@ function EditAppliance({ close, roomId, updateAppliance }) {
                 onChange={handleChange}
               />
               <label
-                class="check-label mx-2"
+                className="check-label mx-2"
                 style={{ fontWeight: "400" }}
                 for="flexRadioDefault2"
               >
@@ -134,7 +134,7 @@ function EditAppliance({ close, roomId, updateAppliance }) {
         <div className="body">
           <input
             type="button"
-            class="btn btn-default"
+            className="btn btn-default"
             data-dismiss="modal"
             onClick={() => close(false)}
             value="Hủy"
@@ -142,7 +142,7 @@ function EditAppliance({ close, roomId, updateAppliance }) {
           <input
             type="submit"
             onClick={createAppliance}
-            class="btn btn-success"
+            className="btn btn-success"
             value="Ghi nhận"
           />
         </div>

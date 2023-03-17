@@ -43,7 +43,7 @@ function Login() {
   };
   return (
     <div className="container-login">
-      <div class="signup-form">
+      <div className="signup-form">
         <div className="form">
           <h2>Đăng nhập</h2>
           {error ? (
@@ -52,10 +52,10 @@ function Login() {
             <></>
           )}
 
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="email"
-              class="form-control"
+              className="form-control"
               name="username"
               value={form.username}
               onChange={onUpdateField}
@@ -65,10 +65,10 @@ function Login() {
           <div className="form-item__error">
             {usernameError ? <p>Tài khoản là bắt buộc</p> : <></>}
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               name="password"
               onChange={onUpdateField}
               value={form.password}
@@ -79,10 +79,10 @@ function Login() {
             {passwrodError ? <p>Mật khẩu là bắt buộc</p> : <></>}
           </div>
           <div
-            class="form-group pb-2"
+            className="form-group pb-2"
             style={{ display: "flex", justifyContent: "space-between" }}
           >
-            <label class="float-left form-check-label">
+            <label className="float-left form-check-label">
               <input
                 type="checkbox"
                 name="remember"
@@ -95,16 +95,16 @@ function Login() {
               Quên mật khẩu?
             </Link>
           </div>
-          <div class="form-group d-flex justify-content-center">
+          <div className="form-group d-flex justify-content-center">
             <button
               onClick={submitLogin}
-              class="btn btn-primary btn-lg btn-block"
+              className="btn btn-primary btn-lg btn-block"
             >
               ĐĂNG NHẬP
             </button>
           </div>
         </div>
-        <div class="text-center" style={{ color: "white" }}>
+        <div className="text-center" style={{ color: "white" }}>
           Bạn chưa có tài khoản?{" "}
           <Link className="text-login" to={"/signup"}>
             Tạo tài khoản

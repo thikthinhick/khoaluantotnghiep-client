@@ -1,91 +1,42 @@
 import React from "react";
-import { ArrowLeftRight, BarChart, House } from "react-bootstrap-icons";
+import { BarChart } from "react-bootstrap-icons";
 import VerticalBarChart from "../appliancedetail/VerticalBarChart";
 import "./Optimize.css";
 function Optimize() {
   return (
     <main>
-      <div class="container-fluid px-4">
-        <ol className="breadcrumb mb-4">
-          <li class="breadcrumb-item">
-            <House />
-          </li>
-          <li className="breadcrumb-item">
-            <a href="index.html">Giải pháp</a>
-          </li>
-        </ol>
+      <div className="container-fluid px-4">
         <div>
-          <div class="form-check form-switch">
+          <div className="form-check form-switch">
             <input
-              class="form-check-input"
+              className="form-check-input"
               type="checkbox"
               role="switch"
               id="flexSwitchCheckDefault"
             />
-            <label class="form-check-label" for="flexSwitchCheckDefault">
+            <label className="form-check-label" for="flexSwitchCheckDefault">
               Tắt thiết bị khi thiết bị ở chế độ chờ
             </label>
           </div>
-          <div class="form-check form-switch">
+          <div className="form-check form-switch">
             <input
-              class="form-check-input"
+              className="form-check-input"
               type="checkbox"
               role="switch"
               id="flexSwitchCheckDefault"
             />
             <div className="d-flex">
               <label className="form-check-label" for="flexSwitchCheckDefault">
-                Sử dụng lập lịch thông minh
-              </label>
-              {/* <ButtonPrimary title={"CHỈNH SỬA"} /> */}
-            </div>
-          </div>
-          <div>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="inlineRadioOptions"
-                id="inlineRadio1"
-                value="option1"
-              />
-              <label class="form-check-label" for="inlineRadio1">
-                Biểu giá đơn
-              </label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="inlineRadioOptions"
-                id="inlineRadio2"
-                value="option2"
-              />
-              <label class="form-check-label" for="inlineRadio2">
-                Biểu giá theo thời điểm
+                Sử dụng lập lịch tối ưu
               </label>
             </div>
           </div>
-          {/* <select
-                      class="form-select"
-                      style={{ width: "300px" }}
-                      aria-label="Default select example"
-                    >
-                      <option selected>
-                        Chọn khoảng thời gian sử dụng để tối ưu
-                      </option>
-                      <option value="1">Tất cả các thời gian</option>
-                      <option value="2">Quý 1</option>
-                      <option value="3">Quý 2</option>
-                      <option value="2">Quý 3</option>
-                      <option value="3">Quý 4</option>
-                    </select> */}
         </div>
-        <div className="row mt-4">
-          <div class="col-xl-6">
-            <div class="card mb-4">
+        <div className="mt-4 row">
+          <div className="col-9">
+            <div className="card mb-4">
               <div
-                class="card-header"
+                className="card-header"
                 style={{
                   display: "flex",
                   fontSize: "14px",
@@ -93,37 +44,34 @@ function Optimize() {
                 }}
               >
                 <BarChart />
-                &nbsp; Thống kê tiêu thụ thiết bị hiện tại
+                &nbsp; Biểu đồ so sánh tiêu thụ trước và sau tối ưu
               </div>
-              <div class="card-body">
+              <div className="card-body">
                 <VerticalBarChart />
               </div>
             </div>
           </div>
-          <div class="col-xl-6">
-            <div class="card mb-4">
-              <div
-                class="card-header"
-                style={{
-                  display: "flex",
-                  fontSize: "14px",
-                  alignItems: "center",
-                }}
-              >
-                <BarChart />
-                &nbsp; Thống kê tiêu thụ thiết bị sau khi tối ưu
-              </div>
-              <div class="card-body">
-                <VerticalBarChart />
+          <div className="col-xl-3">
+            <div className="card mb-4">
+              <div className="card-header">Kết quả</div>
+              <div className="card-body">
+                <div className="d-flex justify-content-between">
+                  <span>Số điện tiết kiệm:</span>
+                  <b>20 số</b>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <span>Số tiền tiết kiệm:</span> <b>100,000 VNĐ</b>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-xl-8">
-            <div class="card mb-4">
+
+        {/* <div className="row">
+          <div className="col-xl-8">
+            <div className="card mb-4">
               <div
-                class="card-header"
+                className="card-header"
                 style={{
                   display: "flex",
                   fontSize: "14px",
@@ -133,8 +81,8 @@ function Optimize() {
                 <ArrowLeftRight />
                 &nbsp; So sánh
               </div>
-              <div class="card-body">
-                <table class="table">
+              <div className="card-body">
+                <table className="table">
                   <thead>
                     <tr>
                       <th scope="col">Tên thông số</th>
@@ -163,19 +111,19 @@ function Optimize() {
               </div>
             </div>
           </div>
-          <div class="col-xl-4">
-            <div class="card mb-4">
-              <div class="card-header">
-                <i class="fas fa-table me-1"></i>
+          <div className="col-xl-4">
+            <div className="card mb-4">
+              <div className="card-header">
+                <i className="fas fa-table me-1"></i>
                 Kết quả
               </div>
-              <div class="card-body">
+              <div className="card-body">
                 <div>Năng lượng tiết kiệm: 20 kWh/năm</div>
                 <div>Số tiền tiết kiệm được: 100.000 VNĐ/năm</div>
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </main>
   );

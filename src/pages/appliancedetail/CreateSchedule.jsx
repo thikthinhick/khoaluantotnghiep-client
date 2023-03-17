@@ -1,7 +1,7 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState } from "react";
 import { URL } from "../../contants/Contants";
 import axios from "axios";
-function EditSchedule({ info, close, updateSchedule }) {
+function CreateSchedule({ close, applianceId, addSchedule }) {
   const [formRepeat, setFormRepeat] = useState({
     T2: false,
     T3: false,
@@ -16,29 +16,6 @@ function EditSchedule({ info, close, updateSchedule }) {
     startDate: "00:00",
     endDate: "23:59",
   });
-  useEffect(() => {
-    const { name, startDate, endDate, repeatDay } = info;
-    setForm({
-      name: name,
-      startDate: startDate.substr(0, 5),
-      endDate: endDate.substr(0, 5),
-    });
-    if (repeatDay) {
-      const x = {
-        T2: false,
-        T3: false,
-        T4: false,
-        T5: false,
-        T6: false,
-        T7: false,
-        CN: false,
-      };
-      repeatDay.split(",").forEach((element) => {
-        x[element] = true;
-      });
-      setFormRepeat(x);
-    }
-  }, [info]);
   const hanleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
@@ -47,8 +24,8 @@ function EditSchedule({ info, close, updateSchedule }) {
     const { name } = e.target;
     setFormRepeat({ ...formRepeat, [name]: !formRepeat[name] });
   };
-  const submit = () => {
-    if (window.confirm("Bạn có chắc chắn muốn update lịch trình không?")) {
+  const createSchedule = () => {
+    if (window.confirm("Bạn có muốn tạo lịch trình không ?")) {
       let repeatDay = "";
       Object.keys(formRepeat).forEach((element) => {
         if (formRepeat[element]) repeatDay = repeatDay.concat(element + ",");
@@ -56,18 +33,19 @@ function EditSchedule({ info, close, updateSchedule }) {
       repeatDay = repeatDay.slice(0, repeatDay.length - 1);
       const body = {
         schedule: {
-          name: form.name,
-          startDate: form.startDate,
-          endDate: form.endDate,
           repeatDay: repeatDay,
-          id: info.id,
+          name: form.name,
+          endDate: form.endDate,
+          startDate: form.startDate,
         },
+        applianceId: applianceId,
       };
       axios
-        .put(`${URL}api/schedule`, body)
+        .post(`${URL}api/schedule`, body)
         .then((res) => {
-          alert("Cập nhật lịch trình thành công!");
-          updateSchedule(body.schedule);
+          addSchedule(res.data.info);
+          close();
+          alert("Tạo lịch trình thành công!");
         })
         .catch((err) => {
           console.log(err);
@@ -84,7 +62,6 @@ function EditSchedule({ info, close, updateSchedule }) {
             className="form-control"
             onChange={hanleChange}
             name="name"
-            value={form.name}
             required
           />
         </div>
@@ -146,13 +123,13 @@ function EditSchedule({ info, close, updateSchedule }) {
             className="btn btn-default"
             data-dismiss="modal"
             value="Hủy"
-            onClick={() => close()}
+            onClick={() => close(false)}
           />
           <input
             type="submit"
             className="btn btn-success"
             value="Ghi nhận"
-            onClick={() => submit()}
+            onClick={createSchedule}
           />
         </div>
       </div>
@@ -160,4 +137,4 @@ function EditSchedule({ info, close, updateSchedule }) {
   );
 }
 
-export default memo(EditSchedule);
+export default CreateSchedule;

@@ -93,13 +93,13 @@ function SignUp() {
   return (
     <div className="container-login">
       {!token ? (
-        <div class="signup-form">
+        <div className="signup-form">
           <div className="form">
             <h2>Tạo tài khoản</h2>
-            <div class="form-group">
+            <div className="form-group">
               <input
                 type="text"
-                class="form-control"
+                className="form-control"
                 value={form.username}
                 onChange={onUpdateField}
                 name="username"
@@ -110,10 +110,10 @@ function SignUp() {
             <div className="form-item__error">
               <p>{error.username}</p>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <input
                 type="email"
-                class="form-control"
+                className="form-control"
                 name="email"
                 value={form.email}
                 onChange={onUpdateField}
@@ -124,10 +124,10 @@ function SignUp() {
             <div className="form-item__error">
               <p>{error.email}</p>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <input
                 type="password"
-                class="form-control"
+                className="form-control"
                 name="password"
                 value={form.password}
                 onChange={onUpdateField}
@@ -138,10 +138,10 @@ function SignUp() {
             <div className="form-item__error">
               <p>{error.password}</p>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <input
                 type="password"
-                class="form-control"
+                className="form-control"
                 value={form.confirm_password}
                 onChange={onUpdateField}
                 name="confirm_password"
@@ -152,8 +152,8 @@ function SignUp() {
             <div className="form-item__error">
               <p>{error.confirm_password}</p>
             </div>
-            <div class="form-group pb-2">
-              <label class="float-left form-check-label">
+            <div className="form-group pb-2">
+              <label className="float-left form-check-label">
                 <input
                   type="checkbox"
                   name="accept"
@@ -163,18 +163,18 @@ function SignUp() {
                 Đồng ý với <Link to="/login">Điều khoản dịch vụ</Link>
               </label>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <button
                 disabled={!form.accept}
                 type="submit"
-                class="btn btn-success btn-lg btn-block"
+                className="btn btn-success btn-lg btn-block"
                 onClick={submitSignup}
               >
                 TẠO TÀI KHOẢN
               </button>
             </div>
           </div>
-          <div class="text-center" style={{ color: "white" }}>
+          <div className="text-center" style={{ color: "white" }}>
             Bạn đã có tài khoản?{" "}
             <Link className="text-login" to={"/login"}>
               Đăng nhập
@@ -182,7 +182,7 @@ function SignUp() {
           </div>
         </div>
       ) : (
-        <div class="signup-form">
+        <div className="signup-form">
           <div className="form">
             <h2>Xác nhận tạo tài khoản</h2>
             <div

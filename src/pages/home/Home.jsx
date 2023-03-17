@@ -76,57 +76,61 @@ function Home() {
   }, []);
   return (
     <main>
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary-custom text-white mb-4">
-              <div class="card-body">Tổng tiêu thụ trong ngày</div>
-              <div class="card-footer d-flex align-items-center justify-content-between">
-                <div class="small text-white">{state.consumptionInDay} kWh</div>
-                <div class="small text-white">
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-xl-3 col-md-6">
+            <div className="card bg-primary-custom text-white mb-4">
+              <div className="card-body">Tổng tiêu thụ trong ngày</div>
+              <div className="card-footer d-flex align-items-center justify-content-between">
+                <div className="small text-white">
+                  {state.consumptionInDay} Số điện
+                </div>
+                <div className="small text-white">
                   <BarChart />
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary-custom text-white mb-4">
-              <div class="card-body">Tổng tiêu thụ trong tháng</div>
-              <div class="card-footer d-flex align-items-center justify-content-between">
-                <div class="small text-white">
-                  {state.consumptionInMonth} kWh
+          <div className="col-xl-3 col-md-6">
+            <div className="card bg-primary-custom text-white mb-4">
+              <div className="card-body">Tổng tiêu thụ trong tháng</div>
+              <div className="card-footer d-flex align-items-center justify-content-between">
+                <div className="small text-white">
+                  {state.consumptionInMonth} Số điện
                 </div>
-                <div class="small text-white">
+                <div className="small text-white">
                   <BarChart />
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary-custom text-white mb-4">
-              <div class="card-body">Tổng tiêu thụ</div>
-              <div class="card-footer d-flex align-items-center justify-content-between">
-                <div class="small text-white">{state.consumptionTotal} kWh</div>
-                <div class="small text-white">
+          <div className="col-xl-3 col-md-6">
+            <div className="card bg-primary-custom text-white mb-4">
+              <div className="card-body">Tổng tiêu thụ</div>
+              <div className="card-footer d-flex align-items-center justify-content-between">
+                <div className="small text-white">
+                  {state.consumptionTotal} Số điện
+                </div>
+                <div className="small text-white">
                   <BarChart />
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-md-6">
-            <div class="card-body">
+          <div className="col-xl-3 col-md-6">
+            <div className="card-body">
               <Weather />
             </div>
           </div>
         </div>
       </div>
-      <div class="row mx-1">
+      <div className="row mx-1">
         <div className="col-xl-3 d-flex flex-column">
           <div className="d-flex mb-4">
             <ButtonPower />
           </div>
 
-          <div class="card">
+          <div className="card">
             <div className="card-header align-items-center d-flex">
               <Speedometer2 />
               &nbsp; Công tơ điện
@@ -165,7 +169,7 @@ function Home() {
             </div>
           </div>
         </div>
-        <div class="col-xl-9">
+        <div className="col-xl-9">
           <Chartmetter dataChart={dataChart} />
         </div>
       </div>

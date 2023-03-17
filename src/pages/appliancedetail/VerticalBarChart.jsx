@@ -17,6 +17,11 @@ const state = {
   ],
   datasets: [
     {
+      label: "Trước khi tối ưu",
+      data: [20, 30, 10, 200, 10, 33, 10, 90, 11, 12, 3],
+      backgroundColor: "#9BD0F5",
+    },
+    {
       label: "Tiêu thụ",
       data: [20, 30, 10, 200, 10, 33, 10, 90, 11, 12, 3],
       backgroundColor: "rgba(255, 99, 132, 0.5)",
