@@ -3,7 +3,7 @@ import {
   HouseDoor,
   LayoutSidebar,
   BarChart,
-  Lightbulb,
+  Diagram3Fill,
   Gear,
   QuestionCircle,
 } from "react-bootstrap-icons";
@@ -20,7 +20,7 @@ function NavbarLeft() {
     {
       path: "/room",
       name: "Quản lý phòng",
-      icon: <LayoutSidebar />,
+      icon: <Diagram3Fill />,
     },
     {
       path: "/statistic",
@@ -32,12 +32,6 @@ function NavbarLeft() {
       name: "Cài đặt",
       icon: <Gear />,
     },
-    {
-      path: "/optimize",
-      name: "Tỗi ưu",
-      icon: <Lightbulb />,
-    },
-    ,
     {
       path: "/about",
       name: "Thông tin thêm",

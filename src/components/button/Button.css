@@ -18,58 +18,31 @@
 .custom-button-success {
     background-color: var(--primary-color)
 }
-.switch {
+  .switch {
+   background-color: #bfbfbf;
+   border-radius: 11px;
+    width: 44px;
+    height: 22px;
     position: relative;
     display: inline-block;
-    width: 50px;
-    height: 26px;
-  }
-  
-  .switch input { 
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  .slider {
-    position: absolute;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .2s;
-    transition: .2s;
   }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 22px;
-    width: 22px;
-    left: 2px;
-    bottom: 2px;
+  .switch-on{
+    background-color: var(--primary-color);
+  }
+  .switch-slider{
+    height: 18px;
+    width: 18px;
     background-color: white;
-    -webkit-transition: .2s;
-    transition: .2s;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    border-radius: 9px;
+    transition: all ease 0.2s;
   }
-  
-  input:checked + .slider {
-    background-color: var(--primary-color)
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #55a3f4;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(25px);
-  }
-  .slider.round {
-    border-radius: 13px;
+  .switch-slider__on{
+    transform: all ease 0.2s;
+    transform: translateX(22px);
   }
   .custom-button-power{
     height: 60px;
@@ -83,7 +56,4 @@
   }
   .custom-button-power.off{
     background: var(--red-color)
-  }
-  .slider.round:before {
-    border-radius: 11px
   }

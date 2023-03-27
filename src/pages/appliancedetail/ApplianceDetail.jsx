@@ -1,20 +1,31 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Calendar2, Table } from "react-bootstrap-icons";
-import { useParams } from "react-router-dom";
+import { Calendar2, SortUpAlt, Table } from "react-bootstrap-icons";
+import { useParams, useLocation } from "react-router-dom";
 import { ToggleSwitch } from "../../components/button/Button";
 import LoadingIcon from "../../components/loading/LoadingIcon";
 import Pagination from "../../components/pagination/Pagination";
+import Status from "../../components/status/Status";
 import Popup from "../../components/popup/Popup";
 import { URL } from "../../contants/Contants";
 import { useStore } from "../../store/AppProvider";
 import "./ApplianceDetail.css";
 import CreateSchedule from "./CreateSchedule";
 import EditSchedule from "./EditSchedule";
+const URL_WEB_SOCKET = "ws://localhost:8081/websocket";
 function ApplianceDetail() {
   const { applianceId } = useParams();
+  const location = useLocation();
   const [showCreateAppliance, setShowCreateAppliance] = useState(false);
   const [state, setState] = useState({ dbSchedules: [] });
+  const [page, setPage] = useState(0);
+  const [watt, setWatt] = useState();
+  const [ws, setWs] = useState(null);
+  const { loading, setLoading } = useStore();
+  const request = {
+    typeMessage: "SUBSCRIBE_APPLIANCE",
+    applianceId: applianceId,
+  };
   const { user } = useStore();
   useEffect(() => {
     axios
@@ -22,9 +33,12 @@ function ApplianceDetail() {
       .then((res) => {
         let data = res.data;
         data = {
-          ...data,
-
-          dbSchedules: data.dbSchedules.map((element) => {
+          ...data.appliance,
+          consumptionCurrentMonth: data.consumptionCurrentMonth,
+          consumptionTotal: data.consumptionTotal,
+          costCurrentMonth: data.costCurrentMonth,
+          costTotal: data.costTotal,
+          dbSchedules: data.appliance.dbSchedules.map((element) => {
             element.showEditSchedule = false;
             return element;
           }),
@@ -34,6 +48,24 @@ function ApplianceDetail() {
       .catch((err) => {
         console.log(err);
       });
+  }, [location.pathname]);
+  useEffect(() => {
+    const wsClient = new WebSocket(URL_WEB_SOCKET);
+    wsClient.onopen = () => {
+      setWs(wsClient);
+      wsClient.send(JSON.stringify(request));
+      console.log("connected to server!");
+    };
+    wsClient.onmessage = (response) => {
+      let message = JSON.parse(response.data);
+      if (message.typeMessage === "SPEED_METER") {
+        setWatt(message.data);
+      }
+    };
+    wsClient.onclose = () => console.log("closed!");
+    return () => {
+      wsClient.close();
+    };
   }, []);
   const deleteSchedule = (id) => {
     if (window.confirm("Bạn có chắc chắn muốn xóa lịch trình không?")) {
@@ -83,6 +115,64 @@ function ApplianceDetail() {
     });
     setState({ ...state, dbSchedules: schedules });
   };
+  const changeAutoOff = () => {
+    const message = state.autoOff ? "'tắt'" : "'bật'";
+    if (
+      window.confirm(
+        `Bạn có muốn ${message} chế độ tự động tắt thiết bị khi ở chế độ chờ không?`
+      )
+    ) {
+      axios
+        .put(`${URL}api/appliance/change_auto_off`, {
+          autoOff: !state.autoOff,
+          applianceId: applianceId,
+        })
+        .then((res) => {
+          setState({ ...state, autoOff: !state.autoOff });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+  const changeScheduleStatus = (scheduleId, scheduleStatus) => {
+    const message = scheduleStatus ? "bật" : "tắt";
+    if (window.confirm(`Bạn có muốn ${message} lịch trình không?`)) {
+      axios
+        .put(`${URL}api/schedule/change_status`, {
+          scheduleId: scheduleId,
+          scheduleStatus: scheduleStatus,
+        })
+        .then((res) => {
+          const schedules = state.dbSchedules.map((element) =>
+            element.id === scheduleId
+              ? { ...element, status: !element.status }
+              : element
+          );
+          setState({ ...state, dbSchedules: schedules });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+  const updateStatusAppliance = () => {
+    const message = state.status ? "tắt" : "bật";
+    if (window.confirm(`Bạn có muốn ${message} thiết bị không?`) === true) {
+      axios
+        .put(`${URL}api/appliance/change_status`, {
+          status: !state.status,
+          applianceId: applianceId,
+          userId: user.value.userId,
+        })
+        .then((res) => {
+          setState({ ...state, status: !state.status });
+        })
+        .catch((err) => {
+          alert(`Không thể ${message} thiết bị! hãy kiểm tra lại`);
+        });
+    }
+  };
   return (
     <main>
       <div className="container-fluid px-4 pt-4 container__appliance-detail">
@@ -101,31 +191,41 @@ function ApplianceDetail() {
             <div className="col-xl-6 description px-4">
               <h2>{state.name}</h2>
               <ul>
-                <li className="description-appliance">{state.description}</li>
+                <li className="description-appliance">
+                  <b style={{ color: "black" }}>Mô tả: </b>
+                  {state.description}
+                </li>
                 <li>
                   <b>Công suất hiện tại: </b>
                   <h2 style={{ color: "var(--primary-color)" }}>
-                    <LoadingIcon />
+                    {watt ? watt.value : "0"} W
                   </h2>
                 </li>
-                <li>
-                  <b>Tổng năng lượng đã tiêu thụ: </b>400 kWh
-                </li>
+
                 <li className="d-flex align-items-center">
                   <b>Trạng thái :</b>&ensp;
-                  {/* <Status index={1} /> */}
-                  <LoadingIcon />
+                  {watt ? (
+                    watt.standBy ? (
+                      <Status index={3} />
+                    ) : (
+                      <Status index={1} />
+                    )
+                  ) : (
+                    <Status index={2} />
+                  )}
+                </li>
+                <li className="mt-2 d-flex align-items-center">
+                  <b>Tắt thiết bị tự động:</b>
+                  <div className="mx-2">
+                    <ToggleSwitch value={state.autoOff} click={changeAutoOff} />
+                  </div>
                 </li>
                 <li className="mt-2">
-                  <a className="btn btn-outline-dark mt-auto" href="#">
-                    Tắt thiết bị
-                  </a>
-                  <a className="btn btn-outline-dark mx-2" href="#">
-                    Theo dõi
-                  </a>
-
-                  <a className="btn btn-outline-dark mt-auto" href="#">
-                    Xóa Thiết bị
+                  <a
+                    className="btn btn-outline-dark mt-auto"
+                    onClick={updateStatusAppliance}
+                  >
+                    {state.status ? "Tắt thiết bị" : "Bật thiết bị"}
                   </a>
                 </li>
               </ul>
@@ -138,27 +238,31 @@ function ApplianceDetail() {
                 &nbsp; Các chỉ số liên quan
               </div>
               <div className="card-body">
-                <table className="table">
+                <table className="table table-consumption">
                   <tbody>
                     <tr>
-                      <td>Loại thiết bị:</td>
-                      <td>Loại 1</td>
+                      <td>Tiêu thụ tháng này:</td>
+                      <td>
+                        <b>{state.consumptionCurrentMonth} kWh</b>
+                      </td>
                     </tr>
                     <tr>
-                      <td>Tổng tiêu thụ tháng này</td>
-                      <td>50 kWh</td>
+                      <td>Chi phí tháng này:</td>
+                      <td>
+                        <b>{state.costCurrentMonth}</b>
+                      </td>
                     </tr>
                     <tr>
-                      <td>Tổng tiêu thụ tháng trước</td>
-                      <td>50 kWh</td>
+                      <td>Tổng tiêu thụ:</td>
+                      <td>
+                        <b>{state.consumptionTotal} kWh</b>
+                      </td>
                     </tr>
                     <tr>
-                      <td>Chi phí hiện phải trả:</td>
-                      <td>40.000 VNĐ</td>
-                    </tr>
-                    <tr>
-                      <td>Chi phí tháng trước:</td>
-                      <td>80.000 VNĐ</td>
+                      <td>Tổng chi phí:</td>
+                      <td>
+                        <b>{state.costTotal}</b>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -181,7 +285,7 @@ function ApplianceDetail() {
                 <table className="table border">
                   <thead className="thead-dark">
                     <tr>
-                      <th scope="col">Số thứ tự</th>
+                      <th scope="col">STT</th>
                       <th scope="col">Tên lịch trình</th>
                       <th scope="col">Lặp lại</th>
                       <th scope="col">Bắt đầu</th>
@@ -191,51 +295,65 @@ function ApplianceDetail() {
                     </tr>
                   </thead>
                   <tbody>
-                    {state.dbSchedules.map((element, index) => (
-                      <tr key={index}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{element.name}</td>
-                        <td>
-                          {element.repeatDay ? element.repeatDay : "1 lần"}
-                        </td>
-                        <td>{element.startDate}</td>
-                        <td>{element.endDate}</td>
-                        <td>
-                          <div className="d-flex">
-                            <Popup
-                              title={"Chỉnh sửa lịch trình"}
-                              show={element.showEditSchedule}
-                              close={closeShowEditSchedule}
-                              trigger={
-                                <a
-                                  className="btn btn-outline-dark mt-auto"
-                                  onClick={() =>
-                                    changeShowEditSchedule(element.id)
-                                  }
-                                >
-                                  Chỉnh sửa lịch trình
-                                </a>
+                    {state.dbSchedules
+                      .slice(page * 4, (page + 1) * 4)
+                      .map((element, index) => (
+                        <tr key={index}>
+                          <th scope="row">{index + 1}</th>
+                          <td>{element.name}</td>
+                          <td>
+                            {element.repeatDay ? element.repeatDay : "Không"}
+                          </td>
+                          <td>{element.startDate}</td>
+                          <td>{element.endDate}</td>
+                          <td>
+                            <div className="d-flex">
+                              <Popup
+                                title={"Chỉnh sửa lịch trình"}
+                                show={element.showEditSchedule}
+                                close={closeShowEditSchedule}
+                                trigger={
+                                  <a
+                                    className="btn btn-outline-dark mt-auto"
+                                    onClick={() =>
+                                      changeShowEditSchedule(element.id)
+                                    }
+                                  >
+                                    Chỉnh sửa lịch trình
+                                  </a>
+                                }
+                              >
+                                <EditSchedule
+                                  info={element}
+                                  close={closeShowEditSchedule}
+                                  updateSchedule={updateSchedule}
+                                />
+                              </Popup>
+                              <a
+                                className="btn btn-outline-dark mt-auto mx-2"
+                                onClick={() => deleteSchedule(element.id)}
+                              >
+                                Xóa
+                              </a>
+                            </div>
+                          </td>
+                          <td>
+                            <div
+                              style={{
+                                width: "fit-content",
+                              }}
+                              onClick={() =>
+                                changeScheduleStatus(
+                                  element.id,
+                                  !element.status
+                                )
                               }
                             >
-                              <EditSchedule
-                                info={element}
-                                close={closeShowEditSchedule}
-                                updateSchedule={updateSchedule}
-                              />
-                            </Popup>
-                            <a
-                              className="btn btn-outline-dark mt-auto mx-2"
-                              onClick={() => deleteSchedule(element.id)}
-                            >
-                              Xóa
-                            </a>
-                          </div>
-                        </td>
-                        <td>
-                          <ToggleSwitch value={element.status} />
-                        </td>
-                      </tr>
-                    ))}
+                              <ToggleSwitch value={element.status} />
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               )}
@@ -260,7 +378,15 @@ function ApplianceDetail() {
                     addSchedule={addSchedule}
                   />
                 </Popup>
-                {state.dbSchedules.length === 0 ? <></> : <Pagination />}
+                {state.dbSchedules.length === 0 ? (
+                  <></>
+                ) : (
+                  <Pagination
+                    total={state.dbSchedules.length}
+                    page={page}
+                    changePage={setPage}
+                  />
+                )}
               </div>
             </div>
           </div>

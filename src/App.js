@@ -11,10 +11,12 @@ import SignUp from "./pages/auth/SignUp";
 import NotFound from "./pages/error/NotFound";
 import Home from "./pages/home/Home";
 import ManageAppliance from "./pages/manageappliance/ManageAppliance";
-import ManagerClient from "./pages/managerclient/ManagerClient";
+import Statistic from "./pages/statistic/Statistic";
 import ManageRoom from "./pages/manageroom/ManageRoom";
 import Optimize from "./pages/optimize/Optimize";
 import { useStore } from "./store/AppProvider";
+import Setting from "./pages/setting/Setting";
+import { useEffect, useState } from "react";
 function App() {
   const { loading, user } = useStore();
 
@@ -40,14 +42,15 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="room" element={<ManageRoom />} />
           <Route path="/room/:id" element={<ManageAppliance />} />
+          <Route path="/statistic" element={<Statistic />} />
           <Route
             path="/room/:roomId/appliance/:applianceId"
             element={<ApplianceDetail />}
           />
+          <Route path="setting" element={<Setting />} />
           <Route path="optimize" element={<Optimize />} />
         </Route>
         <Route path="/login" element={<Login />} />
-        <Route path="/manager-client" element={<ManagerClient />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />

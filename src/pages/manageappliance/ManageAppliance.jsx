@@ -88,8 +88,10 @@ function ManageAppliance() {
     const message = status ? "tắt" : "bật";
     if (window.confirm(`Bạn có muốn ${message} thiết bị không?`) === true) {
       axios
-        .put(`${url}api/appliance/change_status?id=${applianceId}`, {
+        .put(`${url}api/appliance/change_status`, {
           status: !status,
+          applianceId: applianceId,
+          userId: user.value.userId,
         })
         .then((res) => {
           let listAppliances = state.appliances.map((element) => {
@@ -106,7 +108,7 @@ function ManageAppliance() {
   const totalWatt = () => {
     let sum = 0;
     for (let key in watts) {
-      sum += watts[key];
+      sum += watts[key].value;
     }
     return sum;
   };
@@ -192,12 +194,11 @@ function ManageAppliance() {
               <table className="table">
                 <thead>
                   <tr>
-                    <th scope="col">ID</th>
+                    <th scope="col">STT</th>
                     <th scope="col">Tên thiết bị</th>
                     <th scope="col">Tình trạng thiết bị</th>
                     <th scope="col">Tiêu thụ hiện tại</th>
-                    <th scope="col">Loại thiết bị</th>
-                    <th scope="col"></th>
+                    <th scope="col">Tùy chọn</th>
                     <th scope="col">Bật / tắt</th>
                   </tr>
                 </thead>
@@ -208,13 +209,19 @@ function ManageAppliance() {
                       <td>{element.name}</td>
                       <td>
                         {watts[element.id] ? (
-                          <Status index={1} />
+                          watts[element.id].standBy ? (
+                            <Status index={3} />
+                          ) : (
+                            <Status index={1} />
+                          )
                         ) : (
                           <Status index={2} />
                         )}
                       </td>
-                      <td>{watts[element.id] ? watts[element.id] : 0} W</td>
-                      <td>Loại 1</td>
+                      <td>
+                        {watts[element.id] ? watts[element.id].value : "0"} W
+                      </td>
+
                       <td>
                         <div className="d-flex">
                           <Link
@@ -223,12 +230,11 @@ function ManageAppliance() {
                           >
                             Chi tiết
                           </Link>
-
                           <a className="btn btn-outline-dark mt-auto mx-2">
-                            Lập lịch
+                            Chỉnh sửa thiết bị
                           </a>
                           <a
-                            className="btn btn-outline-dark mt-auto"
+                            className="btn btn-outline-dark mt-auto mx-2"
                             onClick={() => deleteAppliance(element.id)}
                           >
                             Xóa thiết bị
@@ -268,7 +274,7 @@ function ManageAppliance() {
                     updateAppliance={updateAppliance}
                   />
                 </Popup>
-                <Pagination />
+                {/* <Pagination  /> */}
               </div>
             </div>
           </div>

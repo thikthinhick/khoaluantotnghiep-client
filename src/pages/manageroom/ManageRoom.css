@@ -14,9 +14,11 @@
     position: absolute;
     background-color: var(--primary-color);
     color: white;
-    padding: 5px 10px;
+    padding: 5px;
     border-radius: 5px 0px 0px 0px;
     min-width: 50px;
+    display: flex;
+    align-items: center;
 }
 .container-room__body{
     padding: 5px 10px;

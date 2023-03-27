@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import useComponentVisible from "../useComponentVisiable";
-import { Search } from "react-bootstrap-icons";
+import { Search, ArrowReturnLeft } from "react-bootstrap-icons";
+import axios from "axios";
 import "./NavbarTop.css";
-const data = [
-  "Bóng đèn 1",
-  "Bóng đèn 2",
-  "Bóng đèn 3",
-  "Máy giặt",
-  "Tủ lạnh",
-  "Nồi cơm điện",
-  "Lò vi sóng",
-];
+import { URL } from "../../contants/Contants";
+import { Link, useNavigate } from "react-router-dom";
 function Searchbar() {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(true);
@@ -18,21 +12,18 @@ function Searchbar() {
   const [filterResult, setFilterResult] = useState([]);
   const handleChange = (e) => {
     const { value } = e.target;
-    setFilterResult(filter_list(value));
+    if (value !== "") loadData(value);
     setInput(value);
   };
-  const filter_list = (value) => {
-    let list = [];
-    if (value === "") return list;
-    let result = new RegExp(value, "i");
-
-    data.forEach((item) => {
-      if (result.test(item)) {
-        list.push(item);
-      }
-    });
-    return list;
+  const loadData = (value) => {
+    axios
+      .get(`${URL}api/appliance/search?keyword=${value}`)
+      .then((res) => {
+        setFilterResult(res.data.info);
+      })
+      .catch((err) => {});
   };
+  const nav = useNavigate();
   return (
     <form
       ref={ref}
@@ -46,6 +37,7 @@ function Searchbar() {
           name="input"
           onChange={handleChange}
           value={input}
+          autocomplete="off"
           placeholder="Tìm kiếm nhanh thiết bị..."
           onFocus={() => setIsComponentVisible(true)}
         />
@@ -65,8 +57,23 @@ function Searchbar() {
         {isComponentVisible && (
           <ul class="list-group">
             {filterResult.map((element, index) => (
-              <li class="list-group-item" key={index}>
-                {element}
+              <li
+                class="list-group-item d-flex justify-content-between"
+                key={index}
+                onClick={() => {
+                  setIsComponentVisible(false);
+                  nav(
+                    `room/${element.roomId}/appliance/${element.applianceId}`
+                  );
+                }}
+              >
+                <div>
+                  <b>{element.applianceName}</b>
+                  <p style={{ fontSize: "12px", color: "gray" }}>
+                    ({element.roomName})
+                  </p>
+                </div>
+                <ArrowReturnLeft size={18} />
               </li>
             ))}
           </ul>

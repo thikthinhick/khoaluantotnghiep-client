@@ -1,6 +1,6 @@
 import React from "react";
 import { BarChart } from "react-bootstrap-icons";
-import VerticalBarChart from "../appliancedetail/VerticalBarChart";
+import VerticalBarChart from "./VerticalBarChart";
 import "./Optimize.css";
 function Optimize() {
   return (

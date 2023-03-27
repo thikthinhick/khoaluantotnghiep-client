@@ -38,13 +38,16 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false);
   };
-
+  const signout = () => {
+    setUser(null, 0);
+  };
   const value = useMemo(
     () => ({
       user,
       loading,
       login,
       signup,
+      signout,
       setUser,
       setLoading,
     }),

@@ -43,7 +43,6 @@ function Home() {
     axios
       .get(`${URL}api/home`)
       .then((response) => {
-        console.log(response.data);
         setState(response.data);
       })
       .catch((err) => {
@@ -106,7 +105,7 @@ function Home() {
           </div>
           <div className="col-xl-3 col-md-6">
             <div className="card bg-primary-custom text-white mb-4">
-              <div className="card-body">Tổng tiêu thụ</div>
+              <div className="card-body">Tổng tiêu thụ trong năm</div>
               <div className="card-footer d-flex align-items-center justify-content-between">
                 <div className="small text-white">
                   {state.consumptionTotal} Số điện
@@ -118,18 +117,22 @@ function Home() {
             </div>
           </div>
           <div className="col-xl-3 col-md-6">
-            <div className="card-body">
-              <Weather />
+            <div className="card bg-primary-custom text-white mb-4">
+              <div className="card-body">Tổng tiêu thụ</div>
+              <div className="card-footer d-flex align-items-center justify-content-between">
+                <div className="small text-white">
+                  {state.consumptionTotal} Số điện
+                </div>
+                <div className="small text-white">
+                  <BarChart />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div className="row mx-1">
         <div className="col-xl-3 d-flex flex-column">
-          <div className="d-flex mb-4">
-            <ButtonPower />
-          </div>
-
           <div className="card">
             <div className="card-header align-items-center d-flex">
               <Speedometer2 />

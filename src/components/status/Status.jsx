@@ -7,7 +7,7 @@ const StatusOff = ({ title }) => {
   return <div className="container-status status-off">ĐANG TẮT</div>;
 };
 const StatusStandby = ({ title }) => {
-  return <div className="container-status status-standby">CHẾ ĐỘ CHỜ</div>;
+  return <div className="container-status status-standby">ĐANG CHỜ</div>;
 };
 const StatusUnplugged = ({ title }) => {
   return <div className="container-status status-unplugged">KHÔNG KẾT NỐI</div>;

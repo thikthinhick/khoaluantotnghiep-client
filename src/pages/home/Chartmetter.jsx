@@ -29,10 +29,11 @@ function Chartmetter({ dataChart }) {
     datasets: [
       {
         label: "Công suất tiêu thụ",
-        borderColor: "rgb(255, 99, 132)",
+        borderColor: "#FF6384",
+        backgroundColor: "rgba(251, 85, 85, 0.4)",
         fill: true,
         pointStyle: "none",
-        pointRadius: 2,
+        pointRadius: 0,
         data: dataChart,
       },
     ],
@@ -42,7 +43,7 @@ function Chartmetter({ dataChart }) {
       line: {
         tension: 0.2,
         borderWidth: 1.5,
-        color: "#666",
+        color: "#9BD0F5",
         lineTension: 0,
       },
     },
@@ -65,14 +66,14 @@ function Chartmetter({ dataChart }) {
           },
         },
       ],
-      // yAxes: [
-      //   {
-      //     ticks: {
-      //       max: 10000,
-      //       min: 0,
-      //     },
-      //   },
-      // ],
+      yAxes: [
+        {
+          ticks: {
+            max: 5000,
+            min: 0,
+          },
+        },
+      ],
     },
   };
 

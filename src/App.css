@@ -36,6 +36,9 @@
   --red-color: #ff4961;
   --primary-light-color: rgba(255, 74, 0, 0.5);
 }
+div[disabled] {
+  pointer-events: none;
+}
 .bg-primary-custom {
   background: var(--primary-color)
 }

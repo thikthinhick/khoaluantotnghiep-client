@@ -39,12 +39,13 @@ const ButtonPower = ({ title }) => {
     </div>
   );
 };
-const ToggleSwitch = ({ value }) => {
+const ToggleSwitch = ({ value, click }) => {
   return (
-    <label class="switch">
-      <input type="checkbox" checked={value} />
-      <span class="slider round"></span>
-    </label>
+    <div className={!value ? "switch" : "switch switch-on"} onClick={click}>
+      <div
+        className={!value ? "switch-slider" : "switch-slider switch-slider__on"}
+      ></div>
+    </div>
   );
 };
 export { ButtonPrimary, ButtonPower, ButtonError, ButtonSuccess, ToggleSwitch };

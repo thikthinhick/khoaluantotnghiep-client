@@ -24,9 +24,9 @@ const Speedometer = ({ id, value, title }) => {
   return (
     <div style={styles.dial}>
       <ReactSpeedometer
-        maxValue={16000}
+        maxValue={8000}
         minValue={0}
-        labelFontSize={10}
+        labelFontSize={12}
         height={160}
         width={255}
         value={value}

@@ -1,45 +1,86 @@
 import React from "react";
-import { BellFill, ChevronCompactDown } from "react-bootstrap-icons";
+import { BellFill } from "react-bootstrap-icons";
 import useComponentVisible from "../useComponentVisiable";
-import profile from "../../assets/images/user.webp";
 import "./NavbarTop.css";
-const data = [
-  {
-    id: 1,
-    thumbnail: profile,
-    name: "Chương Lê",
-    content: "Tắt máy giặt trong nhà tắm",
-    time: "3 tiếng trước",
-    new: true,
-  },
-  {
-    id: 2,
-    thumbnail: profile,
-    name: "Chương Lê",
-    content: "Tắt máy giặt trong nhà tắm",
-    time: "3 tiếng trước",
-    new: false,
-  },
-  {
-    id: 3,
-    thumbnail: profile,
-    name: "Chương Lê",
-    content: "Tắt máy giặt trong nhà tắm",
-    time: "3 tiếng trước",
-    new: false,
-  },
-];
+import { useStore } from "../../store/AppProvider";
+import { useEffect, useState, memo } from "react";
+import axios from "axios";
+import { Datediff } from "../../utils/Data";
+import { URL } from "../../contants/Contants";
 function Notification() {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
+  const { user } = useStore();
+  const [state, setState] = useState({
+    totalNotification: 0,
+    notifications: [],
+  });
+  const [listening, setListening] = useState(false);
+  let eventSource = undefined;
+  const getNotification = () => {
+    axios
+      .get(`${URL}api/notification?user_id=${user.value.userId}`)
+      .then((res) => {
+        setState({ totalNotification: 0, notifications: res.data.info });
+      })
+      .catch((err) => {});
+  };
+  useEffect(() => {
+    axios
+      .get(`${URL}api/notification/get_total?user_id=${user.value.userId}`)
+      .then((res) => {
+        setState({ ...state, totalNotification: res.data.info });
+      })
+      .catch((err) => {});
+    if (!listening) {
+      eventSource = new EventSource(
+        `${URL}api/notification/receive?user_id=${user.value.userId}`
+      );
+      eventSource.onopen = (event) => {
+        console.log("connection opened");
+      };
+      eventSource.onmessage = (event) => {
+        setState({ ...state, totalNotification: state.totalNotification + 1 });
+      };
+
+      eventSource.onerror = (event) => {
+        console.log(event.target.readyState);
+        if (event.target.readyState === EventSource.CLOSED) {
+          console.log("eventsource closed (" + event.target.readyState + ")");
+        }
+        eventSource.close();
+      };
+
+      setListening(true);
+    }
+    return () => {
+      if (eventSource) eventSource.close();
+      console.log("eventsource closed");
+    };
+  }, []);
   return (
     <div className="notification">
-      <BellFill
-        color="white"
-        size={20}
-        onClick={() => setIsComponentVisible(!isComponentVisible)}
-        style={{ cursor: "pointer" }}
-      />
+      <div className="notification-icon">
+        <BellFill
+          color="white"
+          size={20}
+          onClick={() => {
+            getNotification();
+            setIsComponentVisible(true);
+          }}
+          style={{ cursor: "pointer" }}
+        />
+        {state.totalNotification > 0 ? (
+          state.totalNotification > 9 ? (
+            <span>9+</span>
+          ) : (
+            <span>{state.totalNotification}</span>
+          )
+        ) : (
+          <></>
+        )}
+      </div>
+
       {isComponentVisible && (
         <div className="notification-content" ref={ref}>
           <div className="border-arrow"></div>
@@ -54,7 +95,7 @@ function Notification() {
               Thông báo
             </h5>
             <ul class="list-group" style={{ borderRadius: "0px" }}>
-              {data.map((element, index) => (
+              {state.notifications.map((element, index) => (
                 <li class="list-group-item " key={index}>
                   <div className="notifi-item">
                     <div className="notification-content__img">
@@ -65,8 +106,8 @@ function Notification() {
                       <p>{element.content}</p>
                     </div>
                     <div className="notification-content__time">
-                      <span>{element.time}</span>
-                      {element.new ? <span className="status"></span> : <></>}
+                      <span>{Datediff(element.time)}</span>
+                      {element.new ? <div className="status"></div> : <></>}
                     </div>
                   </div>
                 </li>
@@ -79,4 +120,4 @@ function Notification() {
   );
 }
 
-export default Notification;
+export default memo(Notification);

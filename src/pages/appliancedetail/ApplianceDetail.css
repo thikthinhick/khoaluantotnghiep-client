@@ -13,5 +13,10 @@
     color: gray;
     line-height: 1.5rem;
     height: 4.5rem;
-
+}
+.table-consumption tr td{
+  border: none
+}
+.table-consumption tr:not(:last-child){
+  border-bottom: 1px solid #e1e1e1;
 }

@@ -9,7 +9,8 @@ import profile from "../../assets/images/user.webp";
 import Searchbar from "./Searchbar";
 import { Link } from "react-router-dom";
 function Navbar() {
-  const { user } = useStore();
+  const { user, signout } = useStore();
+  console.log(user.value);
   return (
     <nav
       id="navbar-container"
@@ -57,12 +58,10 @@ function Navbar() {
       </div>
 
       <NavDropdown id="collasible-nav-dropdown" style={{ color: "white" }}>
-        <NavDropdown.Item className="d-flex align-items-center">
-          <Person /> &ensp;Trang cá nhân
-        </NavDropdown.Item>
-
-        <NavDropdown.Divider />
-        <NavDropdown.Item className="d-flex align-items-center">
+        <NavDropdown.Item
+          className="d-flex align-items-center"
+          onClick={() => signout()}
+        >
           <BoxArrowLeft />
           &ensp;Đăng xuất
         </NavDropdown.Item>
