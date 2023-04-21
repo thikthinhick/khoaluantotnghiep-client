@@ -18,3 +18,18 @@
     padding-bottom: 12px;
     text-align: left;
   }
+  .choose-time {
+   background-color: white;
+   border-radius: 2px;
+  }
+  .choose-time label {
+    margin-right: 10px;
+  }
+  .choose-time input {
+    outline: none;
+    padding: 0 10px;
+    border-radius: 2px;
+  }
+  .choose-time select {
+    outline: none; 
+  }

@@ -20,14 +20,16 @@ export const useLocalStorage = (keyName, defaultValue) => {
     }
   });
   const setValue = (newValue, ttl) => {
+    const item = newValue
+      ? {
+          value: newValue,
+          expiry: new Date().getTime() + ttl,
+        }
+      : null;
     try {
-      const item = {
-        value: newValue,
-        expiry: new Date().getTime() + ttl,
-      };
       window.localStorage.setItem(keyName, JSON.stringify(item));
     } catch (err) {}
-    setStoredValue(newValue);
+    setStoredValue(item);
   };
 
   return [storedValue, setValue];

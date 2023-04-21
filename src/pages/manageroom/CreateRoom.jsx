@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { URL as url } from "../../contants/Contants";
 import axios from "axios";
+import { useStore } from "../../store/AppProvider";
 function CreateRoom({ addRoom, close }) {
+  const { user } = useStore();
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
   const [form, setForm] = useState({ roomName: "", descriptionRoom: "" });
@@ -37,6 +39,7 @@ function CreateRoom({ addRoom, close }) {
         .post(`${url}api/room`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + user.value.token,
           },
         })
         .then((res) => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useStore } from "../../store/AppProvider";
 import "./styles.css";
@@ -10,7 +10,13 @@ function ValidateEmail(mail) {
   return false;
 }
 function SignUp() {
-  const { signup } = useStore();
+  const { signup, setLoading } = useStore();
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }, []);
   const [form, setForm] = useState({
     username: "",
     email: "",

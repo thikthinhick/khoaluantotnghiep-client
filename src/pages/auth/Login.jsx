@@ -2,12 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useStore } from "../../store/AppProvider";
 import "./styles.css";
+import axios from "axios";
 function Login() {
   const { login, user, setLoading } = useStore();
   const navigate = useNavigate();
   useEffect(() => {
     if (user) navigate("/");
-  });
+    else {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        console.log("hello");
+      }, 500);
+    }
+  }, []);
   const [form, setForm] = useState({
     username: "",
     password: "",
@@ -41,6 +49,7 @@ function Login() {
     if (form.username === "") setUsernameError(true);
     if (form.password === "") setPasswordError(true);
   };
+
   return (
     <div className="container-login">
       <div className="signup-form">

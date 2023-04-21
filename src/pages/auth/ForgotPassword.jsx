@@ -49,7 +49,7 @@ function ForgotPassword() {
           <div>
             <br></br>
             <div className="form-group">
-              <label for="fname">Nhập email:</label>
+              <label for="fname">Email:</label>
               <input
                 style={{
                   width: "100%",

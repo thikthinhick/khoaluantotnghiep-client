@@ -1,16 +1,15 @@
 import React from "react";
-import { Gear, BoxArrowLeft, Person, BellFill } from "react-bootstrap-icons";
-import Notification from "./Notification";
-import House from "../../assets/images/house.png";
-import "./NavbarTop.css";
+import { BoxArrowLeft } from "react-bootstrap-icons";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { useStore } from "../../store/AppProvider";
-import profile from "../../assets/images/user.webp";
-import Searchbar from "./Searchbar";
 import { Link } from "react-router-dom";
+import House from "../../assets/images/house.png";
+import profile from "../../assets/images/user.webp";
+import { useStore } from "../../store/AppProvider";
+import "./NavbarTop.css";
+import Notification from "./Notification";
+import Searchbar from "./Searchbar";
 function Navbar() {
   const { user, signout } = useStore();
-  console.log(user.value);
   return (
     <nav
       id="navbar-container"
@@ -47,7 +46,7 @@ function Navbar() {
       <div className="d-flex align-items-center">
         <img
           className="image-profile"
-          src={user.value.thumbnail ? user.value.thumbnail : profile}
+          src={user ? user.value.thumbnail : profile}
         />
         <span
           className="mx-2"

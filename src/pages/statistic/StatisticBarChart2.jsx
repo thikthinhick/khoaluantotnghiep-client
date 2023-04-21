@@ -6,7 +6,7 @@ const state = {
 
   datasets: [
     {
-      label: "Trước khi tối ưu",
+      label: "Lượng tiêu thụ",
       data: [20, 30, 10, 200, 10, 33, 10, 90, 11, 12, 3],
       backgroundColor: "#36A2EB",
     },

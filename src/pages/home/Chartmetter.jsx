@@ -5,38 +5,41 @@ import { Line } from "react-chartjs-2";
 const typeTimes = [
   {
     duration: 1000 * 60 * 15,
-    delay: 15000,
+    delay: 10000,
     refresh: 15000,
-  },
-  {
-    duration: 1000 * 60 * 60 * 3,
-    delay: 15000 * 12,
-    refresh: 15000 * 12,
   },
   {
     duration: 1000 * 60 * 60 * 24,
     delay: 15000 * 12 * 8,
-    refresh: 15000 * 60 * 8,
+    refresh: 15000 * 60,
   },
 ];
-function Chartmetter({ dataChart }) {
+function Chartmetter({ dataChart, changeChartType }) {
   const [typeTime, setTypeTime] = useState(typeTimes[0]);
-
   const changeTypeTime = (e) => {
+    changeChartType(e.target.value);
     setTypeTime(typeTimes[e.target.value]);
   };
-  const data = {
-    datasets: [
-      {
-        label: "Công suất tiêu thụ",
-        borderColor: "#FF6384",
-        backgroundColor: "rgba(251, 85, 85, 0.4)",
-        fill: true,
-        pointStyle: "none",
-        pointRadius: 0,
-        data: dataChart,
-      },
-    ],
+  const data = (canvas) => {
+    const ctx = canvas.getContext("2d");
+    const gradient = ctx.createLinearGradient(0, 0, 0, 500);
+    gradient.addColorStop(0, "rgba(250,174,50,1)");
+    gradient.addColorStop(1, "rgba(250,174,50,0)");
+
+    return {
+      datasets: [
+        {
+          label: "Công suất tiêu thụ",
+          borderColor: "#FF6384",
+          backgroundColor: gradient,
+          fill: true,
+          pointStyle: "none",
+          pointRadius: 0,
+          borderWidth: 1.5,
+          data: dataChart,
+        },
+      ],
+    };
   };
   const options = {
     elements: {
@@ -69,7 +72,7 @@ function Chartmetter({ dataChart }) {
       yAxes: [
         {
           ticks: {
-            max: 5000,
+            max: 2000,
             min: 0,
           },
         },
@@ -85,9 +88,8 @@ function Chartmetter({ dataChart }) {
           &nbsp; Biểu đồ theo dõi tiêu thụ trực tiếp
         </div>
         <select name="time" id="time" onChange={changeTypeTime}>
-          <option value="0">Theo dõi trong 30 phút</option>
-          <option value="1">Theo dõi trong 3 giờ</option>
-          <option value="2">Theo dõi trong 1 ngày</option>
+          <option value="0">Theo dõi trong 15 phút</option>
+          <option value="1">Theo dõi trong 1 ngày</option>
         </select>
       </div>
       <div style={{ height: "100%" }}>

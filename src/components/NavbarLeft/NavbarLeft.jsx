@@ -1,13 +1,11 @@
 import React from "react";
 import {
-  HouseDoor,
-  LayoutSidebar,
   BarChart,
   Diagram3Fill,
   Gear,
-  QuestionCircle,
+  HouseDoor,
+  QuestionCircle
 } from "react-bootstrap-icons";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import { NavLink } from "react-router-dom";
 import "./NavbarLeft.css";
 function NavbarLeft() {

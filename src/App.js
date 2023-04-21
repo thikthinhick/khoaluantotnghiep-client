@@ -11,21 +11,19 @@ import SignUp from "./pages/auth/SignUp";
 import NotFound from "./pages/error/NotFound";
 import Home from "./pages/home/Home";
 import ManageAppliance from "./pages/manageappliance/ManageAppliance";
-import Statistic from "./pages/statistic/Statistic";
 import ManageRoom from "./pages/manageroom/ManageRoom";
-import Optimize from "./pages/optimize/Optimize";
-import { useStore } from "./store/AppProvider";
+
 import Setting from "./pages/setting/Setting";
-import { useEffect, useState } from "react";
+import Statistic from "./pages/statistic/Statistic";
+import { useStore } from "./store/AppProvider";
 function App() {
-  const { loading, user } = useStore();
+  const { loading } = useStore();
 
   return (
     <div className="App">
       {loading ? (
         <div className="loader-container">
-          <div className="spinner"></div>
-          <div class="loader"></div>
+          <h1>LOADING...</h1>
         </div>
       ) : (
         <></>
@@ -48,7 +46,6 @@ function App() {
             element={<ApplianceDetail />}
           />
           <Route path="setting" element={<Setting />} />
-          <Route path="optimize" element={<Optimize />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />

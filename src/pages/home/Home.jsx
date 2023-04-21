@@ -1,18 +1,25 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { BarChart, CashCoin, Speedometer2 } from "react-bootstrap-icons";
+import {
+  BarChart,
+  CashCoin,
+  SortUpAlt,
+  Speedometer2,
+} from "react-bootstrap-icons";
 import { ButtonPower } from "../../components/button/Button";
 import Weather from "../../components/Weather";
 import { URL } from "../../contants/Contants";
 import Chartmetter from "./Chartmetter";
 import "./Home.css";
 import Speedometter from "./Speedometter";
+import { useStore } from "../../store/AppProvider";
 const URL_WEB_SOCKET = "ws://localhost:8081/websocket";
 const request = {
   typeMessage: "SUBSCRIBE_HOME",
 };
 function Home() {
   const [ws, setWs] = useState(null);
+  const { setLoading } = useStore();
   const [speed, setSpeed] = useState({});
   const [dataChart, setDataChart] = useState([]);
   const [state, setState] = useState({
@@ -23,23 +30,9 @@ function Home() {
     costLastMonth: "",
     costCurrentMonth: "",
     costTotal: "",
+    chartType: "0",
   });
   useEffect(() => {
-    axios
-      .get(`${URL}api/consumption/last_consumption`)
-      .then((response) => {
-        let data = [];
-        response.data.forEach((element) => {
-          data.push({
-            x: Date.parse(element.time),
-            y: element.currentConsumption,
-          });
-        });
-        setDataChart(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
     axios
       .get(`${URL}api/home`)
       .then((response) => {
@@ -54,6 +47,22 @@ function Home() {
       wsClient.send(JSON.stringify(request));
       console.log("connected to server!");
     };
+    axios
+      .get(`${URL}api/consumption/last_consumption?type=${state.chartType}`)
+      .then((response) => {
+        let data = [];
+        response.data.forEach((element) => {
+          data.push({
+            x: Date.parse(element.time),
+            y: element.currentConsumption,
+          });
+        });
+
+        setDataChart(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     wsClient.onmessage = (response) => {
       let message = JSON.parse(response.data);
       if (message.typeMessage === "CHART_HOME") {
@@ -73,6 +82,25 @@ function Home() {
       wsClient.close();
     };
   }, []);
+
+  const changeChartType = (value) => {
+    axios
+      .get(`${URL}api/consumption/last_consumption?type=${value}`)
+      .then((response) => {
+        let data = [];
+        response.data.forEach((element) => {
+          data.push({
+            x: Date.parse(element.time),
+            y: element.currentConsumption,
+          });
+        });
+        setDataChart(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    setState({ ...state, chartType: value });
+  };
   return (
     <main>
       <div className="container-fluid">
@@ -139,7 +167,9 @@ function Home() {
               &nbsp; Công tơ điện
             </div>
             <div className="card-body">
-              <Speedometter value={speed.currentConsumption} />
+              <Speedometter
+                value={speed.currentConsumption ? speed.currentConsumption : 0}
+              />
             </div>
           </div>
           <br></br>
@@ -150,6 +180,20 @@ function Home() {
             </div>
             <div className="card-body">
               <table className="table-home">
+                <tr>
+                  <td>Biểu giá điện:</td>
+                  <td>
+                    <b style={{ textTransform: "uppercase" }}>
+                      {state.staffType}
+                    </b>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Chi phí hôm nay:</td>
+                  <td>
+                    <b>{state.costCurrentDay}</b>
+                  </td>
+                </tr>
                 <tr>
                   <td>Chi phí tháng này:</td>
                   <td>
@@ -173,7 +217,10 @@ function Home() {
           </div>
         </div>
         <div className="col-xl-9">
-          <Chartmetter dataChart={dataChart} />
+          <Chartmetter
+            dataChart={dataChart}
+            changeChartType={changeChartType}
+          />
         </div>
       </div>
     </main>

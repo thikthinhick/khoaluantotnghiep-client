@@ -4,7 +4,7 @@ function Loading() {
   return (
     <div
       style={{
-        background: "rgba(0,0,0,0.4)",
+        background: "white",
         height: "100%",
         display: "flex",
         alignItems: "center",

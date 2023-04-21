@@ -27,9 +27,8 @@ function Statistic() {
               <table id="customers">
                 <tr>
                   <th>STT</th>
-                  <th>Ngày bắt đầu</th>
-                  <th>Ngày kết thúc</th>
-                  <th>Số ngày</th>
+                  <th>Tháng</th>
+                  <th>Năm</th>
                   <th>Loại hóa đơn</th>
                   <th>Số điện</th>
                   <th>Trung bình</th>
@@ -38,9 +37,9 @@ function Statistic() {
                 {[1, 1, 1, 1, 1].map((element, index) => (
                   <tr>
                     <td>{index + 1}</td>
-                    <td>2023-01-01</td>
-                    <td>2023-01-31</td>
-                    <td>31</td>
+
+                    <td>1</td>
+                    <td>2023</td>
                     <td>Theo thời điểm</td>
                     <td>100</td>
                     <td>3.2</td>
@@ -63,10 +62,16 @@ function Statistic() {
                   display: "flex",
                   fontSize: "14px",
                   alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                <BarChart />
-                &nbsp; Biểu đồ so sánh tiêu thụ trước và sau tối ưu
+                <div>
+                  <BarChart />
+                  &nbsp;Biểu đồ tiêu thụ các ngày gần nhất
+                </div>
+                <div className="choose-time">
+                  <input type="date" />
+                </div>
               </div>
               <div className="card-body">
                 <StatisticBarChart1 />
@@ -81,10 +86,23 @@ function Statistic() {
                   display: "flex",
                   fontSize: "14px",
                   alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                <BarChart />
-                &nbsp; Biểu đồ so sánh tiêu thụ trước và sau tối ưu
+                <div>
+                  <BarChart />
+                  &nbsp; Biểu đồ tiêu thụ TB theo từng giờ
+                </div>
+
+                <div className="choose-time">
+                  <select name="time">
+                    <option value="0">Theo ngày</option>
+                    <option value="1">Theo tháng</option>
+                    <option value="2">Theo năm</option>
+                    <option value="2">Tất cả</option>
+                  </select>
+                  <input type="date" />
+                </div>
               </div>
               <div className="card-body">
                 <StatisticBarChart2 />
@@ -99,10 +117,23 @@ function Statistic() {
                   display: "flex",
                   fontSize: "14px",
                   alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                <BarChart />
-                &nbsp; Biểu đồ so sánh tiêu thụ trước và sau tối ưu
+                <div>
+                  <BarChart />
+                  &nbsp; Biểu đồ lượng tiêu thụ các phòng
+                </div>
+
+                <div className="choose-time">
+                  <select name="time">
+                    <option value="0">Theo ngày</option>
+                    <option value="1">Theo tháng</option>
+                    <option value="2">Theo năm</option>
+                    <option value="2">Tất cả</option>
+                  </select>
+                  <input type="date" />
+                </div>
               </div>
               <div className="card-body">
                 <PieChart />
@@ -117,10 +148,23 @@ function Statistic() {
                   display: "flex",
                   fontSize: "14px",
                   alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                <BarChart />
-                &nbsp; Biểu đồ so sánh tiêu thụ trước và sau tối ưu
+                <div>
+                  <BarChart />
+                  &nbsp; Biểu đồ lượng tiêu thụ các thiết bị
+                </div>
+
+                <div className="choose-time">
+                  <select name="time">
+                    <option value="0">Theo ngày</option>
+                    <option value="1">Theo tháng</option>
+                    <option value="2">Theo năm</option>
+                    <option value="2">Tất cả</option>
+                  </select>
+                  <input type="date" />
+                </div>
               </div>
               <div className="card-body">
                 <HorizontalChart />

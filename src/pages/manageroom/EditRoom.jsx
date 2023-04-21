@@ -54,7 +54,6 @@ function EditRoom({ getDataParent, updateRoom, close }) {
         })
         .then((res) => {
           alert("Update phòng thành công!");
-          // console.log(res.data.info);
           updateRoom(res.data.info);
           close();
         })

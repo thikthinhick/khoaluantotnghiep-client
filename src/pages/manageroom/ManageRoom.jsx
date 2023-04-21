@@ -5,20 +5,27 @@ import Room from "./Room";
 import axios from "axios";
 import Popup from "../../components/popup/Popup";
 import CreateRoom from "./CreateRoom";
+import { useStore } from "../../store/AppProvider";
 const URL_WEB_SOCKET = "ws://localhost:8081/websocket";
 const request = {
   typeMessage: "SUBSCRIBE_ROOMS",
 };
 function ManageRoom() {
+  const { user, setLoading } = useStore();
+
   const [rooms, setRooms] = useState([]);
   const [watts, setWatts] = useState({});
   const [visible, setVisible] = useState({ createRoom: false });
   const [ws, setWs] = useState(null);
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${URL}api/room`)
       .then((response) => {
         setRooms(response.data.info);
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
       })
       .catch((error) => {
         console.log(error);
@@ -85,12 +92,14 @@ function ManageRoom() {
           <Popup
             title={"Tạo phòng mới"}
             trigger={
-              <a
-                className="btn btn-outline-dark mt-auto"
-                onClick={() => setVisible({ ...visible, createRoom: true })}
-              >
-                Tạo phòng mới
-              </a>
+              <div disabled={user.value.roles[0] !== "ADMIN"}>
+                <a
+                  className="btn btn-outline-dark mt-auto"
+                  onClick={() => setVisible({ ...visible, createRoom: true })}
+                >
+                  Tạo phòng mới
+                </a>
+              </div>
             }
             close={closeCreateRoom}
             show={visible.createRoom}

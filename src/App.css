@@ -29,7 +29,6 @@
   font-weight: 600;
 }
 :root{
-
   --primary-color: #04AA6D;
   --green-color: #62d493;
   --yellow-color: #FFF4A3;
@@ -37,6 +36,10 @@
   --primary-light-color: rgba(255, 74, 0, 0.5);
 }
 div[disabled] {
+  cursor: not-allowed;
+}
+
+div[disabled] a {  
   pointer-events: none;
 }
 .bg-primary-custom {
@@ -77,8 +80,9 @@ ol, ul {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1;
+  background: white;
+  transition: all ease-in-out 0.5s;
+  z-index: 10;
   position: absolute;
 }
 

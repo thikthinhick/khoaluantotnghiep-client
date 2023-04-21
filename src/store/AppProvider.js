@@ -21,8 +21,10 @@ export const AuthProvider = ({ children }) => {
     if (response.status === 200) {
       const ttl = remember ? 1000 * 60 * 60 * 24 * 7 : 1000 * 10;
       setUser(response.data, ttl);
-      setLoading(false);
-      navigate("/", { replace: true });
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/", { replace: true });
+      }, 500);
     }
   };
   const signup = async (form) => {

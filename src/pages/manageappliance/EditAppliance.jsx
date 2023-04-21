@@ -75,7 +75,7 @@ function EditAppliance({ close, roomId, updateAppliance }) {
             name="applianceDescription"
           />
         </div>
-        <div className="form-group mb-2">
+        {/* <div className="form-group mb-2">
           <label>*Loại thiết bị</label>
           <div className="d-flex">
             <div className="d-flex">
@@ -111,7 +111,7 @@ function EditAppliance({ close, roomId, updateAppliance }) {
               </label>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="form-group mb-2">
           <label>Chọn ảnh thiết bị</label>
           <input type="file" onChange={onSelectFile} className="form-control" />

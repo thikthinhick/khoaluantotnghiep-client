@@ -32,7 +32,9 @@ function ManageAppliance() {
       .get(`${url}api/room?id=${id}`)
       .then((res) => {
         setState(res.data);
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
       })
       .catch((err) => {
         console.log(err);
@@ -60,19 +62,19 @@ function ManageAppliance() {
   const updateAppliance = (appliance) => {
     setState({ ...state, appliances: [...state.appliances, appliance] });
   };
-  const deleteAppliance = async (id) => {
+  const deleteAppliance = async (appliaceId) => {
     if (window.confirm("bạn có chắc chắn muốn xóa không?") === true) {
       axios
         .delete(`${url}api/appliance`, {
           data: {
             userId: user.value.userId,
-            applianceId: id,
+            applianceId: appliaceId,
           },
         })
         .then(() => {
           alert("Xóa thành công!");
           const appliances = state.appliances.filter((element) => {
-            return element.id !== id;
+            return element.id !== appliaceId;
           });
           setState({
             ...state,
@@ -94,14 +96,41 @@ function ManageAppliance() {
           userId: user.value.userId,
         })
         .then((res) => {
+          console.log(res.data);
           let listAppliances = state.appliances.map((element) => {
-            if (element.id === applianceId) element.status = res.data.info;
+            if (element.id === applianceId) element.status = !status;
             return element;
           });
           setState({ ...state, appliances: listAppliances });
         })
         .catch((err) => {
           alert(`Không thể ${message} thiết bị! hãy kiểm tra lại`);
+        });
+    }
+  };
+  const updateStatusAllAppliance = () => {
+    if (
+      window.confirm(
+        `Bạn có muốn tắt tất cả các thiết bị trong phòng không?`
+      ) === true
+    ) {
+      axios
+        .put(`${url}api/appliance/change_status_all`, {
+          roomId: id,
+          userId: user.value.userId,
+        })
+        .then((res) => {
+          let appliances = state.appliances.map((element) => {
+            element.status = false;
+            return element;
+          });
+          console.log(appliances);
+          setState({ ...state, appliances: appliances });
+          alert("Tắt thành công!");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert(`Không thế tắt tất cả các thiết bị hãy kiểm tra lại`);
         });
     }
   };
@@ -126,7 +155,12 @@ function ManageAppliance() {
               <p style={{ color: "gray", height: "40px" }}>
                 {state.descriptionRoom}
               </p>
-              <a className="btn btn-outline-dark mt-2">Tắt tất cả</a>{" "}
+              <a
+                className="btn btn-outline-dark mt-2"
+                onClick={updateStatusAllAppliance}
+              >
+                Tắt tất cả
+              </a>{" "}
               <div className="d-flex mt-3">
                 <div className="item col-4">
                   <div className="content">
@@ -161,13 +195,17 @@ function ManageAppliance() {
                       </ul>
                       <Popup
                         title={"Chọn người điều khiển"}
+                        close={setVisiableUser}
                         show={visiableUser}
                         trigger={
-                          <ChevronCompactRight
-                            size={20}
-                            style={{ cursor: "pointer" }}
-                            onClick={() => setVisiableUser(true)}
-                          />
+                          <div disabled={user.value.roles[0] !== "ADMIN"}>
+                            <a
+                              style={{ cursor: "pointer" }}
+                              onClick={() => setVisiableUser(true)}
+                            >
+                              <ChevronCompactRight size={20} />
+                            </a>
+                          </div>
                         }
                       >
                         <MultipleOption
@@ -230,15 +268,20 @@ function ManageAppliance() {
                           >
                             Chi tiết
                           </Link>
-                          <a className="btn btn-outline-dark mt-auto mx-2">
-                            Chỉnh sửa thiết bị
-                          </a>
-                          <a
-                            className="btn btn-outline-dark mt-auto mx-2"
-                            onClick={() => deleteAppliance(element.id)}
-                          >
-                            Xóa thiết bị
-                          </a>
+                          <div disabled={user.value.roles[0] !== "ADMIN"}>
+                            <a className="btn btn-outline-dark mt-auto mx-2">
+                              Chỉnh sửa thiết bị
+                            </a>
+                          </div>
+
+                          <div disabled={user.value.roles[0] !== "ADMIN"}>
+                            <a
+                              className="btn btn-outline-dark mt-auto mx-2"
+                              onClick={() => deleteAppliance(element.id)}
+                            >
+                              Xóa thiết bị
+                            </a>
+                          </div>
                         </div>
                       </td>
                       <td>
@@ -260,12 +303,14 @@ function ManageAppliance() {
                   title={"Tạo thiết bị mới"}
                   show={visiableAppliance}
                   trigger={
-                    <a
-                      className="btn btn-outline-dark mt-auto"
-                      onClick={() => setVisiableAppliance(true)}
-                    >
-                      Thêm thiết bị
-                    </a>
+                    <div disabled={user.value.roles[0] !== "ADMIN"}>
+                      <a
+                        className="btn btn-outline-dark mt-auto"
+                        onClick={() => setVisiableAppliance(true)}
+                      >
+                        Thêm thiết bị
+                      </a>
+                    </div>
                   }
                 >
                   <EditAppliance

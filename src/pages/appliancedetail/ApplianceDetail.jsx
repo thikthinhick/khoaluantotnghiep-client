@@ -21,13 +21,14 @@ function ApplianceDetail() {
   const [page, setPage] = useState(0);
   const [watt, setWatt] = useState();
   const [ws, setWs] = useState(null);
-  const { loading, setLoading } = useStore();
+  const { setLoading } = useStore();
   const request = {
     typeMessage: "SUBSCRIBE_APPLIANCE",
     applianceId: applianceId,
   };
   const { user } = useStore();
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${URL}api/appliance?id=${applianceId}`)
       .then((res) => {
@@ -44,6 +45,9 @@ function ApplianceDetail() {
           }),
         };
         setState(data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       })
       .catch((err) => {
         console.log(err);

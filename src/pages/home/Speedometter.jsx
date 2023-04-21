@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReactSpeedometer from "react-d3-speedometer";
 
 const styles = {
@@ -24,7 +24,7 @@ const Speedometer = ({ id, value, title }) => {
   return (
     <div style={styles.dial}>
       <ReactSpeedometer
-        maxValue={8000}
+        maxValue={2000}
         minValue={0}
         labelFontSize={12}
         height={160}
