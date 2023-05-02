@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Table, ListUl } from "react-bootstrap-icons";
-import profile from "../../assets/images/user.webp";
+import { XCircleFill } from "react-bootstrap-icons";
 import Status from "../../components/status/Status";
 import Popup from "../../components/popup/Popup";
 import TariffDetail from "./TariffDetail";
 import { URL } from "../../contants/Contants";
 import axios from "axios";
+const data = [
+  {
+    key: "1",
+    name: "Biểu giá điện đơn",
+  },
+  {
+    key: "2",
+    name: "Biểu giá điện theo thời điểm",
+  },
+  {
+    key: "3",
+    name: "biểu giá điện theo số lượng điện",
+  },
+];
 export default function Setting() {
   const [visiabled, setVisiabled] = useState(false);
   const [state, setState] = useState({ users: [] });
@@ -13,7 +27,6 @@ export default function Setting() {
     axios
       .get(`${URL}api/setting`)
       .then((res) => {
-        console.log(res.data);
         setState(res.data);
       })
       .catch((err) => {
@@ -24,17 +37,34 @@ export default function Setting() {
     const { name, value } = e.target;
     if (
       window.confirm(
-        "Biểu giá sẽ áp dụng vào tháng sau, bạn có chắc chắn muốn thay đổi biểu giá điện không?"
+        "Biểu giá sẽ áp dụng vào tháng sau, bạn có chắc chắn muốn đặt lịch thay đổi biểu giá điện không?"
       )
     ) {
       axios
-        .put(`${URL}api/staff/${value}`)
+        .put(`${URL}api/bill/${value}`)
         .then((res) => {
           alert("Cập nhật thành công!");
           setState({ ...state, staffTypeChange: value });
         })
         .catch((err) => {
           alert("Cập nhật không thành công!");
+        });
+    }
+  };
+  const removeScheduleBill = () => {
+    if (
+      window.confirm(
+        "Bạn có muốn xóa lịch cập nhật biểu giá điện vào tháng sau không?"
+      )
+    ) {
+      axios
+        .delete(`${URL}api/bill`)
+        .then((res) => {
+          alert("Xóa thành công!");
+          setState({ ...state, staffTypeChange: null });
+        })
+        .catch((err) => {
+          alert("Xóa không thành công");
         });
     }
   };
@@ -70,60 +100,31 @@ export default function Setting() {
                 </div>
               </div>
               <div className="card-body">
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="staffType"
-                    value="1"
-                    onChange={handleChangeField}
-                    checked={state.staffType === "1"}
-                  />
-                  <label class="form-check-label" for="inlineRadio1">
-                    Biểu giá điện đơn
-                  </label>
-                  {state.staffTypeChange === "1" ? (
-                    <span className="staff-schedule">Đã lên lịch</span>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="staffType"
-                    onChange={handleChangeField}
-                    value="2"
-                    checked={state.staffType === "2"}
-                  />
-                  <label class="form-check-label" for="inlineRadio2">
-                    Biểu giá điện theo thời điểm
-                  </label>
-                  {state.staffTypeChange === "2" ? (
-                    <span className="staff-schedule">Đã lên lịch</span>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="staffType"
-                    onChange={handleChangeField}
-                    value="3"
-                    checked={state.staffType === "3"}
-                  />
-                  <label class="form-check-label" for="inlineRadio2">
-                    Biểu giá điện theo số lượng điện
-                  </label>
-                  {state.staffTypeChange === "3" ? (
-                    <span className="staff-schedule">Đã lên lịch</span>
-                  ) : (
-                    <></>
-                  )}
-                </div>
+                {data.map((element) => (
+                  <div class="form-check" key={element.key}>
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="staffType"
+                      value={element.key}
+                      onChange={handleChangeField}
+                      checked={state.staffType === element.key}
+                    />
+                    <label class="form-check-label" for="inlineRadio1">
+                      {element.name}
+                    </label>
+                    {state.staffTypeChange === element.key ? (
+                      <span className="staff-schedule">
+                        Đã đặt lịch <span className="background-white"></span>
+                        <button onClick={removeScheduleBill}>
+                          <XCircleFill style={{ color: "var(--red-color)" }} />
+                        </button>
+                      </span>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
