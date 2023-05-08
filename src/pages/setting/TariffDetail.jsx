@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Setting.css";
 import axios from "axios";
 import { URL } from "../../contants/Contants";
+import { httpClient } from "../../utils/httpClient";
 function TariffDetail({ close }) {
   const [form, setForm] = useState({
     Single: "",
@@ -16,8 +17,8 @@ function TariffDetail({ close }) {
     Number6: "",
   });
   useEffect(() => {
-    axios
-      .get(`${URL}api/staff`)
+    httpClient()
+      .get(`/api/staff`)
       .then((res) => {
         setForm(res.data);
       })
@@ -33,8 +34,8 @@ function TariffDetail({ close }) {
     if (
       window.confirm("Bạn có chắc chắn muốn cập nhật biểu giá điện hay không?")
     )
-      axios
-        .put(`${URL}api/staff`, form)
+      httpClient()
+        .put(`/api/staff`, form)
         .then((res) => {
           alert("Cập nhật thành công!");
         })

@@ -1,7 +1,7 @@
 import React from "react";
-import { BoxArrowLeft } from "react-bootstrap-icons";
+import { BoxArrowLeft, Person } from "react-bootstrap-icons";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import House from "../../assets/images/house.png";
 import profile from "../../assets/images/user.webp";
 import { useStore } from "../../store/AppProvider";
@@ -10,6 +10,7 @@ import Notification from "./Notification";
 import Searchbar from "./Searchbar";
 function Navbar() {
   const { user, signout } = useStore();
+  const nav = useNavigate();
   return (
     <nav
       id="navbar-container"
@@ -46,7 +47,7 @@ function Navbar() {
       <div className="d-flex align-items-center">
         <img
           className="image-profile"
-          src={user ? user.value.thumbnail : profile}
+          src={user ? user?.value.thumbnail : profile}
         />
         <span
           className="mx-2"
@@ -63,6 +64,13 @@ function Navbar() {
         >
           <BoxArrowLeft />
           &ensp;Đăng xuất
+        </NavDropdown.Item>
+        <NavDropdown.Item
+          className="d-flex align-items-center"
+          onClick={() => nav("/profile")}
+        >
+          <Person />
+          &ensp;Trang cá nhân
         </NavDropdown.Item>
       </NavDropdown>
     </nav>

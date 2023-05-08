@@ -1,35 +1,34 @@
 import React from "react";
-import { BellFill } from "react-bootstrap-icons";
+import { BellFill, SortUpAlt } from "react-bootstrap-icons";
 import useComponentVisible from "../useComponentVisiable";
 import "./NavbarTop.css";
 import { useStore } from "../../store/AppProvider";
 import { useEffect, useState, memo } from "react";
-import axios from "axios";
 import { Datediff } from "../../utils/Data";
 import { URL } from "../../contants/Contants";
+import { httpClient } from "../../utils/httpClient";
 function Notification() {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(false);
   const { user } = useStore();
-  const [state, setState] = useState({
-    totalNotification: 0,
-    notifications: [],
-  });
+  const [totalNotification, setTotalNotification] = useState(0);
+  const [notifications, setNotifications] = useState([]);
   const [listening, setListening] = useState(false);
   let eventSource = undefined;
   const getNotification = () => {
-    axios
-      .get(`${URL}api/notification?user_id=${user.value.userId}`)
+    httpClient()
+      .get(`/api/notification?user_id=${user.value.userId}`)
       .then((res) => {
-        setState({ totalNotification: 0, notifications: res.data.info });
+        setNotifications(res.data.info);
+        setTotalNotification(0);
       })
       .catch((err) => {});
   };
   useEffect(() => {
-    axios
-      .get(`${URL}api/notification/get_total?user_id=${user.value.userId}`)
+    httpClient()
+      .get(`api/notification/get_total?user_id=${user.value.userId}`)
       .then((res) => {
-        setState({ ...state, totalNotification: res.data.info });
+        setTotalNotification(res.data.info);
       })
       .catch((err) => {});
     if (!listening) {
@@ -40,14 +39,10 @@ function Notification() {
         console.log("connection opened");
       };
       eventSource.onmessage = (event) => {
-        setState({ ...state, totalNotification: state.totalNotification + 1 });
+        setTotalNotification((prev) => prev + 1);
       };
 
       eventSource.onerror = (event) => {
-        console.log(event.target.readyState);
-        if (event.target.readyState === EventSource.CLOSED) {
-          console.log("eventsource closed (" + event.target.readyState + ")");
-        }
         eventSource.close();
       };
 
@@ -55,7 +50,6 @@ function Notification() {
     }
     return () => {
       if (eventSource) eventSource.close();
-      console.log("eventsource closed");
     };
   }, []);
   return (
@@ -70,11 +64,11 @@ function Notification() {
           }}
           style={{ cursor: "pointer" }}
         />
-        {state.totalNotification > 0 ? (
-          state.totalNotification > 9 ? (
+        {totalNotification > 0 ? (
+          totalNotification > 9 ? (
             <span>9+</span>
           ) : (
-            <span>{state.totalNotification}</span>
+            <span>{totalNotification}</span>
           )
         ) : (
           <></>
@@ -95,7 +89,7 @@ function Notification() {
               Thông báo
             </h5>
             <ul class="list-group" style={{ borderRadius: "0px" }}>
-              {state.notifications.map((element, index) => (
+              {notifications.map((element, index) => (
                 <li class="list-group-item " key={index}>
                   <div className="notifi-item">
                     <div className="notification-content__img">

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, memo } from "react";
-import { URL } from "../../contants/Contants";
-import axios from "axios";
+import { httpClient } from "../../utils/httpClient";
 function EditSchedule({ info, close, updateSchedule }) {
   const [formRepeat, setFormRepeat] = useState({
     T2: false,
@@ -63,8 +62,8 @@ function EditSchedule({ info, close, updateSchedule }) {
           id: info.id,
         },
       };
-      axios
-        .put(`${URL}api/schedule`, body)
+      httpClient()
+        .put(`/api/schedule`, body)
         .then((res) => {
           alert("Cập nhật lịch trình thành công!");
           updateSchedule(body.schedule);

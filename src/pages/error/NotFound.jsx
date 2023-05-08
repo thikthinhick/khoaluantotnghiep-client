@@ -2,7 +2,7 @@ import React from "react";
 import "./error.css";
 function NotFound() {
   return (
-    <div className="container-error">
+    <div className="container-error bg-dark">
       <center>
         <br></br>
         <br></br>

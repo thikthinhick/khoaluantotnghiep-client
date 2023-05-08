@@ -4,11 +4,13 @@ import {
   Diagram3Fill,
   Gear,
   HouseDoor,
-  QuestionCircle
+  QuestionCircle,
 } from "react-bootstrap-icons";
 import { NavLink } from "react-router-dom";
 import "./NavbarLeft.css";
+import { useStore } from "../../store/AppProvider";
 function NavbarLeft() {
+  const { user } = useStore();
   const menuItem = [
     {
       path: "/",
@@ -48,17 +50,21 @@ function NavbarLeft() {
             flex: 1,
           }}
         >
-          {menuItem.map((element, index) => (
-            <NavLink
-              className="link-item"
-              to={element.path}
-              key={index}
-              activeClassName="active"
-            >
-              <div className="navbar-left-icon">{element.icon}</div>
-              <div className="navbar-left-name">{element.name}</div>
-            </NavLink>
-          ))}
+          {menuItem.map((element, index) =>
+            element.name !== "Cài đặt" || user.value.roles[0] === "ADMIN" ? (
+              <NavLink
+                className="link-item"
+                to={element.path}
+                key={index}
+                activeClassName="active"
+              >
+                <div className="navbar-left-icon">{element.icon}</div>
+                <div className="navbar-left-name">{element.name}</div>
+              </NavLink>
+            ) : (
+              <></>
+            )
+          )}
         </ul>
       </div>
     </div>

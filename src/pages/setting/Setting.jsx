@@ -4,8 +4,11 @@ import { XCircleFill } from "react-bootstrap-icons";
 import Status from "../../components/status/Status";
 import Popup from "../../components/popup/Popup";
 import TariffDetail from "./TariffDetail";
-import { URL } from "../../contants/Contants";
-import axios from "axios";
+import { httpClient } from "../../utils/httpClient";
+import Pagination from "../../components/pagination/Pagination";
+import EditUser from "./EditUser";
+import { useStore } from "../../store/AppProvider";
+import { useNavigate } from "react-router-dom";
 const data = [
   {
     key: "1",
@@ -21,27 +24,36 @@ const data = [
   },
 ];
 export default function Setting() {
+  const { setLoading } = useStore();
+  const nav = useNavigate();
+  const [page, setPage] = useState(0);
   const [visiabled, setVisiabled] = useState(false);
   const [state, setState] = useState({ users: [] });
   useEffect(() => {
-    axios
-      .get(`${URL}api/setting`)
+    setLoading(true);
+    httpClient()
+      .get(`/api/setting`)
       .then((res) => {
         setState(res.data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
       })
       .catch((err) => {
-        console.log(err);
+        setLoading(false);
+        if (err.code === "ERR_NETWORK") nav("/error-server");
+        else if (err.response?.data.responseCode === -1) nav("/profile");
       });
   }, []);
   const handleChangeField = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
     if (
       window.confirm(
         "Biểu giá sẽ áp dụng vào tháng sau, bạn có chắc chắn muốn đặt lịch thay đổi biểu giá điện không?"
       )
     ) {
-      axios
-        .put(`${URL}api/bill/${value}`)
+      httpClient()
+        .put(`/api/bill/${value}`)
         .then((res) => {
           alert("Cập nhật thành công!");
           setState({ ...state, staffTypeChange: value });
@@ -57,8 +69,8 @@ export default function Setting() {
         "Bạn có muốn xóa lịch cập nhật biểu giá điện vào tháng sau không?"
       )
     ) {
-      axios
-        .delete(`${URL}api/bill`)
+      httpClient()
+        .delete(`/api/bill`)
         .then((res) => {
           alert("Xóa thành công!");
           setState({ ...state, staffTypeChange: null });
@@ -67,6 +79,15 @@ export default function Setting() {
           alert("Xóa không thành công");
         });
     }
+  };
+  const updateUsers = (data) => {
+    console.log(data);
+    console.log(state.users);
+    const newUsers = state.users.map((element) =>
+      element.id === data.id ? { ...element, ...data } : element
+    );
+
+    setState({ ...state, users: newUsers });
   };
   return (
     <main>
@@ -144,36 +165,80 @@ export default function Setting() {
                 <th>Trạng thái</th>
                 <th>Thao tác</th>
               </tr>
-              {state.users.map((element, index) => (
-                <tr>
-                  <td>{index + 1}</td>
-                  <td>
-                    <img
-                      src={element.thumbnail}
-                      style={{
-                        height: "26px",
-                        width: "26px",
-                        borderRadius: "13px",
-                        marginRight: "5px",
-                      }}
-                    />
-                    {element.username}
-                  </td>
-                  <td>{element.email}</td>
-                  <td>{element.listRoomNames.toString()}</td>
-                  <td>
-                    <Status index={1} />
-                  </td>
-                  <td>
-                    <a className="btn btn-outline-dark mt-auto">Chỉnh sửa</a>
-                  </td>
-                </tr>
-              ))}
+              {state.users.map((element, index) => {
+                element.index = index + 1;
+                return (
+                  <RowUser
+                    key={index}
+                    info={element}
+                    updateState={updateUsers}
+                  />
+                );
+              })}
             </table>
-            <div className="mt-3" style={{ float: "right" }}></div>
+
+            <div className="mt-3" style={{ float: "right" }}>
+              {state.users.length === 0 ? (
+                <></>
+              ) : (
+                <Pagination
+                  total={state.users.length}
+                  page={page}
+                  changePage={setPage}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
     </main>
   );
 }
+const RowUser = ({ info, updateState }) => {
+  const [visiabled, setVisiabled] = useState(false);
+  return (
+    <tr>
+      <td>{info.index}</td>
+      <td>
+        <img
+          src={info.thumbnail}
+          style={{
+            height: "26px",
+            width: "26px",
+            borderRadius: "13px",
+            marginRight: "5px",
+          }}
+        />
+        {info.username}
+      </td>
+      <td>{info.email}</td>
+      <td>
+        {info.listRoomNames.length !== 0
+          ? info.listRoomNames.toString()
+          : "Chưa có phòng nào !"}
+      </td>
+      <td>{info.active ? <Status index={5} /> : <Status index={6} />}</td>
+      <td>
+        <Popup
+          title={"Quản lí người dùng"}
+          trigger={
+            <a
+              className="btn btn-outline-dark mt-auto"
+              onClick={() => setVisiabled(true)}
+            >
+              Chỉnh sửa
+            </a>
+          }
+          close={() => setVisiabled(false)}
+          show={visiabled}
+        >
+          <EditUser
+            updateState={updateState}
+            userId={info.id}
+            close={() => setVisiabled(false)}
+          />
+        </Popup>
+      </td>
+    </tr>
+  );
+};

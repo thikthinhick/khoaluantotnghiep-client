@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { memo, useEffect, useState } from "react";
 import { URL as url } from "../../contants/Contants";
+import { httpClient } from "../../utils/httpClient";
 function EditRoom({ getDataParent, updateRoom, close }) {
   const [selectedFile, setSelectedFile] = useState();
 
@@ -46,8 +47,8 @@ function EditRoom({ getDataParent, updateRoom, close }) {
     formData.append("file", selectedFile);
     formData.append("data", JSON.stringify(form));
     if (window.confirm("bạn có chắc muốn cập nhật phòng không?") === true) {
-      axios
-        .put(`${url}api/room?id=${form.roomId}`, formData, {
+      httpClient()
+        .put(`/api/room?id=${form.roomId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

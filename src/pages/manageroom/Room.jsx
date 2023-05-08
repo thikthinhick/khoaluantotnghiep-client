@@ -6,6 +6,7 @@ import Popup from "../../components/popup/Popup";
 import EditRoom from "./EditRoom";
 import { Speedometer2 } from "react-bootstrap-icons";
 import { useStore } from "../../store/AppProvider";
+import Status from "../../components/status/Status";
 function Room({ info, deleteRoom, watt, updateRoom }) {
   const { user } = useStore();
   const [visiable, setVisiable] = useState(false);
@@ -45,18 +46,25 @@ function Room({ info, deleteRoom, watt, updateRoom }) {
             <h5>{info.roomName}</h5>
             <p>{info.totalAppliances} thiết bị</p>
           </div>
-
-          <ul className="d-flex users">
-            {info.users.length !== 0 ? (
-              info.users.map((element, index) => (
+          <div className="d-flex justify-content-between">
+            <ul className="d-flex users">
+              {info.users.slice(0, 3).map((element, index) => (
                 <li key={index}>
                   <img src={element.thumbnail ? element.thumbnail : Profile} />
                 </li>
-              ))
-            ) : (
-              <p>Phòng chưa có người nào</p>
-            )}
-          </ul>
+              ))}
+              {info.users.length - 3 > 0 ? (
+                <li style={{ marginLeft: "15px", fontSize: "16px" }}>
+                  + {info.users.length - 3}
+                </li>
+              ) : (
+                <></>
+              )}
+            </ul>
+            <div className="d-flex align-items-center">
+              <Status index={info.active ? 5 : 6} />
+            </div>
+          </div>
         </div>
 
         <div className="card-footer pt-0 border-top-0 bg-transparent">

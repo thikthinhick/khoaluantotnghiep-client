@@ -77,7 +77,7 @@ function ResetPassword() {
       }
     }
   };
-  return true ? (
+  return (
     <div className="container-login">
       <div className="signup-form">
         <div className="form" style={{ width: "500px" }}>
@@ -147,8 +147,6 @@ function ResetPassword() {
         </div>
       </div>
     </div>
-  ) : (
-    <></>
   );
 }
 

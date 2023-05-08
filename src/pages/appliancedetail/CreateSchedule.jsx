@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { URL } from "../../contants/Contants";
 import "./ApplianceDetail.css";
-import axios from "axios";
+import { httpClient } from "../../utils/httpClient";
 function CreateSchedule({ close, applianceId, addSchedule }) {
   const [formRepeat, setFormRepeat] = useState({
     T2: false,
@@ -45,16 +44,14 @@ function CreateSchedule({ close, applianceId, addSchedule }) {
         estimatedTime: form.estimatedTime,
         applianceId: applianceId,
       };
-      axios
-        .post(`${URL}api/schedule`, body)
+      httpClient()
+        .post(`/api/schedule`, body)
         .then((res) => {
           addSchedule(res.data.info);
           close();
           alert("Tạo lịch trình thành công!");
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   };
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { URL } from "../../contants/Contants";
 import "./ManageRoom.css";
 import Room from "./Room";
@@ -6,29 +6,36 @@ import axios from "axios";
 import Popup from "../../components/popup/Popup";
 import CreateRoom from "./CreateRoom";
 import { useStore } from "../../store/AppProvider";
+import { useNavigate } from "react-router-dom";
+import { httpClient } from "../../utils/httpClient";
+import { SortUpAlt } from "react-bootstrap-icons";
 const URL_WEB_SOCKET = "ws://localhost:8081/websocket";
 const request = {
   typeMessage: "SUBSCRIBE_ROOMS",
 };
 function ManageRoom() {
+  const nav = useNavigate();
   const { user, setLoading } = useStore();
-
   const [rooms, setRooms] = useState([]);
   const [watts, setWatts] = useState({});
   const [visible, setVisible] = useState({ createRoom: false });
   const [ws, setWs] = useState(null);
   useEffect(() => {
     setLoading(true);
-    axios
-      .get(`${URL}api/room`)
+
+    httpClient()
+      .get(`/api/room`)
       .then((response) => {
+        console.log(response.data);
         setRooms(response.data.info);
         setTimeout(() => {
           setLoading(false);
         }, 500);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        setLoading(false);
+        if (err.code === "ERR_NETWORK") nav("/error-server");
+        else if (err.response?.data.responseCode === -1) nav("/profile");
       });
     const wsClient = new WebSocket(URL_WEB_SOCKET);
     wsClient.onopen = () => {
@@ -49,8 +56,8 @@ function ManageRoom() {
   }, []);
   const deleteRoom = (roomId) => {
     if (window.confirm("Bạn có chắc chắn muốn xóa!") === true) {
-      axios
-        .delete(`${URL}api/room/${roomId}`)
+      httpClient()
+        .delete(`/api/room/${roomId}`)
         .then((response) => {
           const newRoom = rooms.filter((element) => element.roomId !== roomId);
           setRooms(newRoom);
@@ -62,13 +69,25 @@ function ManageRoom() {
     }
   };
   const addRoom = (room) => {
-    setRooms([...rooms, { ...room, users: [], totalAppliances: 0 }]);
+    setRooms([
+      ...rooms,
+      {
+        ...room,
+        users: [
+          {
+            id: user.value.userId,
+            username: user.value.username,
+            thumbnail: user.value.thumbnail,
+          },
+        ],
+        totalAppliances: 0,
+      },
+    ]);
   };
   const updateRoom = (room) => {
     let x = rooms.map((element) =>
-      element.id === room.id ? { ...element, ...room } : element
+      element.roomId === room.roomId ? { ...element, ...room } : element
     );
-
     setRooms(x);
   };
   const closeCreateRoom = () => {
@@ -95,6 +114,7 @@ function ManageRoom() {
               <div disabled={user.value.roles[0] !== "ADMIN"}>
                 <a
                   className="btn btn-outline-dark mt-auto"
+                  style={{ marginBottom: "50px" }}
                   onClick={() => setVisible({ ...visible, createRoom: true })}
                 >
                   Tạo phòng mới

@@ -22,23 +22,28 @@ export const AuthProvider = ({ children }) => {
       const ttl = remember ? 1000 * 60 * 60 * 24 * 7 : 1000 * 10;
       setUser(response.data, ttl);
       setTimeout(() => {
-        setLoading(false);
         navigate("/", { replace: true });
-      }, 500);
+      }, 1000);
     }
   };
   const signup = async (form) => {
     const { email, password, username } = form;
     setLoading(true);
-    const response = await axios.post(API_URL + "signup", {
-      username,
-      password,
-      email,
-    });
-    if (response.status === 200) {
-      navigate("/");
+    try {
+      const response = await axios.post(API_URL + "signup", {
+        username,
+        password,
+        email,
+      });
+      if (response.status === 200) {
+        alert("Kiểm tra email để xác nhận tạo tài khoản!");
+        navigate("/login");
+      }
+    } catch (err) {
+      alert("Tạo tài khoản thất bại, vui lòng kiểm tra lại!");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
   const signout = () => {
     setUser(null, 0);

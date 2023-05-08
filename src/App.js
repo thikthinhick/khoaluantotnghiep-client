@@ -12,10 +12,12 @@ import NotFound from "./pages/error/NotFound";
 import Home from "./pages/home/Home";
 import ManageAppliance from "./pages/manageappliance/ManageAppliance";
 import ManageRoom from "./pages/manageroom/ManageRoom";
-
+import ErrorServer from "./pages/error/ErrorServer";
 import Setting from "./pages/setting/Setting";
 import Statistic from "./pages/statistic/Statistic";
 import { useStore } from "./store/AppProvider";
+
+import { Profile } from "./pages/profile/Profile";
 function App() {
   const { loading } = useStore();
 
@@ -47,7 +49,9 @@ function App() {
           />
           <Route path="setting" element={<Setting />} />
         </Route>
+        <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/error-server" element={<ErrorServer />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />

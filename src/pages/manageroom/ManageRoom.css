@@ -36,6 +36,8 @@
 .container-room__body .users {
     height: 40px;
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 .container-room__body .users li{
     width: 25px;

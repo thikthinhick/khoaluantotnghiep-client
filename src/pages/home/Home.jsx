@@ -1,25 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import {
-  BarChart,
-  CashCoin,
-  SortUpAlt,
-  Speedometer2,
-} from "react-bootstrap-icons";
-import { ButtonPower } from "../../components/button/Button";
-import Weather from "../../components/Weather";
+import { BarChart, CashCoin, Speedometer2 } from "react-bootstrap-icons";
+import { httpClient } from "../../utils/httpClient";
 import { URL } from "../../contants/Contants";
 import Chartmetter from "./Chartmetter";
 import "./Home.css";
 import Speedometter from "./Speedometter";
+import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/AppProvider";
 const URL_WEB_SOCKET = "ws://localhost:8081/websocket";
 const request = {
   typeMessage: "SUBSCRIBE_HOME",
 };
 function Home() {
+  const { signout, user, setLoading } = useStore();
+  const nav = useNavigate();
   const [ws, setWs] = useState(null);
-  const { setLoading } = useStore();
   const [speed, setSpeed] = useState({});
   const [dataChart, setDataChart] = useState([]);
   const [state, setState] = useState({
@@ -33,22 +29,26 @@ function Home() {
     chartType: "0",
   });
   useEffect(() => {
-    axios
-      .get(`${URL}api/home`)
+    setLoading(true);
+    httpClient()
+      .get(`/api/home`)
       .then((response) => {
         setState(response.data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
       })
       .catch((err) => {
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
         console.log(err);
+        if (err.code === "ERR_NETWORK") nav("/error-server");
+        else if (err.response?.data.responseCode === -1) nav("/profile");
+        else if (err.code === "ERR_BAD_REQUEST") signout();
       });
-    const wsClient = new WebSocket(URL_WEB_SOCKET);
-    wsClient.onopen = () => {
-      setWs(wsClient);
-      wsClient.send(JSON.stringify(request));
-      console.log("connected to server!");
-    };
-    axios
-      .get(`${URL}api/consumption/last_consumption?type=${state.chartType}`)
+    httpClient()
+      .get(`/api/consumption/last_consumption?type=${state.chartType}`)
       .then((response) => {
         let data = [];
         response.data.forEach((element) => {
@@ -60,9 +60,13 @@ function Home() {
 
         setDataChart(data);
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch((err) => {});
+    const wsClient = new WebSocket(URL_WEB_SOCKET);
+    wsClient.onopen = () => {
+      setWs(wsClient);
+      wsClient.send(JSON.stringify(request));
+      console.log("connected to server!");
+    };
     wsClient.onmessage = (response) => {
       let message = JSON.parse(response.data);
       if (message.typeMessage === "CHART_HOME") {
@@ -84,8 +88,8 @@ function Home() {
   }, []);
 
   const changeChartType = (value) => {
-    axios
-      .get(`${URL}api/consumption/last_consumption?type=${value}`)
+    httpClient()
+      .get(`api/consumption/last_consumption?type=${value}`)
       .then((response) => {
         let data = [];
         response.data.forEach((element) => {

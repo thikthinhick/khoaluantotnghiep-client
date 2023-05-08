@@ -37,9 +37,10 @@
 }
 div[disabled] {
   cursor: not-allowed;
+
 }
 
-div[disabled] a {  
+div[disabled] a, a[disabled], div[disabled] div{  
   pointer-events: none;
 }
 .bg-primary-custom {

@@ -1,9 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Calendar2, SortUpAlt, Table } from "react-bootstrap-icons";
-import { useParams, useLocation } from "react-router-dom";
+import { Calendar2, Table, ArrowLeft } from "react-bootstrap-icons";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { ToggleSwitch } from "../../components/button/Button";
-import LoadingIcon from "../../components/loading/LoadingIcon";
+import { httpClient } from "../../utils/httpClient";
 import Pagination from "../../components/pagination/Pagination";
 import Status from "../../components/status/Status";
 import Popup from "../../components/popup/Popup";
@@ -21,6 +20,7 @@ function ApplianceDetail() {
   const [page, setPage] = useState(0);
   const [watt, setWatt] = useState();
   const [ws, setWs] = useState(null);
+  const nav = useNavigate();
   const { setLoading } = useStore();
   const request = {
     typeMessage: "SUBSCRIBE_APPLIANCE",
@@ -29,8 +29,8 @@ function ApplianceDetail() {
   const { user } = useStore();
   useEffect(() => {
     setLoading(true);
-    axios
-      .get(`${URL}api/appliance?id=${applianceId}`)
+    httpClient()
+      .get(`/api/appliance?id=${applianceId}`)
       .then((res) => {
         let data = res.data;
         data = {
@@ -47,10 +47,12 @@ function ApplianceDetail() {
         setState(data);
         setTimeout(() => {
           setLoading(false);
-        }, 1000);
+        }, 500);
       })
       .catch((err) => {
-        console.log(err);
+        setLoading(false);
+        if (err.code === "ERR_NETWORK") nav("/error-server");
+        else if (err.response?.data.responseCode === -1) nav("/profile");
       });
   }, [location.pathname]);
   useEffect(() => {
@@ -73,8 +75,8 @@ function ApplianceDetail() {
   }, []);
   const deleteSchedule = (id) => {
     if (window.confirm("Bạn có chắc chắn muốn xóa lịch trình không?")) {
-      axios
-        .delete(`${URL}api/schedule`, {
+      httpClient()
+        .delete(`/api/schedule`, {
           data: { userId: user.value.userId, scheduleId: id },
         })
         .then((res) => {
@@ -126,8 +128,8 @@ function ApplianceDetail() {
         `Bạn có muốn ${message} chế độ tự động tắt thiết bị khi ở chế độ chờ không?`
       )
     ) {
-      axios
-        .put(`${URL}api/appliance/change_auto_off`, {
+      httpClient()
+        .put(`/api/appliance/change_auto_off`, {
           autoOff: !state.autoOff,
           applianceId: applianceId,
         })
@@ -142,7 +144,7 @@ function ApplianceDetail() {
   const changeScheduleStatus = (scheduleId, scheduleStatus) => {
     const message = scheduleStatus ? "bật" : "tắt";
     if (window.confirm(`Bạn có muốn ${message} lịch trình không?`)) {
-      axios
+      httpClient()
         .put(`${URL}api/schedule/change_status`, {
           scheduleId: scheduleId,
           scheduleStatus: scheduleStatus,
@@ -163,7 +165,7 @@ function ApplianceDetail() {
   const updateStatusAppliance = () => {
     const message = state.status ? "tắt" : "bật";
     if (window.confirm(`Bạn có muốn ${message} thiết bị không?`) === true) {
-      axios
+      httpClient()
         .put(`${URL}api/appliance/change_status`, {
           status: !state.status,
           applianceId: applianceId,
@@ -173,13 +175,18 @@ function ApplianceDetail() {
           setState({ ...state, status: !state.status });
         })
         .catch((err) => {
-          alert(`Không thể ${message} thiết bị! hãy kiểm tra lại`);
+          // alert(`Không thể ${message} thiết bị! hãy kiểm tra lại`);
         });
     }
   };
   return (
     <main>
-      <div className="container-fluid px-4 pt-4 container__appliance-detail">
+      <div className="container-fluid px-4 container__appliance-detail">
+        <button className="px-2 bg-transparent mb-2" onClick={() => nav(-1)}>
+          <ArrowLeft size={16} />
+          {"  "}
+          <span style={{ textDecoration: "underline" }}>Trở về phòng</span>
+        </button>
         <div className="row header">
           <div className="col-xl-8 d-flex">
             <div className="col-xl-6">
@@ -229,7 +236,7 @@ function ApplianceDetail() {
                     className="btn btn-outline-dark mt-auto"
                     onClick={updateStatusAppliance}
                   >
-                    {state.status ? "Tắt thiết bị" : "Bật thiết bị"}
+                    {watt ? "Tắt thiết bị" : "Bật thiết bị"}
                   </a>
                 </li>
               </ul>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { URL as url } from "../../contants/Contants";
-import axios from "axios";
 import { useStore } from "../../store/AppProvider";
+import { httpClient } from "../../utils/httpClient";
 function CreateRoom({ addRoom, close }) {
   const { user } = useStore();
   const [selectedFile, setSelectedFile] = useState();
@@ -35,8 +35,8 @@ function CreateRoom({ addRoom, close }) {
     formData.append("file", selectedFile);
     formData.append("data", JSON.stringify(form));
     if (window.confirm("bạn có chắc muốn tạo phòng không?") === true) {
-      axios
-        .post(`${url}api/room`, formData, {
+      httpClient()
+        .post(`/api/room`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + user.value.token,
@@ -44,6 +44,7 @@ function CreateRoom({ addRoom, close }) {
         })
         .then((res) => {
           alert("Tạo phòng thành công!");
+          res.data.info.active = true;
           addRoom(res.data.info);
           close();
         })

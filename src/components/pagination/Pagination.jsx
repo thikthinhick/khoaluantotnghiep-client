@@ -1,15 +1,15 @@
 import React from "react";
 import "./Pagination.css";
 import { ChevronRight, ChevronLeft } from "react-bootstrap-icons";
-const ItemPagination = ({ title, style }) => {
+const ItemPagination = ({ title, style, pick }) => {
   return (
-    <div className="item-pagination" style={style}>
+    <div className="item-pagination" style={style} onClick={pick}>
       {title}
     </div>
   );
 };
 function Pagination({ page, total, changePage }) {
-  const pages = parseInt((total / 4).toFixed());
+  const pages = parseInt(Math.ceil(total / 4));
   const next = () => {
     changePage(page + 1);
   };
@@ -21,8 +21,8 @@ function Pagination({ page, total, changePage }) {
   };
   return (
     <div className="container-pagination">
-      <div onClick={prev} disabled={page === 0}>
-        <ItemPagination title={<ChevronLeft />} />
+      <div disabled={page === 0}>
+        <ItemPagination title={<ChevronLeft />} pick={prev} />
       </div>
 
       {[...Array(pages).keys()].map((element, index) => (
@@ -42,8 +42,8 @@ function Pagination({ page, total, changePage }) {
         </div>
       ))}
 
-      <div onClick={next} disabled={!(page + 1 < pages)}>
-        <ItemPagination title={<ChevronRight />} />
+      <div disabled={!(page + 1 < pages)}>
+        <ItemPagination title={<ChevronRight />} pick={next} />
       </div>
     </div>
   );

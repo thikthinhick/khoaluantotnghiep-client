@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Check, Search } from "react-bootstrap-icons";
 import { URL } from "../../contants/Contants";
 import "./multipleOption.css";
+import { httpClient } from "../../utils/httpClient";
 function MultipleOption({ close, roomId, updateUser }) {
   const [input, setInput] = useState("");
   const [state, setState] = useState({ data: [], result: [] });
@@ -18,8 +19,8 @@ function MultipleOption({ close, roomId, updateUser }) {
   };
   useEffect(() => {
     refInput.current.focus();
-    axios
-      .get(`${URL}api/auth/get_user?room_id=${roomId}`)
+    httpClient()
+      .get(`/api/auth/get_user?room_id=${roomId}`)
       .then((res) => {
         const response = res.data;
         setState({ result: response, data: response });
@@ -47,8 +48,8 @@ function MultipleOption({ close, roomId, updateUser }) {
           users.push(element);
         }
       });
-      axios
-        .post(`${URL}api/room/${roomId}/add_user_to_room`, {
+      httpClient()
+        .post(`/api/room/${roomId}/add_user_to_room`, {
           userIds: users.map((element) => element.id),
         })
         .then((response) => {

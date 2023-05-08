@@ -1,32 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { URL as url } from "../../contants/Contants";
 import { httpClient } from "../../utils/httpClient";
-function EditAppliance({ close, getDataParent, updateAppliance }) {
+function CreateAppliance({ close, roomId, updateAppliance }) {
   const [selectedFile, setSelectedFile] = useState();
+  const [preview, setPreview] = useState();
   const [form, setForm] = useState({
     applianceName: "",
     applianceDescription: "",
-    thumbnail: null,
+    applianceType: "true",
   });
   useEffect(() => {
     if (!selectedFile) {
-      setForm({ ...form, thumbnail: null });
+      setPreview(undefined);
       return;
     }
     const objectUrl = URL.createObjectURL(selectedFile);
-    setForm({ ...form, thumbnail: objectUrl });
+    setPreview(objectUrl);
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
-  useEffect(() => {
-    setForm(() => getDataParent());
-  }, []);
-  const handleChange = (e) => {
-    const nextFormState = {
-      ...form,
-      [e.target.name]: e.target.value,
-    };
-    setForm(nextFormState);
-  };
   const onSelectFile = (e) => {
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(null);
@@ -34,29 +25,33 @@ function EditAppliance({ close, getDataParent, updateAppliance }) {
     }
     setSelectedFile(e.target.files[0]);
   };
-  const submit = () => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+  const createAppliance = () => {
     var formData = new FormData();
+    const x = { ...form, roomId: roomId };
     formData.append("file", selectedFile);
-    formData.append("data", JSON.stringify(form));
-    if (window.confirm("bạn có chắc muốn cập nhật thiết bị không?") === true) {
+    formData.append("data", JSON.stringify(x));
+    if (window.confirm("bạn có chắc muốn tạo thiết bị không?") === true) {
       httpClient()
-        .put(`/api/appliance`, formData, {
+        .post(`${url}api/appliance`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         })
         .then((res) => {
-          alert("Update thiết bị thành công!");
-          updateAppliance(form.applianceId, form.applianceName);
-          close();
+          updateAppliance(res.data.info);
+          close(false);
+          alert("Tạo thành công!");
         })
         .catch((err) => {
           console.log(err);
-          alert("Update thiết bị thất bại!");
+          alert("Tạo thất bại!");
         });
     }
   };
-
   return (
     <>
       <div className="modal-body container__editroom">
@@ -83,9 +78,9 @@ function EditAppliance({ close, getDataParent, updateAppliance }) {
         <div className="form-group mb-2">
           <label>Chọn ảnh thiết bị</label>
           <input type="file" onChange={onSelectFile} className="form-control" />
-          {form.thumbnail && (
+          {selectedFile && (
             <img
-              src={form.thumbnail}
+              src={preview}
               style={{
                 width: "100%",
                 height: "100%",
@@ -109,9 +104,9 @@ function EditAppliance({ close, getDataParent, updateAppliance }) {
           />
           <input
             type="submit"
+            onClick={createAppliance}
             className="btn btn-success"
             value="Ghi nhận"
-            onClick={submit}
           />
         </div>
       </div>
@@ -119,4 +114,4 @@ function EditAppliance({ close, getDataParent, updateAppliance }) {
   );
 }
 
-export default EditAppliance;
+export default CreateAppliance;

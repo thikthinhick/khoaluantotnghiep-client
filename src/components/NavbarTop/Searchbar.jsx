@@ -4,7 +4,8 @@ import { Search, ArrowReturnLeft } from "react-bootstrap-icons";
 import axios from "axios";
 import "./NavbarTop.css";
 import { URL } from "../../contants/Contants";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { httpClient } from "../../utils/httpClient";
 function Searchbar() {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useComponentVisible(true);
@@ -16,8 +17,8 @@ function Searchbar() {
     setInput(value);
   };
   const loadData = (value) => {
-    axios
-      .get(`${URL}api/appliance/search?keyword=${value}`)
+    httpClient()
+      .get(`/api/appliance/search?keyword=${value}`)
       .then((res) => {
         setFilterResult(res.data.info);
       })

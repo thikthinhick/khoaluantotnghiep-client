@@ -1,16 +1,16 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { ChevronCompactRight, Table } from "react-bootstrap-icons";
-import { useParams, Link } from "react-router-dom";
+import { ChevronCompactRight, Table, ArrowLeft } from "react-bootstrap-icons";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import LoadingIcon from "../../components/loading/LoadingIcon";
 import MultipleOption from "../../components/multipleOption/MultipleOption";
-import Pagination from "../../components/pagination/Pagination";
+import { httpClient } from "../../utils/httpClient";
 import Popup from "../../components/popup/Popup";
-import { URL as url } from "../../contants/Contants";
 import { useStore } from "../../store/AppProvider";
 import EditAppliance from "./EditAppliance";
+import Pagination from "../../components/pagination/Pagination";
 import "./ManageAppliance.css";
 import Status from "../../components/status/Status";
+import CreateAppliance from "./CreateAppliance";
 const URL_WEB_SOCKET = "ws://localhost:8081/websocket";
 
 function ManageAppliance() {
@@ -19,8 +19,10 @@ function ManageAppliance() {
     typeMessage: "SUBSCRIBE_ROOM",
     roomId: id,
   };
+  const nav = useNavigate();
   const [watts, setWatts] = useState({});
   const { user } = useStore();
+  const [page, setPage] = useState(0);
   const { setLoading } = useStore();
   const [ws, setWs] = useState(null);
   const [visiableUser, setVisiableUser] = useState(false);
@@ -28,8 +30,8 @@ function ManageAppliance() {
   const [state, setState] = useState({ appliances: [], users: [] });
   useEffect(() => {
     setLoading(true);
-    axios
-      .get(`${url}api/room?id=${id}`)
+    httpClient()
+      .get(`/api/room?id=${id}`)
       .then((res) => {
         setState(res.data);
         setTimeout(() => {
@@ -37,7 +39,9 @@ function ManageAppliance() {
         }, 500);
       })
       .catch((err) => {
-        console.log(err);
+        setLoading(false);
+        if (err.code === "ERR_NETWORK") nav("/error-server");
+        else if (err.response?.data.responseCode === -1) nav("/profile");
       });
     const wsClient = new WebSocket(URL_WEB_SOCKET);
     wsClient.onopen = () => {
@@ -62,10 +66,17 @@ function ManageAppliance() {
   const updateAppliance = (appliance) => {
     setState({ ...state, appliances: [...state.appliances, appliance] });
   };
+  const updateStateAppliance = (applianceId, applianceName) => {
+    console.log(applianceId + " " + applianceName);
+    const newAppliance = state.appliances.map((element) =>
+      element.id === applianceId ? { ...element, name: applianceName } : element
+    );
+    setState({ ...state, appliances: newAppliance });
+  };
   const deleteAppliance = async (appliaceId) => {
     if (window.confirm("bạn có chắc chắn muốn xóa không?") === true) {
-      axios
-        .delete(`${url}api/appliance`, {
+      httpClient()
+        .delete(`/api/appliance`, {
           data: {
             userId: user.value.userId,
             applianceId: appliaceId,
@@ -89,14 +100,13 @@ function ManageAppliance() {
   const updateStatusAppliance = (applianceId, status) => {
     const message = status ? "tắt" : "bật";
     if (window.confirm(`Bạn có muốn ${message} thiết bị không?`) === true) {
-      axios
-        .put(`${url}api/appliance/change_status`, {
+      httpClient()
+        .put(`/api/appliance/change_status`, {
           status: !status,
           applianceId: applianceId,
           userId: user.value.userId,
         })
         .then((res) => {
-          console.log(res.data);
           let listAppliances = state.appliances.map((element) => {
             if (element.id === applianceId) element.status = !status;
             return element;
@@ -114,8 +124,8 @@ function ManageAppliance() {
         `Bạn có muốn tắt tất cả các thiết bị trong phòng không?`
       ) === true
     ) {
-      axios
-        .put(`${url}api/appliance/change_status_all`, {
+      httpClient()
+        .put(`/api/appliance/change_status_all`, {
           roomId: id,
           userId: user.value.userId,
         })
@@ -130,7 +140,7 @@ function ManageAppliance() {
         })
         .catch((err) => {
           console.log(err);
-          alert(`Không thế tắt tất cả các thiết bị hãy kiểm tra lại`);
+          // alert(`Không thế tắt tất cả các thiết bị hãy kiểm tra lại`);
         });
     }
   };
@@ -229,79 +239,42 @@ function ManageAppliance() {
           </div>
           <div className="card-body">
             <div className="row px-3 container-manager-room">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">STT</th>
-                    <th scope="col">Tên thiết bị</th>
-                    <th scope="col">Tình trạng thiết bị</th>
-                    <th scope="col">Tiêu thụ hiện tại</th>
-                    <th scope="col">Tùy chọn</th>
-                    <th scope="col">Bật / tắt</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {state.appliances.map((element, index) => (
-                    <tr key={index}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{element.name}</td>
-                      <td>
-                        {watts[element.id] ? (
-                          watts[element.id].standBy ? (
-                            <Status index={3} />
-                          ) : (
-                            <Status index={1} />
-                          )
-                        ) : (
-                          <Status index={2} />
-                        )}
-                      </td>
-                      <td>
-                        {watts[element.id] ? watts[element.id].value : "0"} W
-                      </td>
-
-                      <td>
-                        <div className="d-flex">
-                          <Link
-                            className="btn btn-outline-dark mt-auto"
-                            to={`appliance/${element.id}`}
-                          >
-                            Chi tiết
-                          </Link>
-                          <div disabled={user.value.roles[0] !== "ADMIN"}>
-                            <a className="btn btn-outline-dark mt-auto mx-2">
-                              Chỉnh sửa thiết bị
-                            </a>
-                          </div>
-
-                          <div disabled={user.value.roles[0] !== "ADMIN"}>
-                            <a
-                              className="btn btn-outline-dark mt-auto mx-2"
-                              onClick={() => deleteAppliance(element.id)}
-                            >
-                              Xóa thiết bị
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <a
-                          className="btn btn-outline-dark mt-auto"
-                          onClick={() =>
-                            updateStatusAppliance(element.id, element.status)
-                          }
-                        >
-                          {element.status ? "Tắt thiết bị" : "Bật thiết bị"}
-                        </a>
-                      </td>
+              {state.appliances.length === 0 ? (
+                <h2 className="text-aligns-center p-4 text-center">
+                  Danh sách trống
+                </h2>
+              ) : (
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">STT</th>
+                      <th scope="col">Tên thiết bị</th>
+                      <th scope="col">Tình trạng thiết bị</th>
+                      <th scope="col">Tiêu thụ hiện tại</th>
+                      <th scope="col">Tùy chọn</th>
+                      <th scope="col">Bật / tắt</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {state.appliances.map((element, index) => (
+                      <RowAppliance
+                        info={element}
+                        key={index}
+                        index={index + 1}
+                        watts={watts}
+                        deleteAppliance={deleteAppliance}
+                        updateStatusAppliance={updateStatusAppliance}
+                        updateAppliance={updateStateAppliance}
+                      />
+                    ))}
+                  </tbody>
+                </table>
+              )}
               <div className="p-0 d-flex justify-content-between">
                 <Popup
                   title={"Tạo thiết bị mới"}
                   show={visiableAppliance}
+                  close={() => setVisiableAppliance(false)}
                   trigger={
                     <div disabled={user.value.roles[0] !== "ADMIN"}>
                       <a
@@ -313,13 +286,21 @@ function ManageAppliance() {
                     </div>
                   }
                 >
-                  <EditAppliance
+                  <CreateAppliance
                     close={setVisiableAppliance}
                     roomId={state.roomId}
                     updateAppliance={updateAppliance}
                   />
                 </Popup>
-                {/* <Pagination  /> */}
+                {state.appliances.length === 0 ? (
+                  <></>
+                ) : (
+                  <Pagination
+                    total={state.appliances.length}
+                    page={page}
+                    changePage={setPage}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -328,5 +309,89 @@ function ManageAppliance() {
     </main>
   );
 }
-
+const RowAppliance = ({
+  info,
+  watts,
+  deleteAppliance,
+  updateStatusAppliance,
+  index,
+  updateAppliance,
+}) => {
+  const { user } = useStore();
+  const [visiabled, setVisiabled] = useState(false);
+  const getDataParent = () => {
+    const { id, description, name, thumbnail } = info;
+    return {
+      applianceId: id,
+      applianceDescription: description,
+      applianceName: name,
+      thumbnail,
+    };
+  };
+  return (
+    <tr>
+      <th scope="row">{index}</th>
+      <td>{info.name}</td>
+      <td>
+        {watts[info.id] ? (
+          watts[info.id].standBy ? (
+            <Status index={3} />
+          ) : (
+            <Status index={1} />
+          )
+        ) : (
+          <Status index={2} />
+        )}
+      </td>
+      <td>{watts[info.id] ? watts[info.id].value : "0"} W</td>
+      <td>
+        <div className="d-flex">
+          <Link
+            className="btn btn-outline-dark mt-auto"
+            to={`appliance/${info.id}`}
+          >
+            Chi tiết
+          </Link>
+          <Popup
+            title={"Chỉnh sửa thiết bị"}
+            show={visiabled}
+            close={() => setVisiabled(false)}
+            trigger={
+              <div disabled={user.value.roles[0] !== "ADMIN"}>
+                <a
+                  className="btn btn-outline-dark mt-auto mx-2"
+                  onClick={() => setVisiabled(true)}
+                >
+                  Chỉnh sửa thiết bị
+                </a>
+              </div>
+            }
+          >
+            <EditAppliance
+              getDataParent={getDataParent}
+              updateAppliance={updateAppliance}
+              close={() => setVisiabled(false)}
+            />
+          </Popup>
+          <div disabled={user.value.roles[0] !== "ADMIN"}>
+            <a
+              className="btn btn-outline-dark mt-auto mx-2"
+              onClick={() => deleteAppliance(info.id)}
+            >
+              Xóa thiết bị
+            </a>
+          </div>
+        </div>
+      </td>
+      <td>
+        <a
+          className="btn btn-outline-dark mt-auto"
+          onClick={() => updateStatusAppliance(info.id, info.status)}
+        >
+          {watts[info.id] ? "Tắt thiết bị" : "Bật thiết bị"}
+        </a>
+      </td>
+    </tr>
+  );
+};
 export default ManageAppliance;

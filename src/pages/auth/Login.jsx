@@ -12,7 +12,6 @@ function Login() {
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-        console.log("hello");
       }, 500);
     }
   }, []);
